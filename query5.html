@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Ricerca utente e storico</title>
+
+    <style>
+        .input {
+            text-align: center;
+        }
+
+        .centerLink {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="text-align: center;"><a href="index.html"><img src="immagini/logo_unife.png" height="100px"
+                width="200px"></a></div>
+    <h1 style="text-align: center;">Gestione Biblioteca UNIFE - Ricerca utente e storico</h1>
+
+    <hr><br>
+
+    <form action="php/getStorico.php" method="POST">
+        <fieldset>
+            <p style="text-align: center">
+                Ricerca di un utente della biblioteca e il suo storico dei prestiti
+                (compresi quelli in corso)
+            </p>
+            <input style="width:100%" type="text" name="Nome" placeholder="Scrivi qui il nome dell'utente">
+            <input style="width:100%" type="text" name="Cognome" placeholder="Scrivi qui il cognome dell'utente">
+            <input style="width:100%" type="text" name="NMatricola" placeholder="Scrivi qui la matricola dell'utente">
+            <input style="width:100%; " type="submit" value="Invia" />
+        </fieldset>
+    </form>
+
+    <br>
+
+    <div class="centerLink"><a href="index.html" style="text-align:center;">Torna alla homepage</a></div>
+
+    <br>
+    <hr>
+
+    <footer style="text-align: center;">
+        <p>Basi di dati 2022/23 - Progetto di <a
+                href="mailto:gaia.marzola@edu.unife.it?subject=Progetto basi di dati 2022/23">Gaia Marzola</a>
+            e <a href="mailto:solomonolamide.taiwo@edu.unife.it?subject=Progetto basi di dati 2022/23">Solomon Olamide
+                Taiwo</a>
+            (Gruppo n. 6)</p>
+    </footer>
+
+</body>
+
+</html>
