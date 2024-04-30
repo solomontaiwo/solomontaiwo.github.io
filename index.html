@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <!---------------------- HEAD ------------------------->
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,6 +13,7 @@
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
       crossorigin="anonymous"
     />
+    <!---------------------- STYLE ------------------------->
     <style scoped>
       html {
         scroll-behavior: smooth;
@@ -38,6 +40,14 @@
           text-align: center;
         }
 
+        @media screen and (max-width: 768px) {
+          p {
+            text-align: center;
+          }
+        }
+
+        /********************** INTRO STYLE **********************/
+
         .intro-section {
           margin-bottom: 20px;
 
@@ -54,16 +64,34 @@
             }
             .short-info-col {
               margin-top: 20px;
-
-              @media screen and (max-width: 768px) {
-                p {
-                  text-align: center;
-                }
-              }
             }
           }
         }
+
+        /********************** PORTFOLIO STYLE **********************/
+
+        .portfolio-section {
+          margin-bottom: 20px;
+
+          .project-image {
+            max-height: 200px;
+            width: auto;
+          }
+
+          .project-image-col,
+          .project-info-col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .project-info-col {
+            margin-top: 20px;
+          }
+        }
       }
+
+      /********************** MENU STYLE **********************/
 
       .menu-row {
         text-align: center;
@@ -78,6 +106,8 @@
     </style>
   </head>
   <body>
+    <!---------------------- MENU ------------------------->
+
     <div class="row menu-row">
       <div class="portfolio-link-col col-6 col-sm-6">
         <a href="#portfolio">Portfolio</a>
@@ -86,6 +116,7 @@
         <a href="#contact">Contact me</a>
       </div>
     </div>
+
     <div class="page-container">
       <div class="row intro-section">
         <h1 id="home" class="col-12 intro-title">
@@ -94,14 +125,17 @@
 
         <br />
         <br />
+
+        <!---------------------- INTRO ------------------------->
+
         <div class="row intro-row">
-          <div class="col-12 col-md-4 avatar-col">
+          <div class="avatar-col col-12 col-md-4">
             <img
               src="./src/images/solomon-profile-photo.jpg"
               class="avatar-image"
             />
           </div>
-          <div class="col col-md-8 short-info-col">
+          <div class="short-info-col col col-md-8">
             <p>
               Software engineering intern at
               <a
@@ -130,8 +164,49 @@
         </div>
       </div>
 
-      <h1 id="portfolio" class="col-12 portfolio-title">Portfolio</h1>
-      Building... 🚧
+      <!---------------------- PORTFOLIO ------------------------->
+
+      <div class="row portfolio-section">
+        <h1 id="portfolio" class="col-12 portfolio-title">Portfolio</h1>
+
+        <br />
+        <br />
+
+        <div class="row project-one-row">
+          <div class="project-image-col col-12 col-md-4">
+            <img
+              src="./src/images/work-in-progress.jpg"
+              class="project-image"
+            />
+          </div>
+          <div class="project-info-col col col-md-8">
+            <p>
+              Project description bla bla bla soninkeqn denkjqnoad daobobe
+              edwnexno cenojano jnedwodon neownd.
+            </p>
+          </div>
+        </div>
+
+        <br />
+        <br />
+
+        <div class="row project-two-row">
+          <div class="project-image-col col-12 col-md-4">
+            <img
+              src="./src/images/work-in-progress.jpg"
+              class="project-image"
+            />
+          </div>
+          <div class="project-info-col col-8 col col-md-8">
+            <p>
+              Project description bla bla bla soninkeqn denkjqnoad daobobe
+              edwnexno cenojano jnedwodon neownd.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!---------------------- CONTACT ------------------------->
 
       <h1 id="contact" class="col-12 contact-title">Contact me</h1>
       <div class="container px-4 text-center">
@@ -158,6 +233,9 @@
         </div>
       </div>
     </div>
+
+    <!---------------------- SCRIPT ------------------------->
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
