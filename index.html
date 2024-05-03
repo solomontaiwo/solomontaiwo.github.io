@@ -15,13 +15,14 @@
       name="keywords"
       content="Webpage, Computer Science, Software Engineer, Software Developer, IT Specialist"
     />
-
+    <!--  Bootstrap and Popper -->
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+
     <!---------------------- STYLE ------------------------->
     <style>
       html {
@@ -80,6 +81,12 @@
 
         .portfolio-section {
           margin-bottom: 20px;
+
+          .project-one-row,
+          .project-two-row,
+          .project-three-row {
+            margin-bottom: 50px;
+          }
 
           .project-image {
             max-height: 200px;
@@ -142,13 +149,15 @@
         <br />
 
         <div class="row intro-row">
-          <div class="avatar-col col-12 col-md-6">
+          <div class="avatar-col col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
             <img
               src="./src/images/solomon-profile-photo.jpg"
               class="avatar-image"
             />
           </div>
-          <div class="short-info-col col-12 col-md-6">
+          <div
+            class="short-info-col col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6"
+          >
             <p>
               Software engineering intern at
               <a
@@ -213,7 +222,8 @@
               VueJS. "The Artist Room" allows its users to check availability
               and book rooms, with a simple and effective interface and an admin
               page that gives the possibility to add new rooms and manage
-              bookings. Project for the Web Technologies class of the Computer
+              bookings.
+              <br />Project for the Web Technologies class of the Computer
               Science course at the University of Ferrara, academic year
               2023/24.
             </p>
@@ -247,9 +257,10 @@
               <br />
               Written in HTML and PHP, "BibliotecaUNIFE" is a web-page that
               offers various queries that retrive data from a database. Nice and
-              effective playground for MySQL queries. Project for the Database
-              Fundamentals class of the Computer Science course at the
-              University of Ferrara, academic year 2022/23.
+              effective playground for MySQL queries.
+              <br />Project for the Database Fundamentals class of the Computer
+              Science course at the University of Ferrara, academic year
+              2022/23.
             </p>
           </div>
         </div>
@@ -257,7 +268,7 @@
         <br />
         <br />
 
-        <!-- <div class="row project-three-row">
+        <div class="row project-three-row">
           <div class="project-image-col col-12 col-md-6">
             <a
               href="./src/images/projects/kshopgraphics/full-page-kshopgraphics.png"
@@ -281,7 +292,7 @@
         </div>
 
         <br />
-        <br /> -->
+        <br />
 
         <div class="col-12 more-projects-col">
           <div class="row">
@@ -306,33 +317,41 @@
 
       <!---------------------- CONTACT ------------------------->
 
-      <h1 id="contact" class="contact-title col-12">Contact me</h1>
-      <div class="container text-center">
-        <div class="col-12">
-          <p>
-            Need more? Don't hesitate to reach out via the contact links below
-            if you have any inquiries or opportunities to discuss.
-          </p>
-        </div>
-        <div class="col-12">
-          <a
-            href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/"
-            target="_blank"
-            >LinkedIn</a
-          >
-          -
-          <a href="https://www.instagram.com/solomon.taiwo/" target="_blank"
-            >Instagram</a
-          >
-          -
-          <a href="https://github.com/solomontaiwo/" target="_blank">Github</a>
-          -
-          <a href="mailto:taiwo.o.solomon@gamail.com">E-mail</a>
+      <div class="row contact-section">
+        <h1 id="contact" class="contact-title col-12">Contact me</h1>
+        <div class="container text-center">
+          <div class="col-12">
+            <p>
+              Need more? Don't hesitate to reach out via the contact links below
+              if you have any inquiries or opportunities to discuss.
+            </p>
+          </div>
+          <div class="col-12">
+            <a
+              href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/"
+              target="_blank"
+            >
+              <i class="fab fa-linkedin"></i>LinkedIn</a
+            >
+            -
+            <a href="https://www.instagram.com/solomon.taiwo/" target="_blank">
+              <i class="fab fa-instagram"></i>Instagram</a
+            >
+            -
+            <a href="https://github.com/solomontaiwo/" target="_blank">
+              <i class="fab fa-github"></i>Github</a
+            >
+            -
+            <a href="mailto:taiwo.o.solomon@gmail.com">
+              <i class="fab fa-envelope"></i>E-mail</a
+            >
+          </div>
         </div>
       </div>
     </div>
 
     <br />
+    <hr />
 
     <footer>
       <p>Made on a sleepless night by Solomon Taiwo</p>
@@ -345,14 +364,10 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
       crossorigin="anonymous"
     ></script>
   </body>
