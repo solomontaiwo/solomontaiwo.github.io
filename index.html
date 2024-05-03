@@ -15,12 +15,19 @@
       name="keywords"
       content="Webpage, Computer Science, Software Engineer, Software Developer, IT Specialist"
     />
-    <!--  Bootstrap and Popper -->
+    <!--  Bootstrap -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
+    />
+
+    <!-- Font Awesome icons -->
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
     />
 
     <!---------------------- STYLE ------------------------->
@@ -46,57 +53,57 @@
             text-align: center;
           }
         }
+      }
 
-        /********************** INTRO STYLE **********************/
+      /********************** INTRO STYLE **********************/
 
-        .intro-section {
-          margin-bottom: 20px;
+      .intro-section {
+        margin-bottom: 20px;
 
-          .intro-row {
-            .avatar-image {
-              max-height: auto;
-              width: 300px;
-            }
-            .avatar-col,
-            .short-info-col {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .short-info-col {
-              margin-top: 20px;
-            }
-          }
-        }
-
-        /********************** PORTFOLIO STYLE **********************/
-
-        .portfolio-section {
-          margin-bottom: 20px;
-
-          .project-one-row,
-          .project-two-row,
-          .project-three-row {
-            margin-bottom: 50px;
-          }
-
-          .project-image {
+        .intro-row {
+          .avatar-image {
             max-height: auto;
             width: 300px;
           }
-
-          .project-image-col,
-          .project-info-col,
-          .more-project-text-col {
+          .avatar-col,
+          .short-info-col {
             display: flex;
             align-items: center;
             justify-content: center;
           }
-
-          .project-info-col,
-          .more-project-text-col {
+          .short-info-col {
             margin-top: 20px;
           }
+        }
+      }
+
+      /********************** PORTFOLIO STYLE **********************/
+
+      .portfolio-section {
+        margin-bottom: 20px;
+
+        .project-one-row,
+        .project-two-row,
+        .project-three-row {
+          margin-bottom: 50px;
+        }
+
+        .project-image {
+          max-height: auto;
+          width: 300px;
+        }
+
+        .project-image-col,
+        .project-info-col,
+        .more-project-text-col {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .project-info-col,
+        .more-project-text-col {
+          margin-top: 20px;
         }
       }
 
@@ -144,7 +151,7 @@
           <div class="avatar-col col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
             <img
               src="./src/images/solomon-profile-photo.jpg"
-              class="avatar-image"
+              class="avatar-image img-fluid"
             />
           </div>
           <div
@@ -198,7 +205,7 @@
               target="_blank"
               ><img
                 src="./src/images/projects/the-artist-room/full-hd/full-hd-home-the-artist-room.png"
-                class="project-image"
+                class="project-image img-fluid"
             /></a>
           </div>
           <div
@@ -235,7 +242,7 @@
               target="_blank"
               ><img
                 src="./src/images/projects/bibliotecaUNIFE/full-hd-BibliotecaUNIFE.png"
-                class="project-image"
+                class="project-image img-fluid"
             /></a>
           </div>
           <div
@@ -268,7 +275,7 @@
               target="_blank"
               ><img
                 src="./src/images/projects/kshopgraphics/full-hd-kshopgraphics.png"
-                class="project-image"
+                class="project-image img-fluid"
             /></a>
           </div>
           <div class="project-info-col col-12 col-md-6">
