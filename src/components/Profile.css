@@ -1,12 +1,16 @@
+/* src/components/Profile.css */
+
 .profile-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f0f0f0;
   text-align: center;
   padding: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .profile-photo {
@@ -21,12 +25,12 @@
 .profile-description h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .profile-description p {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-color);
   line-height: 1.6;
   max-width: 600px;
 }

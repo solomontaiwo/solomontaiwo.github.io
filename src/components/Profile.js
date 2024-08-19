@@ -12,15 +12,21 @@ const Profile = () => {
       <div className="profile-description">
         <h1>Solomon Taiwo</h1>
         <p>
-          Hi, I'm Solomon Taiwo, a passionate software engineer with a
-          Bachelor's degree in Computer Science and currently pursuing a
-          Master's degree in Computer Engineering at the{" "}
-          <a href="https://www.polito.it/en/education/master-s-degree-programmes/computer-engineering">
+          I'm Solomon Taiwo, a passionate software engineer with a Bachelor's
+          degree in Computer Science. <br />
+          I'm currently working at{" "}
+          <a href="https://www.teleconsys.it/" target="_blank" rel="noreferrer">
+            Teleconsys
+          </a>{" "}
+          and pursuing a Master's degree in Computer Engineering at the{" "}
+          <a
+            href="https://www.polito.it/en/education/master-s-degree-programmes/computer-engineering"
+            target="_blank"
+            rel="noreferrer"
+          >
             Polytechnic University of Turin
           </a>
-          . I am specializing in Artificial Intelligence and Data Analysis and
-          have experience working with a variety of programming languages and
-          frameworks.
+          , specializing in Artificial Intelligence and Data Analysis.
         </p>
       </div>
     </div>

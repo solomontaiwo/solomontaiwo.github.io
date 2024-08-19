@@ -1,9 +1,47 @@
+/* src/App.css */
+
+/* Default (Light Theme) */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #4caf50;
+}
+
+/* Dark Theme */
+body.dark-theme {
+  --background-color: #333333;
+  --text-color: #ffffff; /* Update this to ensure text is visible in dark mode */
+  --primary-color: #90caf9;
+}
+
 .App {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #e0e0e0;
-    padding: 20px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.theme-toggle i {
+  font-size: 20px;
+}
