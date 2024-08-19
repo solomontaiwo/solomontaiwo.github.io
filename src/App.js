@@ -40,22 +40,7 @@ function App() {
             <a href="#">Home</a>
           </li>
           <li>
-            <a href="#">About</a>
-          </li>
-          <li className="dropdown">
             <a href="#">Portfolio</a>
-            <ul className="dropdown-menu">
-              <li>
-                <a
-                  href="https://solomontaiwo.github.io/casual-contact-us/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  BB Project
-                </a>
-              </li>
-              {/* Add more dropdown items here */}
-            </ul>
           </li>
           <li>
             <a href="#">Contact</a>
@@ -105,7 +90,14 @@ function App() {
             .
             <br /> <br />
             Technologies: C/C++, Python, Java, JavaScript, Ruby, PHP, SQL, Ruby
-            on Rails, Vue.js, Quasar, Laravel, and more.
+            on Rails, Vue.js, Quasar, Laravel, and more.{" "}
+            <a
+              href="https://solomontaiwo.github.io/casual-contact-us/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Fun project
+            </a>
           </p>
         </div>
       </div>
