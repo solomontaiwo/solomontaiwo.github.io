@@ -13,7 +13,15 @@ const Profile = () => {
         <h1>Solomon Taiwo</h1>
         <p>
           I'm Solomon Taiwo, a passionate software engineer with a Bachelor's
-          degree in Computer Science. <br />
+          degree in Computer Science from the{" "}
+          <a
+            href="https://corsi.unife.it/informatica"
+            target="_blank"
+            rel="noreferrer"
+          >
+            University of Ferrara
+          </a>.{" "}
+          <br /> <br />
           I'm currently working at{" "}
           <a href="https://www.teleconsys.it/" target="_blank" rel="noreferrer">
             Teleconsys
