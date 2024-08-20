@@ -90,14 +90,23 @@ function App() {
             .
             <br /> <br />
             Technologies: C/C++, Python, Java, JavaScript, Ruby, PHP, SQL, Ruby
-            on Rails, Vue.js, Quasar, Laravel, and more.{" "}
+            on Rails, Vue.js, Quasar, Laravel, and more.
+            <br /> <br />
             <a
               href="https://solomontaiwo.github.io/casual-contact-us/"
               target="_blank"
               rel="noreferrer"
             >
-              Fun project
-            </a>
+              Casual Contact Us
+            </a>{" "}
+            <br /> <br />
+            <a
+              href="https://solomontaiwo.github.io/i-consigli-della-nonna/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              I Consigli della Nonna alcolizzata
+            </a>{" "}
           </p>
         </div>
       </div>
