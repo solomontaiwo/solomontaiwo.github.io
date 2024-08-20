@@ -37,9 +37,6 @@ function App() {
       <nav className="navbar">
         <ul>
           <li>
-            <a href="#">Home</a>
-          </li>
-          <li>
             <a href="https://github.com/solomontaiwo">Github</a>
           </li>
           <li>
@@ -48,9 +45,7 @@ function App() {
             </a>
           </li>
           <li>
-            <a href="https://www.instagram.com/solomon.taiwo/">
-              Instagram
-            </a>
+            <a href="https://www.instagram.com/solomon.taiwo/">Instagram</a>
           </li>
           <button className="theme-toggle" onClick={toggleTheme}>
             {isDarkTheme ? <FaSun /> : <FaMoon />}
@@ -99,7 +94,6 @@ function App() {
             Technologies: C/C++, Python, Java, JavaScript, Ruby, PHP, SQL, Ruby
             on Rails, Vue.js, Quasar, Laravel, and more.
             <br /> <br />
-
             <h3>Projects</h3>
             <ul>
               <li>
