@@ -40,10 +40,17 @@ function App() {
             <a href="#">Home</a>
           </li>
           <li>
-            <a href="#">Portfolio</a>
+            <a href="https://github.com/solomontaiwo">Github</a>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <a href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/solomon.taiwo/">
+              Instagram
+            </a>
           </li>
           <button className="theme-toggle" onClick={toggleTheme}>
             {isDarkTheme ? <FaSun /> : <FaMoon />}
@@ -92,21 +99,26 @@ function App() {
             Technologies: C/C++, Python, Java, JavaScript, Ruby, PHP, SQL, Ruby
             on Rails, Vue.js, Quasar, Laravel, and more.
             <br /> <br />
-            <a
-              href="https://solomontaiwo.github.io/casual-contact-us/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Casual Contact Us
-            </a>{" "}
-            <br /> <br />
-            <a
-              href="https://solomontaiwo.github.io/i-consigli-della-nonna/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              I Consigli della Nonna alcolizzata
-            </a>{" "}
+            <ul>
+              <li>
+                <a
+                  href="https://solomontaiwo.github.io/casual-contact-us/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Casual Contact Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://solomontaiwo.github.io/i-consigli-della-nonna/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  I Consigli della Nonna alcolizzata
+                </a>
+              </li>
+            </ul>
           </p>
         </div>
       </div>

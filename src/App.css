@@ -103,6 +103,12 @@ body.dark-theme {
   text-align: center;
 }
 
+.profile-content ul {
+  list-style-type: disc; /* Ensure dots are used */
+  list-style-position: inside; /* Align dots inside the content flow */
+  padding-left: 0px;
+}
+
 .profile-photo {
   width: 150px;
   height: auto;
