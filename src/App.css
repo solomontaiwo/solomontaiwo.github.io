@@ -79,11 +79,6 @@ body.dark-theme {
   color: var(--primary-color);
 }
 
-/* Dropdown Menu */
-.dropdown {
-  position: relative;
-}
-
 .profile-container {
   display: flex;
   justify-content: center;
@@ -91,7 +86,7 @@ body.dark-theme {
   flex-direction: column;
   width: 80%;
   max-width: 800px;
-  margin: 100px auto 20px;
+  margin: auto;
   background-color: var(--container-background);
   border-radius: 8px;
   padding: 20px;
