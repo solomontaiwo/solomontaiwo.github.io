@@ -1,12 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.a183aab6.css",
-    "main.js": "/static/js/main.dd07e7b2.js",
-    "static/js/453.a1752e54.chunk.js": "/static/js/453.a1752e54.chunk.js",
-    "static/media/full-hd-home-the-artist-room.png": "/static/media/full-hd-home-the-artist-room.afa34d2435c934ba37dc.png",
-    "static/media/full-hd-kshopgraphics.png": "/static/media/full-hd-kshopgraphics.079946b90d7689b023e1.png",
-    "static/media/solomon-profile-photo.jpg": "/static/media/solomon-profile-photo.877671ae248cefca3e09.jpg",
-    "static/media/full-hd-BibliotecaUNIFE.png": "/static/media/full-hd-BibliotecaUNIFE.dc46931717dd1891d6b7.png",
+    "main.css": "/static/css/main.8523c51f.css",
+    "main.js": "/static/js/main.00336e0f.js",
     "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
     "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
@@ -16,12 +11,11 @@
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/index.html",
-    "main.a183aab6.css.map": "/static/css/main.a183aab6.css.map",
-    "main.dd07e7b2.js.map": "/static/js/main.dd07e7b2.js.map",
-    "453.a1752e54.chunk.js.map": "/static/js/453.a1752e54.chunk.js.map"
+    "main.8523c51f.css.map": "/static/css/main.8523c51f.css.map",
+    "main.00336e0f.js.map": "/static/js/main.00336e0f.js.map"
   },
   "entrypoints": [
-    "static/css/main.a183aab6.css",
-    "static/js/main.dd07e7b2.js"
+    "static/css/main.8523c51f.css",
+    "static/js/main.00336e0f.js"
   ]
 }
