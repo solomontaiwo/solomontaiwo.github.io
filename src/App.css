@@ -84,52 +84,12 @@ body.dark-theme {
   position: relative;
 }
 
-.dropdown a::after {
-  content: " ▼"; /* Caret symbol indicating dropdown */
-  font-size: 12px;
-}
-
-.dropdown-menu {
-  display: none; /* Ensure menu is hidden by default */
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: var(--dropdown-background);
-  border: 1px solid var(--dropdown-border);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-radius: 4px;
-  z-index: 1000;
-}
-
-.dropdown-menu li {
-  padding: 10px 20px;
-}
-
-.dropdown-menu li a {
-  color: var(--text-color);
-  text-decoration: none;
-  display: block;
-  transition: background-color 0.3s;
-}
-
-.dropdown-menu li a:hover {
-  background-color: var(--primary-color);
-  color: var(--background-color);
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block; /* Show menu on hover */
-}
-
 .profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 100%;
+  width: 80%;
   max-width: 800px;
   margin: 100px auto 20px;
   background-color: var(--container-background);
