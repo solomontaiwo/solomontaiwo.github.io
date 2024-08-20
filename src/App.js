@@ -99,6 +99,8 @@ function App() {
             Technologies: C/C++, Python, Java, JavaScript, Ruby, PHP, SQL, Ruby
             on Rails, Vue.js, Quasar, Laravel, and more.
             <br /> <br />
+
+            <h3>Projects</h3>
             <ul>
               <li>
                 <a
