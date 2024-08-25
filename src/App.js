@@ -98,7 +98,7 @@ function App() {
           <hr />
           <h3>Some projects</h3>
           <a
-            href="https://solomontaiwo.github.io/SoldiSotto/"
+            href="https://solomontaiwo.github.io/soldi-sotto/"
             target="_blank"
             rel="noreferrer"
           >
