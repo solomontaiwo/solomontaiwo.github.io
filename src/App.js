@@ -98,6 +98,14 @@ function App() {
           <hr />
           <h3>Some projects</h3>
           <a
+            href="https://solomontaiwo.github.io/arci-primo-maggio-redesign/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Arci Primo Maggio Redesign
+          </a>
+          <br />
+          <a
             href="https://solomontaiwo.github.io/soldi-sotto/"
             target="_blank"
             rel="noreferrer"
