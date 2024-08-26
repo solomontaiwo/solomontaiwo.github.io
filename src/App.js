@@ -33,22 +33,37 @@ function App() {
       <nav className="navbar">
         <ul>
           <li>
-            <a href="https://github.com/solomontaiwo">Github</a>
+            <a
+              href="https://github.com/solomontaiwo"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Github
+            </a>
           </li>
           <li>
-            <a href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/">
+            <a
+              href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               LinkedIn
             </a>
           </li>
           <li>
-            <a href="https://www.instagram.com/solomon.taiwo/">Instagram</a>
+            <a
+              href="https://www.instagram.com/solomon.taiwo/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram
+            </a>
           </li>
           <button className="theme-toggle" onClick={toggleTheme}>
             {isDarkTheme ? <FaSun /> : <FaMoon />}
           </button>
         </ul>
       </nav>
-      {/* Centering the profile content */}
       <div
         className="profile-content"
         style={{
