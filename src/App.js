@@ -118,8 +118,7 @@ function App() {
             rel="noreferrer"
           >
             Arci Primo Maggio Redesign
-          </a> */}
-          <br />
+          </a>  <br />*/}
           <a
             href="https://solomontaiwo.github.io/soldi-sotto/"
             target="_blank"
