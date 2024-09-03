@@ -1,34 +1,27 @@
-# solomontaiwo.github.io
+# Rewrite
 
-This is my personal portfolio website built using React. It serves as a space to share some basic information about myself, including my educational background, current studies and professional experiences, as well as a showcase for some of the projects I've worked on.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
 
-## Getting Started
+## Development server
 
-If you would like to explore the codebase or contribute:
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-1. Clone the repository:
+## Code scaffolding
 
-   ```bash
-   git clone https://github.com/yourusername/solomontaiwo.github.io.git
-   ```
-2. Navigate to the project directory:
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-   ```bash
-   cd solomontaiwo.github.io
-   ```
-3. Install the dependencies:
+## Build
 
-   ```bash
-   npm install
-   ```
-4. Start the development server:
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-   ```bash
-   npm start
-   ```
+## Running unit tests
 
-   The site will be available at `http://localhost:3000`.
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Contact
+## Running end-to-end tests
 
-Feel free to reach out if you have any questions, suggestions, or opportunities you'd like to discuss. You can contact me via email: [solomon.taiwo@studenti.polito.it](mailto:solomon.taiwo@studenti.polito.it).
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
