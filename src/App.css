@@ -36,6 +36,14 @@ html {
   color: var(--text-color);
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: var(--background-color);
+  z-index: 1000;
+}
+
 .theme-toggle {
   background: none;
   border: none;
@@ -62,6 +70,7 @@ a {
 
 a:hover {
   text-decoration: underline;
+  color: var(--link-hover-color);
 }
 
 /* Dark Theme */
@@ -76,4 +85,12 @@ a:hover {
   --background-color: #ffffff;
   --text-color: #000000;
   --link-color: #1a0dab;
+}
+
+h1, h2, h3 {
+  margin-bottom: 10px;
+}
+p {
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
