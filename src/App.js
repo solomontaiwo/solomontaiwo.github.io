@@ -143,7 +143,7 @@ function App() {
             <div className="project">
               <a href="https://github.com/solomontaiwo/InformaticaUnife/" target="_blank" rel="noreferrer">
                 <img
-                  src="/images/projects/InformaticaUnife/informaticaUnife.png"
+                  src="/images/projects/informaticaUnife/informaticaUnife.png"
                   alt="InformaticaUnife"
                   className="project-image"
                 />
