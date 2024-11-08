@@ -38,27 +38,19 @@ function App() {
           />
           <div className="profile-info">
             <h1>Solomon Taiwo</h1>
-            <p>Computer Science Graduate and Aspiring Artificial Intelligence Engineer</p>
+            <p>Curious by nature, developer by choice, and aspiring AI engineer in the making.</p>
             <p>
-              Currently pursuing a Master's Degree in Computer Engineering (Artificial Intelligence
+              Currently trying to survive a Master’s in Computer Engineering (Artificial Intelligence
               and Data Analysis) at the{" "}
-              <a
-                href="https://www.polito.it/en/education/master-s-degree-programmes/computer-engineering"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://www.polito.it/en/education/master-s-degree-programmes/computer-engineering" target="_blank" rel="noopener noreferrer">
                 Polytechnic University of Turin
-              </a>
+              </a>.
             </p>
             <p>
-              Working as a Software Engineer at{" "}
-              <a
-                href="https://www.teleconsys.it/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              By day, a Software Engineer at{" "}
+              <a href="https://www.teleconsys.it/" target="_blank" rel="noopener noreferrer">
                 Teleconsys
-              </a>
+              </a>, by night... probably still engineering, just with an extra cup of tea.
             </p>
           </div>
           <div className="social-links">
@@ -105,7 +97,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>SoldiSotto</h3>
-                  <p>A personal finance tracking app, powered by React and Firebase.</p>
+                  <p>Keep your finances in check (or at least try). Made with React and Firebase for budget-conscious minds.</p>
                 </div>
               </a>
             </div>
@@ -118,7 +110,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>K-Shop Graphics</h3>
-                  <p>E-commerce built with WooCommerce.</p>
+                  <p>An e-commerce experience so smooth, you'll want to buy twice! Powered by WooCommerce.</p>
                 </div>
               </a>
             </div>
@@ -131,7 +123,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>The Artist Room</h3>
-                  <p>University project where users can book rooms. Made with Laravel.</p>
+                  <p>Need space for inspiration? Book it here! A Laravel project that brings creativity to life.</p>
                 </div>
               </a>
             </div>
@@ -144,7 +136,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>BibliotecaUNIFE</h3>
-                  <p>University project to test SQL queries, developed in HTML/CSS and PHP.</p>
+                  <p>A SQL playground disguised as a university project. Made for the curious (and slightly nerdy) minds.</p>
                 </div>
               </a>
             </div>
@@ -157,7 +149,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>InformaticaUnife</h3>
-                  <p>Repository with useful resources for university students.</p>
+                  <p>A treasure trove of resources for students. Because sharing is caring!</p>
                 </div>
               </a>
             </div>
@@ -170,7 +162,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>I consigli della nonna</h3>
-                  <p>Another casual React project. Made on another sleepless night.</p>
+                  <p>Wisdom from grandma, React style. A spontaneous creation during a caffeine-fueled night.</p>
                 </div>
               </a>
             </div>
@@ -183,7 +175,7 @@ function App() {
                 />
                 <div className="project-info">
                   <h3>Casual Contact Us</h3>
-                  <p>A REALLY casual game made on a sleepless night. First React project.</p>
+                  <p>My first-ever React game. Proof that sleepless nights and code can be fun.</p>
                 </div>
               </a>
             </div>
