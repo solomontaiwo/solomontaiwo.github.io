@@ -46,12 +46,20 @@ body, html {
   margin-bottom: 2rem;
 }
 
+/* Profile Photo with Hover Effects */
 .profile-photo {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   margin-bottom: 1.5rem;
   border: 3px solid var(--link-hover-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effects for Profile Photo */
+.profile-photo:hover {
+  transform: scale(1.1) rotate(3deg); /* Effetto zoom e rotazione */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombra più pronunciata */
 }
 
 /* Social Links */
@@ -66,7 +74,7 @@ body, html {
 .theme-toggle {
   color: var(--link-color);
   font-size: 1.5rem;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -75,6 +83,7 @@ body, html {
 .social-links a:hover,
 .theme-toggle:hover {
   color: var(--link-hover-color);
+  transform: scale(1.2); /* Effetto di ingrandimento */
 }
 
 .theme-toggle {
@@ -86,11 +95,12 @@ body, html {
 /* Style for CV Icon */
 .cv-link {
   color: var(--link-color);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .cv-link:hover {
   color: var(--link-hover-color);
+  transform: scale(1.2); /* Effetto di ingrandimento */
 }
 
 /* Project Section Styles */
@@ -124,7 +134,7 @@ body, html {
 }
 
 .project:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(1.02); /* Effetto di movimento e leggera espansione */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -135,6 +145,11 @@ body, html {
   display: block;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  transition: transform 0.3s ease; /* Transizione per l'effetto zoom */
+}
+
+.project:hover .project-image {
+  transform: scale(1.05); /* Effetto zoom sull'immagine */
 }
 
 /* Overlay Effect for Project Info */
