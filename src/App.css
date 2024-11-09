@@ -1,3 +1,18 @@
+/* Theme Variables */
+.theme-container.light-theme {
+  --background-color: #f1f1f1;
+  --text-color: #121212;
+  --link-color: #444444;
+  --link-hover-color: #121212;
+}
+
+.theme-container.dark-theme {
+  --background-color: #202020;
+  --text-color: #f1f1f1;
+  --link-color: #bbbbbb;
+  --link-hover-color: #ffffff;
+}
+
 /* Global Styles */
 *,
 *::before,
@@ -7,59 +22,60 @@
   padding: 0;
 }
 
-body, html {
-  height: 100%;
+html,
+body {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  font-family: 'Lato', sans-serif;
+  height: 100%;
+  font-family: "Lato", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.App {
+.theme-container {
+  width: 100vw;
   min-height: 100vh;
   background-color: var(--background-color);
   color: var(--text-color);
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 2rem;
+  align-items: center;
 }
 
-/* Main Panel Styles */
-.panel {
-  background-color: var(--card-background);
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 3rem;
-  max-width: 1000px;
+.App {
   width: 100%;
-  text-align: center;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.profile h2 {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
+/* Profile Section */
 .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Profile Photo with Hover Effects */
 .profile-photo {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
-  margin-bottom: 1.5rem;
-  border: 3px solid var(--link-hover-color);
+  border-radius: 10%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover Effects for Profile Photo */
 .profile-photo:hover {
-  transform: scale(1.1) rotate(3deg); /* Effetto zoom e rotazione */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombra più pronunciata */
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 /* Social Links */
@@ -67,7 +83,8 @@ body, html {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  margin: 1.5rem 0;
+  margin: 1.5rem;
+  margin-top: 1rem;
 }
 
 .social-links a,
@@ -83,7 +100,7 @@ body, html {
 .social-links a:hover,
 .theme-toggle:hover {
   color: var(--link-hover-color);
-  transform: scale(1.2); /* Effetto di ingrandimento */
+  transform: scale(1.3);
 }
 
 .theme-toggle {
@@ -92,71 +109,72 @@ body, html {
   cursor: pointer;
 }
 
-/* Style for CV Icon */
-.cv-link {
-  color: var(--link-color);
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.cv-link:hover {
-  color: var(--link-hover-color);
-  transform: scale(1.2); /* Effetto di ingrandimento */
-}
-
 /* Project Section Styles */
 .projects {
-  margin-top: 2rem;
-}
-
-.projects h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  font-weight: bold;
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
 }
 
 /* Project Grid */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  justify-items: center; /* Centra le schede dei progetti */
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Responsiveness for grid columns */
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Project Card Styles */
 .project {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-  max-width: 320px;
 }
 
 .project:hover {
-  transform: translateY(-8px) scale(1.02); /* Effetto di movimento e leggera espansione */
+  transform: translateY(-8px) scale(1.02);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .project-image {
   width: 100%;
-  height: 220px;
+  height: 180px;
   object-fit: cover;
   display: block;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  transition: transform 0.3s ease; /* Transizione per l'effetto zoom */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  transition: transform 0.3s ease;
 }
 
 .project:hover .project-image {
-  transform: scale(1.05); /* Effetto zoom sull'immagine */
+  transform: scale(1.1);
 }
 
-/* Overlay Effect for Project Info */
 .project-info {
-  padding: 1rem;
+  padding: 0.2rem;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
   position: absolute;
   bottom: 0;
@@ -164,37 +182,12 @@ body, html {
   right: 0;
   opacity: 0;
   transform: translateY(100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  transition: opacity 0.6s ease, transform 0.4s ease;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .project:hover .project-info {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* Theme Variables */
-.dark-theme {
-  --background-color: #121212;
-  --text-color: #f1f1f1;
-  --link-color: #bbbbbb;
-  --link-hover-color: #ffffff;
-  --card-background: #252525;
-}
-
-.light-theme {
-  --background-color: #f1f1f1;
-  --text-color: #121212;
-  --link-color: #444444;
-  --link-hover-color: #121212;
-  --card-background: #ffffff;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .project-grid {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
-    gap: 1rem; /* Riduce lo spazio tra le schede */
-  }
 }
