@@ -62,14 +62,14 @@ function App() {
             >
               <FaInstagram />
             </a>
-            <a
+            {/* <a
               href="/curriculum-taiwo.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="social-link cv-link"
             >
               <FaFileAlt />
-            </a>
+            </a> */}
             <button className="theme-toggle" onClick={toggleTheme}>
               {isDarkTheme ? <FaSun /> : <FaMoon />}
             </button>
