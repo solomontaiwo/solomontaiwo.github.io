@@ -133,7 +133,7 @@ body {
 .who-am-i p {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--text-color);
+  color: black;
 }
 
 .who-am-i a {
