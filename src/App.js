@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaSpinner } from "react-icons/fa";
 import "./App.css";
 
 const projects = [
@@ -37,12 +37,12 @@ const projects = [
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [loadedImages, setLoadedImages] = useState(Array(projects.length).fill(false));
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initialTheme = savedTheme ? savedTheme === "dark" : prefersDarkScheme;
-
     setIsDarkTheme(initialTheme);
   }, []);
 
@@ -54,35 +54,73 @@ function App() {
     });
   };
 
+  const handleImageLoad = (index) => {
+    setLoadedImages((prevLoadedImages) => {
+      const updatedLoadedImages = [...prevLoadedImages];
+      updatedLoadedImages[index] = true;
+      return updatedLoadedImages;
+    });
+  };
+
   return (
     <div className={`theme-container ${isDarkTheme ? "dark-theme" : "light-theme"}`}>
       <div className="App">
         {/* Profile Section */}
-        <div className="profile">
-          <img src="/images/solomon-profile-photo.jpg" alt="Solomon Taiwo" className="profile-photo" />
-          <h2>Solomon Taiwo</h2>
-          <div className="social-links">
-            <a href="https://github.com/solomontaiwo" target="_blank" rel="noopener noreferrer" className="social-link">
-              <FaGithub />
-            </a>
-            <a href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/" target="_blank" rel="noopener noreferrer" className="social-link">
-              <FaLinkedin />
-            </a>
-            <a href="https://www.instagram.com/solomon.taiwo/" target="_blank" rel="noopener noreferrer" className="social-link">
-              <FaInstagram />
-            </a>
-            <button className="theme-toggle" onClick={toggleTheme}>
-              {isDarkTheme ? <FaSun /> : <FaMoon />}
-            </button>
+        <div className="profile-section">
+          <div className="profile">
+            <img src="/images/solomon-profile-photo.jpg" alt="Solomon Taiwo" className="profile-photo" />
+            <div className="social-links">
+              <a href="https://github.com/solomontaiwo" target="_blank" rel="noopener noreferrer" className="social-link">
+                <FaGithub />
+              </a>
+              <a href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/" target="_blank" rel="noopener noreferrer" className="social-link">
+                <FaLinkedin />
+              </a>
+              <a href="https://www.instagram.com/solomon.taiwo/" target="_blank" rel="noopener noreferrer" className="social-link">
+                <FaInstagram />
+              </a>
+              <button className="theme-toggle" onClick={toggleTheme}>
+                {isDarkTheme ? <FaSun /> : <FaMoon />}
+              </button>
+            </div>
+          </div>
+
+          {/* Who Am I Section */}
+          <div className="who-am-i">
+            <h3>Who Am I?</h3>
+            <p>
+              I'm <strong>Solomon Taiwo</strong>, a Software Engineer at <a href="https://www.teleconsys.it" target="_blank" rel="noopener noreferrer">Teleconsys</a> and a Master's student in <strong>Computer Engineering (Artificial Intelligence and Data Analysis)</strong> at <a href="https://www.polito.it/en" target="_blank" rel="noopener noreferrer">Polytechnic University of Turin</a>.
+            </p>
+            <p>
+              I'm passionate about building practical applications that enhance everyday life. Want to build something together? Connect with me on my socials!
+            </p>
           </div>
         </div>
 
-        {/* Griglia dei Progetti */}
+        {/* Project Grid */}
         <div className="projects">
           <div className="project-grid">
             {projects.map((project, i) => (
-              <a href={project.link} target="_blank" rel="noreferrer" key={i} className="project">
-                <img src={project.image} alt={project.title} className="project-image" />
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                key={i}
+                className={`project ${loadedImages[i] ? "fade-in" : "loading"}`}
+                style={{ transitionDelay: `${i * 100}ms` }}
+              >
+                {!loadedImages[i] && (
+                  <div className="spinner">
+                    <FaSpinner className="spin-icon" />
+                  </div>
+                )}
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="project-image"
+                  onLoad={() => handleImageLoad(i)}
+                  style={{ display: loadedImages[i] ? "block" : "none" }}
+                />
                 <div className="project-info">
                   <h3>{project.title}</h3>
                 </div>
