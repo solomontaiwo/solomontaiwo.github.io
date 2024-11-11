@@ -67,6 +67,7 @@ html, body {
   .profile-section {
     flex-direction: column;
     align-items: center; /* Centers items for mobile */
+    color: --text-color
   }
 }
 
