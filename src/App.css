@@ -68,7 +68,6 @@ body {
   .profile-section {
     flex-direction: column;
     align-items: center; /* Centers items for mobile */
-    color: var(--text-color);
   }
 }
 
@@ -128,13 +127,13 @@ body {
 .who-am-i h3 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
-  color: black;
+  color: var(--text-color);
 }
 
 .who-am-i p {
   font-size: 1rem;
   line-height: 1.6;
-  color: black;
+  color: var(--text-color);
 }
 
 .who-am-i a {
