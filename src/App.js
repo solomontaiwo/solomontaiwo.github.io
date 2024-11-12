@@ -109,7 +109,8 @@ function App() {
                 className={`project ${loadedImages[i] ? "fade-in" : "loading"}`}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
-                {!loadedImages[i] && (
+                {/* Mostra lo spinner solo se le immagini precedenti sono caricate o è la prima */}
+                {(!loadedImages[i] || (i > 0 && !loadedImages[i - 1])) && (
                   <div className="spinner">
                     <FaSpinner className="spin-icon" />
                   </div>
