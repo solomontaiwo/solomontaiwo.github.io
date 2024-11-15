@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaSpinner } from "react-icons/fa";
+// eslint-disable-next-line
 import packageJson from "../package.json";
 import "./App.css";
 
@@ -132,10 +133,9 @@ function App() {
         </div>
 
         {/* Footer con la versione */}
-        <footer className="footer">
+        {/*         <footer className="footer">
           <p className="version-text">Version {packageJson.version}</p>
-        </footer>
-
+        </footer> */}
       </div>
     </div>
   );
