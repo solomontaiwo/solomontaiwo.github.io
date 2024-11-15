@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaSpinner } from "react-icons/fa";
+import packageJson from "../package.json";
 import "./App.css";
 
 const projects = [
@@ -92,7 +93,7 @@ function App() {
               I'm <strong>Solomon Taiwo</strong>, a Software Engineer at <a href="https://www.teleconsys.it" target="_blank" rel="noopener noreferrer">Teleconsys</a> and a Master's student in <strong>Computer Engineering (Artificial Intelligence and Data Analysis)</strong> at <a href="https://www.polito.it/en" target="_blank" rel="noopener noreferrer">Polytechnic University of Turin</a>.
             </p>
             <p>
-              I'm passionate about building practical applications that enhance everyday life. Want to build something together? Connect with me on my socials!
+              I'm passionate about building practical applications that enhance everyday life. <br />Want to build something together? Connect with me on my socials!
             </p>
           </div>
         </div>
@@ -129,6 +130,12 @@ function App() {
             ))}
           </div>
         </div>
+
+        {/* Footer con la versione */}
+        <footer className="footer">
+          <p className="version-text">Version {packageJson.version}</p>
+        </footer>
+
       </div>
     </div>
   );
