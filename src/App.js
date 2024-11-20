@@ -10,17 +10,17 @@ const projects = [
   },
   {
     title: "K-Shop Graphics",
-    image: "/images/projects/kshopgraphics/full-hd-kshopgraphics.png",
+    image: "/images/projects/kshopgraphics/kshopgraphics.png",
     link: "https://kshopgraphics.com/",
   },
   {
     title: "The Artist Room",
-    image: "/images/projects/the-artist-room/full-hd/full-hd-home-the-artist-room.png",
+    image: "/images/projects/the-artist-room/the-artist-room.png",
     link: "https://github.com/solomontaiwo/the-artist-room/",
   },
   {
     title: "BibliotecaUNIFE",
-    image: "/images/projects/bibliotecaUNIFE/full-hd-BibliotecaUNIFE.png",
+    image: "/images/projects/bibliotecaUNIFE/BibliotecaUNIFE.png",
     link: "https://github.com/solomontaiwo/bibliotecaUNIFE/",
   },
   {
