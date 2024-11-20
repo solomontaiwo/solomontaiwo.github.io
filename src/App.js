@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaSpinner } from "react-icons/fa";
-// eslint-disable-next-line
-import packageJson from "../package.json";
 import "./App.css";
 
 const projects = [
@@ -64,6 +62,24 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    const preloadImages = async () => {
+      await Promise.all(
+        projects.map(
+          (project) =>
+            new Promise((resolve) => {
+              const img = new Image();
+              img.src = project.image;
+              img.onload = resolve;
+              img.onerror = resolve; // Handle error gracefully
+            })
+        )
+      );
+      setLoadedImages(Array(projects.length).fill(true));
+    };
+    preloadImages();
+  }, []);
+
   return (
     <div className={`theme-container ${isDarkTheme ? "dark-theme" : "light-theme"}`}>
       <div className="App">
@@ -109,10 +125,8 @@ function App() {
                 rel="noreferrer"
                 key={i}
                 className={`project ${loadedImages[i] ? "fade-in" : "loading"}`}
-                style={{ transitionDelay: `${i * 100}ms` }}
               >
-                {/* Mostra lo spinner solo se le immagini precedenti sono caricate o è la prima */}
-                {(!loadedImages[i] || (i > 0 && !loadedImages[i - 1])) && (
+                {!loadedImages[i] && (
                   <div className="spinner">
                     <FaSpinner className="spin-icon" />
                   </div>
@@ -131,11 +145,6 @@ function App() {
             ))}
           </div>
         </div>
-
-        {/* Footer con la versione */}
-        {/*         <footer className="footer">
-          <p className="version-text">Version {packageJson.version}</p>
-        </footer> */}
       </div>
     </div>
   );
