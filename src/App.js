@@ -9,11 +9,6 @@ const projects = [
     link: "https://solomontaiwo.github.io/soldi-sotto/",
   },
   {
-    title: "K-Shop Graphics",
-    image: "/images/projects/kshopgraphics/kshopgraphics.png",
-    link: "https://kshopgraphics.com/",
-  },
-  {
     title: "The Artist Room",
     image: "/images/projects/the-artist-room/the-artist-room.png",
     link: "https://github.com/solomontaiwo/the-artist-room/",
@@ -33,6 +28,11 @@ const projects = [
     image: "/images/projects/i-consigli-della-nonna/i-consigli-della-nonna.png",
     link: "https://solomontaiwo.github.io/i-consigli-della-nonna/",
   },
+  {
+    title: "K-Shop Graphics",
+    image: "/images/projects/kshopgraphics/kshopgraphics.png",
+    link: "https://kshopgraphics.com/",
+  }
 ];
 
 function App() {
