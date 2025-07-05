@@ -705,7 +705,7 @@ footer p {
 @media (max-width: 768px) {
   /* Fix navbar mobile padding */
   body {
-    padding-top: 30px; /* Padding ultra-ridotto per mobile reale */
+    padding-top: 70px; /* Padding aumentato per mobile reale */
   }
   
   .navbar-nav {
@@ -813,7 +813,7 @@ footer p {
 @media (max-width: 576px) {
   /* Fix navbar molto piccoli */
   body {
-    padding-top: 25px; /* Padding ultra-compatto per schermi piccoli */
+    padding-top: 65px; /* Padding aumentato per schermi piccoli */
   }
   
   .container {
@@ -822,6 +822,7 @@ footer p {
   
   .hero-section {
     padding: 2rem 0;
+    padding-top: 3rem; /* Padding aggiuntivo per mobile */
   }
   
   .profile-image {
@@ -1100,7 +1101,7 @@ footer p {
 /* ========== MOBILE PORTRAIT SPECIFIC ========== */
 @media (max-width: 480px) and (orientation: portrait) {
   body {
-    padding-top: 20px; /* Padding ultra-minimo per telefoni portrait */
+    padding-top: 60px; /* Padding corretto per telefoni portrait */
   }
   
   .navbar {
@@ -1116,7 +1117,7 @@ footer p {
 @media (hover: none) and (pointer: coarse) {
   /* Specifico per dispositivi touch/mobile reali */
   body {
-    padding-top: 15px !important; /* Padding minimo assoluto per mobile touch */
+    padding-top: 80px !important; /* Padding definitivo per mobile touch */
   }
   
   .navbar {
@@ -1125,6 +1126,6 @@ footer p {
   }
   
   .hero-section {
-    padding-top: 1rem;
+    padding-top: 2rem; /* Padding hero aumentato per mobile touch */
   }
 }
