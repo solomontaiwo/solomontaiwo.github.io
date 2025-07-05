@@ -705,7 +705,7 @@ footer p {
 @media (max-width: 768px) {
   /* Fix navbar mobile padding */
   body {
-    padding-top: 45px; /* Padding ottimizzato per mobile */
+    padding-top: 30px; /* Padding ultra-ridotto per mobile reale */
   }
   
   .navbar-nav {
@@ -813,7 +813,7 @@ footer p {
 @media (max-width: 576px) {
   /* Fix navbar molto piccoli */
   body {
-    padding-top: 40px; /* Padding ultra-compatto per schermi piccoli */
+    padding-top: 25px; /* Padding ultra-compatto per schermi piccoli */
   }
   
   .container {
@@ -1100,7 +1100,7 @@ footer p {
 /* ========== MOBILE PORTRAIT SPECIFIC ========== */
 @media (max-width: 480px) and (orientation: portrait) {
   body {
-    padding-top: 35px; /* Padding ultra-minimo per telefoni portrait */
+    padding-top: 20px; /* Padding ultra-minimo per telefoni portrait */
   }
   
   .navbar {
@@ -1109,5 +1109,22 @@ footer p {
   
   .hero-section {
     padding: 1.5rem 0;
+  }
+}
+
+/* ========== MOBILE TOUCH DEVICES ========== */
+@media (hover: none) and (pointer: coarse) {
+  /* Specifico per dispositivi touch/mobile reali */
+  body {
+    padding-top: 15px !important; /* Padding minimo assoluto per mobile touch */
+  }
+  
+  .navbar {
+    min-height: 50px;
+    padding: 0.25rem 0;
+  }
+  
+  .hero-section {
+    padding-top: 1rem;
   }
 }
