@@ -50,6 +50,8 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior: none; /* Elimina rimbalzo globale */
+  height: 100%; /* Assicura altezza corretta */
 }
 
 body {
@@ -57,6 +59,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   padding-top: 50px; /* Spazio minimo per navbar */
+  overscroll-behavior: none; /* Elimina il rimbalzo su mobile */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll su iOS */
 }
 
 .theme-container {
@@ -64,6 +68,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   transition: all 0.3s ease;
+  overscroll-behavior: none; /* Prevenzione rimbalzo contenitore */
 }
 
 /* ========== NAVIGATION ========== */
@@ -1118,6 +1123,16 @@ footer p {
   /* Specifico per dispositivi touch/mobile reali */
   body {
     padding-top: 80px !important; /* Padding definitivo per mobile touch */
+    overscroll-behavior-y: none; /* Elimina rimbalzo verticale su touch */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  html {
+    overscroll-behavior-y: none; /* Doppia protezione per touch devices */
+  }
+  
+  .theme-container {
+    overscroll-behavior-y: none;
   }
   
   .navbar {
@@ -1127,5 +1142,18 @@ footer p {
   
   .hero-section {
     padding-top: 2rem; /* Padding hero aumentato per mobile touch */
+  }
+}
+
+/* ========== IOS SAFARI SPECIFIC ========== */
+@supports (-webkit-touch-callout: none) {
+  /* Specifico per iOS Safari */
+  body {
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  html {
+    overscroll-behavior: none !important;
   }
 }
