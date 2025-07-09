@@ -82,7 +82,7 @@ const projects = [
   {
     title: "I consigli della nonna",
     image: "/images/projects/i-consigli-della-nonna/i-consigli-della-nonna.png",
-    link: "https://solomontaiwo.github.io/i-consigli-della-nonna/",
+    link: "https://solomontaiwo.github.io/grandma-drunken-advices/",
     tech: ["React", "Bootstrap"],
     category: "Web App",
     status: "Live",
