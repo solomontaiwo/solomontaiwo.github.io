@@ -40,9 +40,9 @@ export const translations = {
       subtitle: "Una selezione dei progetti che ho sviluppato, dalle applicazioni web alle soluzioni enterprise.",
       viewProject: "Visualizza Progetto",
       projectDescriptions: {
+        "Exobabel": "Progetto NASA Space Apps Challenge 2025 - Analisi di esopianeti tramite machine learning",
         "SoldiSotto": "Applicazione web per la gestione delle finanze personali",
         "The Artist Room": "Piattaforma per artisti e gallerie d'arte",
-        "BibliotecaUNIFE": "Sistema di gestione biblioteca universitaria",
         "InformaticaUnife": "Portale informativo per studenti di informatica",
         "I consigli della nonna": "App web per condividere ricette tradizionali",
         "K-Shop Graphics": "Portfolio e e-commerce per servizi grafici"
@@ -116,9 +116,9 @@ export const translations = {
       subtitle: "A selection of projects I've developed, from web applications to enterprise solutions.",
       viewProject: "View Project",
       projectDescriptions: {
+        "Exobabel": "NASA Space Apps Challenge 2025 - Exoplanet analysis using machine learning",
         "SoldiSotto": "Web application for personal finance management",
         "The Artist Room": "Platform for artists and art galleries",
-        "BibliotecaUNIFE": "University library management system",
         "InformaticaUnife": "Information portal for computer science students",
         "I consigli della nonna": "Web app for sharing traditional recipes",
         "K-Shop Graphics": "Portfolio and e-commerce for graphic services"
@@ -150,4 +150,4 @@ export const translations = {
       toAuto: "Automatic"
     }
   }
-}; 
+};

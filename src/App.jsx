@@ -44,6 +44,15 @@ const getStatusColor = (status) => {
 
 const projects = [
   {
+    title: "Exobabel",
+    image: "/images/projects/exobabel/exobabel.png",
+    link: "https://exobabel.wiki/",
+    tech: ["React", "Python", "JavaScript", "ML"],
+    category: "Hackathon Project",
+    status: "Live",
+    gradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)"
+  },
+  {
     title: "SoldiSotto",
     image: "/images/projects/soldisotto/soldi-sotto.png",
     link: "https://solomontaiwo.github.io/soldi-sotto/",
@@ -60,15 +69,6 @@ const projects = [
     category: "University Project",
     status: "Completed",
     gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-  },
-  {
-    title: "BibliotecaUNIFE",
-    image: "/images/projects/bibliotecaUNIFE/BibliotecaUNIFE.png",
-    link: "https://github.com/solomontaiwo/bibliotecaUNIFE/",
-    tech: ["PHP", "MySQL"],
-    category: "University Project",
-    status: "Completed",
-    gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
   },
   {
     title: "InformaticaUnife",
