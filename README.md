@@ -9,7 +9,7 @@ If you would like to explore the codebase or contribute:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/solomontaiwo.github.io.git
+   git clone https://github.com/solomontaiwo/solomontaiwo.github.io.git
    ```
 2. Navigate to the project directory:
 
