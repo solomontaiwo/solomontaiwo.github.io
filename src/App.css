@@ -13,6 +13,19 @@
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --navbar-height: 70px;
+}
+
+@media (max-width: 992px) {
+  :root {
+    --navbar-height: 64px;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --navbar-height: 60px;
+  }
 }
 
 /* ========== LIGHT THEME ========== */
@@ -58,7 +71,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
-  padding-top: 50px; /* Spazio minimo per navbar */
+  padding-top: var(--navbar-height);
   overscroll-behavior: none; /* Elimina il rimbalzo su mobile */
   -webkit-overflow-scrolling: touch; /* Smooth scroll su iOS */
 }
@@ -77,6 +90,7 @@ body {
   background-color: var(--navbar-bg) !important;
   transition: all 0.3s ease;
   border-bottom: 1px solid var(--border-color);
+  min-height: var(--navbar-height);
 }
 
 .navbar-brand {
@@ -97,74 +111,6 @@ body {
 .navbar-nav .nav-link:hover {
   color: var(--primary-color) !important;
   transform: translateY(-2px);
-}
-
-/* ========== THEME TOGGLE BUTTON ========== */
-.theme-toggle-btn {
-  width: 45px;
-  height: 45px;
-  border: 2px solid var(--border-color);
-  border-radius: 50%;
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-.theme-toggle-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-  transform: scale(1.1);
-  box-shadow: var(--shadow);
-}
-
-.theme-toggle-btn.theme-auto {
-  border-color: var(--info-color);
-  color: var(--info-color);
-}
-
-.theme-toggle-btn.theme-auto:hover {
-  background: var(--info-color);
-  border-color: var(--info-color);
-  color: white;
-}
-
-/* ========== LANGUAGE TOGGLE BUTTON ========== */
-.language-toggle-btn {
-  height: 45px;
-  padding: 0 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 25px;
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-  text-decoration: none;
-}
-
-.language-toggle-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.language-toggle-btn:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
 }
 
 /* ========== HERO SECTION ========== */
@@ -423,6 +369,9 @@ section {
   height: 240px;
   overflow: hidden;
   border-radius: 20px 20px 0 0;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .project-image-modern {
@@ -434,43 +383,6 @@ section {
 
 .project-card-modern:hover .project-image-modern {
   opacity: 0.9;
-}
-
-/* Image Overlay */
-.project-image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.project-card-modern:hover .project-image-overlay {
-  opacity: 1;
-}
-
-.project-preview-badge {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--primary-color);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  transition: opacity 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.project-card-modern:hover .project-preview-badge {
-  opacity: 1;
 }
 
 /* Content */
@@ -708,27 +620,6 @@ footer p {
 
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
-  /* Fix navbar mobile padding */
-  body {
-    padding-top: 70px; /* Padding aumentato per mobile reale */
-  }
-  
-  .navbar-nav {
-    display: none;
-  }
-  
-  .theme-toggle-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-  
-  .language-toggle-btn {
-    height: 40px;
-    padding: 0 0.8rem;
-    font-size: 0.8rem;
-  }
-  
   .display-4 {
     font-size: 2rem;
   }
@@ -816,11 +707,6 @@ footer p {
 }
 
 @media (max-width: 576px) {
-  /* Fix navbar molto piccoli */
-  body {
-    padding-top: 65px; /* Padding aumentato per schermi piccoli */
-  }
-  
   .container {
     padding: 0 1rem;
   }
@@ -840,11 +726,6 @@ footer p {
     height: 45px;
     font-size: 1.1rem;
   }
-}
-
-/* ========== SMOOTH TRANSITIONS ========== */
-* {
-  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* ========== PERFORMANCE OPTIMIZATIONS ========== */
@@ -917,43 +798,6 @@ footer p {
 .dark-theme .btn-outline-primary:hover {
   background-color: var(--primary-color);
   color: white;
-}
-
-
-
-.dark-theme .theme-toggle-btn {
-  border-color: var(--border-color);
-  background: var(--card-bg);
-  color: var(--text-primary);
-}
-
-.dark-theme .theme-toggle-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-}
-
-.dark-theme .theme-toggle-btn.theme-auto {
-  border-color: var(--info-color);
-  color: var(--info-color);
-}
-
-.dark-theme .theme-toggle-btn.theme-auto:hover {
-  background: var(--info-color);
-  border-color: var(--info-color);
-  color: white;
-}
-
-.dark-theme .language-toggle-btn {
-  border-color: var(--border-color);
-  background: var(--card-bg);
-  color: var(--text-primary);
-}
-
-.dark-theme .language-toggle-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
 }
 
 .dark-theme .hero-section {
@@ -1045,12 +889,6 @@ footer p {
   color: var(--text-primary);
 }
 
-.dark-theme .project-preview-badge {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--primary-color);
-  backdrop-filter: none;
-}
-
 .dark-theme .project-loader-modern {
   background: rgba(42, 47, 62, 0.5);
 }
@@ -1105,12 +943,8 @@ footer p {
 
 /* ========== MOBILE PORTRAIT SPECIFIC ========== */
 @media (max-width: 480px) and (orientation: portrait) {
-  body {
-    padding-top: 60px; /* Padding corretto per telefoni portrait */
-  }
-  
   .navbar {
-    min-height: 60px; /* Assicura altezza minima navbar */
+    min-height: var(--navbar-height);
   }
   
   .hero-section {
@@ -1122,7 +956,6 @@ footer p {
 @media (hover: none) and (pointer: coarse) {
   /* Specifico per dispositivi touch/mobile reali */
   body {
-    padding-top: 80px !important; /* Padding definitivo per mobile touch */
     overscroll-behavior-y: none; /* Elimina rimbalzo verticale su touch */
     -webkit-overflow-scrolling: touch;
   }
@@ -1136,7 +969,7 @@ footer p {
   }
   
   .navbar {
-    min-height: 50px;
+    min-height: var(--navbar-height);
     padding: 0.25rem 0;
   }
   

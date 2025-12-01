@@ -63,16 +63,6 @@ export const translations = {
       rights: "Tutti i diritti riservati.",
       madeWith: "Realizzato con ❤️ usando React e Bootstrap"
     },
-    
-    // Theme toggle
-    theme: {
-      light: "Passa al tema chiaro",
-      dark: "Passa al tema scuro",
-      auto: "Segui tema di sistema",
-      toLight: "Tema chiaro",
-      toDark: "Tema scuro", 
-      toAuto: "Automatico"
-    }
   },
   
   en: {
@@ -139,15 +129,5 @@ export const translations = {
       rights: "All rights reserved.",
       madeWith: "Made with ❤️ using React and Bootstrap"
     },
-    
-    // Theme toggle
-    theme: {
-      light: "Switch to light theme",
-      dark: "Switch to dark theme",
-      auto: "Follow system theme",
-      toLight: "Light theme",
-      toDark: "Dark theme",
-      toAuto: "Automatic"
-    }
   }
 };

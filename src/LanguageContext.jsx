@@ -11,44 +11,24 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('it'); // default italiano
+  const [language, setLanguage] = useState('en'); // default fallback
 
   // Funzione per rilevare la lingua di sistema
   const detectSystemLanguage = () => {
-    // Prova con navigator.language prima, poi con navigator.languages
-    const browserLanguage = navigator.language || navigator.languages[0] || 'it';
-    
-    // Estrai solo il codice lingua (es: 'en-US' -> 'en')
-    const languageCode = browserLanguage.split('-')[0].toLowerCase();
-    
-    // Supporta solo italiano e inglese
-    return languageCode === 'en' ? 'en' : 'it';
+    const languages = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'])
+      .map((lang) => (lang || '').split('-')[0].toLowerCase());
+    const supported = ['en', 'it'];
+    const match = languages.find((lang) => supported.includes(lang));
+    return match || 'en';
   };
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('portfolio-language');
-    
-    if (savedLanguage) {
-      // Se c'è una lingua salvata, usala
-      setLanguage(savedLanguage);
-    } else {
-      // Altrimenti rileva automaticamente la lingua di sistema
-      const systemLanguage = detectSystemLanguage();
-      setLanguage(systemLanguage);
-      // Salva la scelta automatica per future visite
-      localStorage.setItem('portfolio-language', systemLanguage);
-    }
+    // Rileva automaticamente la lingua di sistema e rimuovi vecchie preferenze manuali
+    localStorage.removeItem('portfolio-language');
+    const systemLanguage = detectSystemLanguage();
+    setLanguage(systemLanguage);
   }, []);
 
-  const toggleLanguage = () => {
-    const newLanguage = language === 'it' ? 'en' : 'it';
-    setLanguage(newLanguage);
-    localStorage.setItem('portfolio-language', newLanguage);
-    
-    // Aggiorna l'attributo lang del documento per accessibilità
-    document.documentElement.lang = newLanguage;
-  };
-  
   // Effetto per aggiornare lang e title quando la lingua cambia
   useEffect(() => {
     document.documentElement.lang = language;
@@ -59,10 +39,7 @@ export const LanguageProvider = ({ children }) => {
   }, [language]);
 
   const value = {
-    language,
-    toggleLanguage,
-    isItalian: language === 'it',
-    isEnglish: language === 'en'
+    language
   };
 
   return (

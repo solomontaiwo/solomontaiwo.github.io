@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaSpinner, FaExternalLinkAlt, FaCode, FaGraduationCap, FaBriefcase, FaGlobe, FaDesktop, FaReact, FaJsSquare, FaCss3Alt, FaNodeJs, FaDatabase, FaJava, FaHtml5, FaWordpress, FaPhp, FaBootstrap, FaPlay, FaCheckCircle, FaCog, FaTag, FaArrowRight } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaInstagram, FaSpinner, FaCode, FaGraduationCap, FaBriefcase, FaReact, FaJsSquare, FaCss3Alt, FaNodeJs, FaDatabase, FaJava, FaHtml5, FaWordpress, FaPhp, FaBootstrap, FaPlay, FaCheckCircle, FaCog, FaTag, FaArrowRight } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -70,6 +70,7 @@ const projects = [
     status: "Completed",
     gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
   },
+    /*
   {
     title: "InformaticaUnife",
     image: "/images/projects/informaticaUnife/informaticaUnife.png",
@@ -97,21 +98,27 @@ const projects = [
     status: "Live",
     gradient: "linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%)"
   }
+    */
 ];
 
+const getSystemPrefersDark = () => {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+};
+
 function App() {
-  const [themeMode, setThemeMode] = useState('auto'); // 'auto', 'light', 'dark'
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => getSystemPrefersDark());
   const [loadedImages, setLoadedImages] = useState(Array(projects.length).fill(false));
-  const { language, toggleLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = translations[language];
 
   // Funzione per applicare il tema in base alla modalità
-  const applyTheme = (mode, systemPrefersDark) => {
-    if (mode === 'auto') {
-      setIsDarkTheme(systemPrefersDark);
-    } else {
-      setIsDarkTheme(mode === 'dark');
+  const applyTheme = (useDarkTheme) => {
+    setIsDarkTheme(useDarkTheme);
+    if (typeof document !== "undefined") {
+      document.documentElement.style.colorScheme = useDarkTheme ? 'dark' : 'light';
     }
   };
 
@@ -121,80 +128,38 @@ function App() {
     if (oldTheme) {
       localStorage.removeItem("theme");
     }
-
-    const savedThemeMode = localStorage.getItem("theme-mode") || 'auto';
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const systemPrefersDark = mediaQuery.matches;
-
-    setThemeMode(savedThemeMode);
-    applyTheme(savedThemeMode, systemPrefersDark);
+    localStorage.removeItem("theme-mode");
   }, []);
 
   // Effetto separato per gestire i cambiamenti del tema di sistema
   useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleSystemThemeChange = (e) => {
-      if (themeMode === 'auto') {
-        setIsDarkTheme(e.matches);
-      }
+      applyTheme(e.matches);
     };
 
-    // Aggiungi listener solo se il tema è auto
-    if (themeMode === 'auto') {
+    applyTheme(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === 'function') {
       mediaQuery.addEventListener('change', handleSystemThemeChange);
+    } else if (typeof mediaQuery.addListener === 'function') {
+      mediaQuery.addListener(handleSystemThemeChange);
     }
 
     // Cleanup
     return () => {
-      mediaQuery.removeEventListener('change', handleSystemThemeChange);
+      if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', handleSystemThemeChange);
+      } else if (typeof mediaQuery.removeListener === 'function') {
+        mediaQuery.removeListener(handleSystemThemeChange);
+      }
     };
-  }, [themeMode]);
-
-  const toggleTheme = () => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const systemPrefersDark = mediaQuery.matches;
-    
-    let newMode;
-    if (themeMode === 'auto') {
-      // Se è auto, passa al contrario del sistema
-      newMode = systemPrefersDark ? 'light' : 'dark';
-    } else if (themeMode === 'light') {
-      newMode = 'dark';
-    } else {
-      newMode = 'auto';
-    }
-    
-    setThemeMode(newMode);
-    localStorage.setItem("theme-mode", newMode);
-    applyTheme(newMode, systemPrefersDark);
-  };
-
-  // Funzione per ottenere l'icona del tema corrente
-  const getThemeIcon = () => {
-    if (themeMode === 'auto') {
-      return <FaDesktop />;
-    } else if (themeMode === 'light') {
-      return <FaMoon />;
-    } else {
-      return <FaSun />;
-    }
-  };
-
-  // Funzione per ottenere il tooltip del tema
-  const getThemeTooltip = () => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const systemPrefersDark = mediaQuery.matches;
-    
-    if (themeMode === 'auto') {
-      const nextMode = systemPrefersDark ? 'light' : 'dark';
-      return `${t.theme.auto} → ${nextMode === 'light' ? t.theme.toLight : t.theme.toDark}`;
-    } else if (themeMode === 'light') {
-      return `${t.theme.toLight} → ${t.theme.toDark}`;
-    } else {
-      return `${t.theme.toDark} → ${t.theme.toAuto}`;
-    }
-  };
+  }, []);
 
   const handleImageLoad = (index) => {
     setLoadedImages((prevLoadedImages) => {
@@ -230,27 +195,29 @@ function App() {
           <a className="navbar-brand fw-bold" href="#home">
             Solomon Taiwo
           </a>
-          <div className="d-flex align-items-center">
-            <ul className="navbar-nav me-3 flex-row">
-              <li className="nav-item me-3">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul className="navbar-nav align-items-lg-center me-lg-3 mb-2 mb-lg-0">
+              <li className="nav-item">
                 <a className="nav-link" href="#about">{t.nav.about}</a>
               </li>
-              <li className="nav-item me-3">
+              <li className="nav-item">
                 <a className="nav-link" href="#projects">{t.nav.projects}</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#contact">{t.nav.contact}</a>
               </li>
             </ul>
-            <div className="d-flex gap-2">
-              <button className="language-toggle-btn" onClick={toggleLanguage} title={`Switch to ${language === 'it' ? 'English' : 'Italiano'}`}>
-                <FaGlobe className="me-1" />
-                {language === 'it' ? 'EN' : 'IT'}
-              </button>
-              <button className={`theme-toggle-btn ${themeMode === 'auto' ? 'theme-auto' : ''}`} onClick={toggleTheme} title={getThemeTooltip()}>
-                {getThemeIcon()}
-              </button>
-            </div>
           </div>
         </div>
       </nav>
@@ -394,7 +361,13 @@ function App() {
                   </div>
                   
                   {/* Image Container */}
-                  <div className="project-image-container">
+                  <a
+                    className="project-image-container"
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${t.projects.viewProject} - ${project.title}`}
+                  >
                     {!loadedImages[i] && (
                       <div className="project-loader-modern">
                         <FaSpinner className="fa-spin fs-1" />
@@ -408,12 +381,7 @@ function App() {
                       onLoad={() => handleImageLoad(i)}
                       style={{ display: loadedImages[i] ? "block" : "none" }}
                     />
-                    <div className="project-image-overlay">
-                      <div className="project-preview-badge">
-                        <FaExternalLinkAlt />
-                      </div>
-                    </div>
-                  </div>
+                  </a>
                   
                   {/* Content */}
                   <div className="project-content-modern">
