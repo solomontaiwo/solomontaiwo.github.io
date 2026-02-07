@@ -874,8 +874,21 @@ main,
   }
 
   .hero-main {
+    padding-top: 1.05rem;
     padding-bottom: 0.25rem;
-    padding-right: 4.7rem;
+    padding-right: 6.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-title,
+  .hero-role,
+  .hero-description {
+    max-width: calc(100% - 6.2rem);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-visual {
@@ -902,6 +915,8 @@ main,
     flex-direction: column;
     gap: 0.55rem;
     margin-bottom: 0.75rem;
+    align-items: center;
+    justify-content: center;
   }
 
   .action-btn {
@@ -913,11 +928,20 @@ main,
     margin-left: 0;
   }
 
+  .social-row {
+    justify-content: center;
+  }
+
   .quick-facts {
     gap: 0.34rem;
+    justify-content: center;
+    align-items: center;
   }
 
   .quick-facts li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.76rem;
     padding: 0.28rem 0.52rem;
   }
@@ -955,6 +979,12 @@ main,
   .hero-description,
   .section-subtitle {
     font-size: 0.95rem;
+  }
+
+  .hero-title,
+  .hero-role,
+  .hero-description {
+    max-width: calc(100% - 5.7rem);
   }
 
   .quick-facts li:nth-child(3) {
