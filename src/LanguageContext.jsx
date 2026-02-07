@@ -1,50 +1,47 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const LanguageContext = createContext();
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
 };
 
-export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('en'); // default fallback
+const detectSystemLanguage = () => {
+  if (typeof navigator === "undefined") {
+    return "en";
+  }
 
-  // Funzione per rilevare la lingua di sistema
-  const detectSystemLanguage = () => {
-    const languages = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'])
-      .map((lang) => (lang || '').split('-')[0].toLowerCase());
-    const supported = ['en', 'it'];
-    const match = languages.find((lang) => supported.includes(lang));
-    return match || 'en';
-  };
+  const rawLanguages =
+    navigator.languages && navigator.languages.length > 0
+      ? navigator.languages
+      : [navigator.language || "en"];
+
+  const supported = ["en", "it"];
+  const normalized = rawLanguages.map((lang) => (lang || "").split("-")[0].toLowerCase());
+  const match = normalized.find((lang) => supported.includes(lang));
+
+  return match || "en";
+};
+
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    // Rileva automaticamente la lingua di sistema e rimuovi vecchie preferenze manuali
-    localStorage.removeItem('portfolio-language');
-    const systemLanguage = detectSystemLanguage();
-    setLanguage(systemLanguage);
+    setLanguage(detectSystemLanguage());
   }, []);
 
-  // Effetto per aggiornare lang e title quando la lingua cambia
   useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
     document.documentElement.lang = language;
-    
-    // Aggiorna anche il titolo del documento
-    const title = language === 'it' ? 'Solomon Taiwo - Portfolio' : 'Solomon Taiwo - Portfolio';
-    document.title = title;
+    document.title = "Solomon Taiwo | Software Engineer Portfolio";
   }, [language]);
 
-  const value = {
-    language
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-}; 
+  return <LanguageContext.Provider value={{ language }}>{children}</LanguageContext.Provider>;
+};
