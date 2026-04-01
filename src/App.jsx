@@ -221,8 +221,8 @@ function App() {
             </ul>
 
             <div className="nav-controls">
-              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label={t.nav.langSwitch} title={t.nav.langSwitch}>
-                {t.nav.langSwitch}
+              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label="Switch language" title={t.nav.langSwitch}>
+                <span aria-hidden="true">{t.nav.langSwitch}</span>
               </button>
               <button className="nav-icon-btn" onClick={toggleTheme} aria-label={t.nav.themeToggle} title={t.nav.themeToggle}>
                 {theme === "dark" ? <FaSun /> : <FaMoon />}
