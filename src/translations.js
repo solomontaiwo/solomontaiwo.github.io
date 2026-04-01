@@ -16,7 +16,6 @@ export const translations = {
       description:
         "Progetto e sviluppo applicazioni web affidabili, curate nel dettaglio e pensate per generare impatto reale.",
       primaryCta: "Vedi i progetti",
-      secondaryCta: "Scarica CV",
       socialLabel: "Canali professionali",
       factsLabel: "Punti chiave",
       imageAlt: "Ritratto professionale di Solomon Taiwo",
@@ -165,7 +164,6 @@ export const translations = {
       description:
         "I design and build reliable web applications with clean execution, strong UX, and measurable real-world impact.",
       primaryCta: "View projects",
-      secondaryCta: "Download resume",
       socialLabel: "Professional channels",
       factsLabel: "Key points",
       imageAlt: "Professional portrait of Solomon Taiwo",
