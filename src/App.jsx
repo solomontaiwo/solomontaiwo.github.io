@@ -95,7 +95,7 @@ const sectionIcon = {
 function App() {
   const [loadedImages, setLoadedImages] = useState(() => Array(projectCatalog.length).fill(false));
   const { language, setLanguage } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] || translations.en;
   const contactEmail = "taiwo.o.solomon@gmail.com";
 
   const [theme, setTheme] = useState(() =>
