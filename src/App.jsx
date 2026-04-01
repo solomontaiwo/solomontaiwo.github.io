@@ -95,7 +95,7 @@ const sectionIcon = {
 function App() {
   const [loadedImages, setLoadedImages] = useState(() => Array(projectCatalog.length).fill(false));
   const { language, setLanguage } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] || translations.en;
   const contactEmail = "taiwo.o.solomon@gmail.com";
 
   const [theme, setTheme] = useState(() =>
@@ -108,7 +108,13 @@ function App() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("theme", next);
+      }
+    } catch (e) {
+      // Ignore storage errors; theme is still applied via data-theme attribute.
+    }
   };
 
   const toggleLanguage = () => {
@@ -221,8 +227,8 @@ function App() {
             </ul>
 
             <div className="nav-controls">
-              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label={t.nav.langSwitch} title={t.nav.langSwitch}>
-                {t.nav.langSwitch}
+              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label="Switch language" title={t.nav.langSwitch}>
+                <span aria-hidden="true">{t.nav.langSwitch}</span>
               </button>
               <button className="nav-icon-btn" onClick={toggleTheme} aria-label={t.nav.themeToggle} title={t.nav.themeToggle}>
                 {theme === "dark" ? <FaSun /> : <FaMoon />}
@@ -487,7 +493,13 @@ function App() {
       {showBackToTop && (
         <button
           className="back-to-top"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => {
+            const prefersReducedMotion =
+              typeof window !== "undefined" &&
+              typeof window.matchMedia === "function" &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+          }}
           aria-label={t.backToTop}
           title={t.backToTop}
         >

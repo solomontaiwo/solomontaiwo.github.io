@@ -27,32 +27,37 @@ const detectSystemLanguage = () => {
   return match || "en";
 };
 
-export const LanguageProvider = ({ children }) => {
-  const [language, setLanguageState] = useState("en");
+const SUPPORTED_LANGUAGES = ["en", "it"];
 
-  useEffect(() => {
-    let saved = null;
-
-    if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
-      try {
-        saved = window.localStorage.getItem("language");
-      } catch (e) {
-        // Ignore storage access errors and fall back to system language
-      }
+const getSavedLanguage = () => {
+  try {
+    const saved = typeof window !== "undefined" && window.localStorage
+      ? window.localStorage.getItem("language")
+      : null;
+    if (saved && SUPPORTED_LANGUAGES.includes(saved.toLowerCase())) {
+      return saved.toLowerCase();
     }
+  } catch (e) {
+    // Ignore storage access errors and fall back to system language
+  }
+  return detectSystemLanguage();
+};
 
-    setLanguageState(saved || detectSystemLanguage());
-  }, []);
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguageState] = useState(getSavedLanguage);
 
   const setLanguage = (lang) => {
-    setLanguageState(lang);
-
-    if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
-      try {
-        window.localStorage.setItem("language", lang);
-      } catch (e) {
-        // Ignore storage access errors; language state is already updated
+    const normalized = (lang || "").toLowerCase();
+    if (!SUPPORTED_LANGUAGES.includes(normalized)) {
+      return;
+    }
+    setLanguageState(normalized);
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("language", normalized);
       }
+    } catch (e) {
+      // Ignore storage access errors; language state is already updated
     }
   };
 
