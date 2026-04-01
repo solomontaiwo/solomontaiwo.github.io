@@ -108,12 +108,12 @@ function App() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    try {
-      if (typeof window !== "undefined" && window.localStorage) {
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
         window.localStorage.setItem("theme", next);
+      } catch {
+        // Ignore storage errors; theme is still applied via data-theme attribute.
       }
-    } catch (e) {
-      // Ignore storage errors; theme is still applied via data-theme attribute.
     }
   };
 
@@ -498,7 +498,11 @@ function App() {
               typeof window !== "undefined" &&
               typeof window.matchMedia === "function" &&
               window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+            if (prefersReducedMotion) {
+              window.scrollTo({ top: 0 });
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
           }}
           aria-label={t.backToTop}
           title={t.backToTop}
