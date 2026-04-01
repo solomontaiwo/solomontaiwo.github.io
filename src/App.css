@@ -83,7 +83,6 @@ html {
 
 body {
   margin: 0;
-  padding-top: var(--nav-height);
   font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
   color: var(--text);
   background: var(--bg);
@@ -244,7 +243,7 @@ main,
 }
 
 .hero-section {
-  padding-top: clamp(1.8rem, 2.8vw, 2.4rem);
+  padding-top: calc(var(--nav-height) + clamp(1.8rem, 2.8vw, 2.4rem));
   padding-bottom: clamp(0.9rem, 1.8vw, 1.4rem);
 }
 
