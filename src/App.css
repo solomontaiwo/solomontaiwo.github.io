@@ -892,6 +892,10 @@ main,
     padding: 2.3rem 0;
   }
 
+  .hero-section {
+    padding-top: calc(var(--nav-height) + 1.4rem);
+  }
+
   .hero-shell {
     padding: 0.78rem;
   }
