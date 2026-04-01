@@ -108,7 +108,13 @@ function App() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        window.localStorage.setItem("theme", next);
+      } catch {
+        // Ignore storage errors; theme is still applied via data-theme attribute.
+      }
+    }
   };
 
   const toggleLanguage = () => {
