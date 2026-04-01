@@ -5,7 +5,6 @@ import {
   FaBriefcase,
   FaCode,
   FaDatabase,
-  FaDownload,
   FaEnvelope,
   FaExternalLinkAlt,
   FaGithub,
@@ -257,11 +256,6 @@ function App() {
                     <a href="#projects" className="action-btn action-btn-primary">
                       {t.hero.primaryCta}
                       <FaArrowRight />
-                    </a>
-
-                    <a href="/curriculum-taiwo.pdf" download className="action-btn action-btn-ghost">
-                      {t.hero.secondaryCta}
-                      <FaDownload />
                     </a>
 
                     <div className="social-row social-row-inline" aria-label={t.hero.socialLabel}>

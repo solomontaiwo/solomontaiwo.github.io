@@ -167,19 +167,9 @@ main,
 
 .top-nav {
   min-height: var(--nav-height);
-  background: rgba(248, 250, 252, 0.62);
+  background: var(--glass-soft);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(16px);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .top-nav {
-    background: rgba(3, 7, 18, 0.62);
-  }
-}
-
-[data-theme="dark"] .top-nav {
-  background: rgba(3, 7, 18, 0.62);
 }
 
 .top-nav .navbar-brand {
