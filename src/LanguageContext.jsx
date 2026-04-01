@@ -31,13 +31,29 @@ export const LanguageProvider = ({ children }) => {
   const [language, setLanguageState] = useState("en");
 
   useEffect(() => {
-    const saved = localStorage.getItem("language");
+    let saved = null;
+
+    if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
+      try {
+        saved = window.localStorage.getItem("language");
+      } catch (e) {
+        // Ignore storage access errors and fall back to system language
+      }
+    }
+
     setLanguageState(saved || detectSystemLanguage());
   }, []);
 
   const setLanguage = (lang) => {
     setLanguageState(lang);
-    localStorage.setItem("language", lang);
+
+    if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
+      try {
+        window.localStorage.setItem("language", lang);
+      } catch (e) {
+        // Ignore storage access errors; language state is already updated
+      }
+    }
   };
 
   useEffect(() => {
