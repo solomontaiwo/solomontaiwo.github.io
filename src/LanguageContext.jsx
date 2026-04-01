@@ -27,12 +27,39 @@ const detectSystemLanguage = () => {
   return match || "en";
 };
 
-export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState("en");
+const SUPPORTED_LANGUAGES = ["en", "it"];
 
-  useEffect(() => {
-    setLanguage(detectSystemLanguage());
-  }, []);
+const getSavedLanguage = () => {
+  try {
+    const saved = typeof window !== "undefined" && window.localStorage
+      ? window.localStorage.getItem("language")
+      : null;
+    if (saved && SUPPORTED_LANGUAGES.includes(saved.toLowerCase())) {
+      return saved.toLowerCase();
+    }
+  } catch (e) {
+    // Ignore storage access errors and fall back to system language
+  }
+  return detectSystemLanguage();
+};
+
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguageState] = useState(getSavedLanguage);
+
+  const setLanguage = (lang) => {
+    const normalized = (lang || "").toLowerCase();
+    if (!SUPPORTED_LANGUAGES.includes(normalized)) {
+      return;
+    }
+    setLanguageState(normalized);
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("language", normalized);
+      }
+    } catch (e) {
+      // Ignore storage access errors; language state is already updated
+    }
+  };
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -43,5 +70,5 @@ export const LanguageProvider = ({ children }) => {
     document.title = "Solomon Taiwo | Software Engineer Portfolio";
   }, [language]);
 
-  return <LanguageContext.Provider value={{ language }}>{children}</LanguageContext.Provider>;
+  return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;
 };

@@ -6,6 +6,8 @@ export const translations = {
       projects: "Progetti",
       contact: "Contatti",
       cta: "Parliamone",
+      langSwitch: "EN",
+      themeToggle: "Cambia tema",
     },
     hero: {
       greeting: "Ciao, sono",
@@ -132,6 +134,7 @@ export const translations = {
         "Disponibile per collaborazioni professionali, opportunità IT e sfide tecniche con obiettivi chiari.",
       linkedinText: "Profilo professionale aggiornato",
       emailValue: "taiwo.o.solomon@gmail.com",
+      emailText: "Scrivimi direttamente",
       primaryCta: "Scrivimi",
       actions: {
         github: "GitHub",
@@ -139,6 +142,7 @@ export const translations = {
         email: "Email",
       },
     },
+    backToTop: "Torna su",
     footer: {
       madeWith: "Portfolio sviluppato con React e Bootstrap",
     },
@@ -151,6 +155,8 @@ export const translations = {
       projects: "Projects",
       contact: "Contact",
       cta: "Let's talk",
+      langSwitch: "IT",
+      themeToggle: "Toggle theme",
     },
     hero: {
       greeting: "Hi, I'm",
@@ -277,6 +283,7 @@ export const translations = {
         "Available for professional collaborations, IT opportunities, and technical challenges with clear goals.",
       linkedinText: "Updated professional profile",
       emailValue: "taiwo.o.solomon@gmail.com",
+      emailText: "Get in touch directly",
       primaryCta: "Contact me",
       actions: {
         github: "GitHub",
@@ -284,6 +291,7 @@ export const translations = {
         email: "Email",
       },
     },
+    backToTop: "Back to top",
     footer: {
       madeWith: "Portfolio built with React and Bootstrap",
     },

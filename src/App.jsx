@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   FaArrowRight,
+  FaArrowUp,
   FaBriefcase,
   FaCode,
   FaDatabase,
+  FaDownload,
+  FaEnvelope,
   FaExternalLinkAlt,
   FaGithub,
   FaGraduationCap,
@@ -13,9 +16,11 @@ import {
   FaJsSquare,
   FaLayerGroup,
   FaLinkedin,
+  FaMoon,
   FaNodeJs,
   FaPhp,
   FaReact,
+  FaSun,
 } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
@@ -89,9 +94,56 @@ const sectionIcon = {
 
 function App() {
   const [loadedImages, setLoadedImages] = useState(() => Array(projectCatalog.length).fill(false));
-  const { language } = useLanguage();
-  const t = translations[language];
+  const { language, setLanguage } = useLanguage();
+  const t = translations[language] || translations.en;
   const contactEmail = "taiwo.o.solomon@gmail.com";
+
+  const [theme, setTheme] = useState(() =>
+    typeof document !== "undefined" ? (document.documentElement.getAttribute("data-theme") || "light") : "light"
+  );
+  const [activeSection, setActiveSection] = useState("home");
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        window.localStorage.setItem("theme", next);
+      } catch {
+        // Ignore storage errors; theme is still applied via data-theme attribute.
+      }
+    }
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === "en" ? "it" : "en");
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const sectionIds = ["home", "about", "skills", "projects", "contact"];
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+      let current = "home";
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+      setShowBackToTop(window.scrollY > 400);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -153,30 +205,38 @@ function App() {
           <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul className="navbar-nav align-items-lg-center me-lg-2">
               <li className="nav-item">
-                <a className="nav-link" href="#about">
+                <a className={`nav-link${activeSection === "about" ? " active" : ""}`} href="#about">
                   {t.nav.about}
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#skills">
+                <a className={`nav-link${activeSection === "skills" ? " active" : ""}`} href="#skills">
                   {t.nav.skills}
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#projects">
+                <a className={`nav-link${activeSection === "projects" ? " active" : ""}`} href="#projects">
                   {t.nav.projects}
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#contact">
+                <a className={`nav-link${activeSection === "contact" ? " active" : ""}`} href="#contact">
                   {t.nav.contact}
                 </a>
               </li>
             </ul>
 
-            <a className="nav-cta" href="#contact">
-              {t.nav.cta}
-            </a>
+            <div className="nav-controls">
+              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label="Switch language" title={t.nav.langSwitch}>
+                <span aria-hidden="true">{t.nav.langSwitch}</span>
+              </button>
+              <button className="nav-icon-btn" onClick={toggleTheme} aria-label={t.nav.themeToggle} title={t.nav.themeToggle}>
+                {theme === "dark" ? <FaSun /> : <FaMoon />}
+              </button>
+              <a className="nav-cta" href="#contact">
+                {t.nav.cta}
+              </a>
+            </div>
           </div>
         </div>
       </nav>
@@ -197,6 +257,11 @@ function App() {
                     <a href="#projects" className="action-btn action-btn-primary">
                       {t.hero.primaryCta}
                       <FaArrowRight />
+                    </a>
+
+                    <a href="/curriculum-taiwo.pdf" download className="action-btn action-btn-ghost">
+                      {t.hero.secondaryCta}
+                      <FaDownload />
                     </a>
 
                     <div className="social-row social-row-inline" aria-label={t.hero.socialLabel}>
@@ -398,6 +463,14 @@ function App() {
                   <p>{t.contact.linkedinText}</p>
                 </a>
               </div>
+
+              <div className="col-md-6 col-lg-4">
+                <a href={`mailto:${contactEmail}`} className="surface-card contact-card reveal delay-2">
+                  <FaEnvelope />
+                  <h3>{t.contact.actions.email}</h3>
+                  <p>{t.contact.emailText}</p>
+                </a>
+              </div>
             </div>
 
             <div className="contact-cta text-center reveal delay-2">
@@ -416,6 +489,27 @@ function App() {
           <p className="mb-0">{t.footer.madeWith}</p>
         </div>
       </footer>
+
+      {showBackToTop && (
+        <button
+          className="back-to-top"
+          onClick={() => {
+            const prefersReducedMotion =
+              typeof window !== "undefined" &&
+              typeof window.matchMedia === "function" &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (prefersReducedMotion) {
+              window.scrollTo({ top: 0 });
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          aria-label={t.backToTop}
+          title={t.backToTop}
+        >
+          <FaArrowUp />
+        </button>
+      )}
     </div>
   );
 }
