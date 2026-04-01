@@ -487,7 +487,17 @@ function App() {
       {showBackToTop && (
         <button
           className="back-to-top"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => {
+            const prefersReducedMotion =
+              typeof window !== "undefined" &&
+              typeof window.matchMedia === "function" &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (prefersReducedMotion) {
+              window.scrollTo({ top: 0 });
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
           aria-label={t.backToTop}
           title={t.backToTop}
         >
