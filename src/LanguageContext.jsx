@@ -28,11 +28,17 @@ const detectSystemLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguageState] = useState("en");
 
   useEffect(() => {
-    setLanguage(detectSystemLanguage());
+    const saved = localStorage.getItem("language");
+    setLanguageState(saved || detectSystemLanguage());
   }, []);
+
+  const setLanguage = (lang) => {
+    setLanguageState(lang);
+    localStorage.setItem("language", lang);
+  };
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -43,5 +49,5 @@ export const LanguageProvider = ({ children }) => {
     document.title = "Solomon Taiwo | Software Engineer Portfolio";
   }, [language]);
 
-  return <LanguageContext.Provider value={{ language }}>{children}</LanguageContext.Provider>;
+  return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;
 };
