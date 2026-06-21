@@ -121,9 +121,9 @@ export const translations = {
         eventfinder: {
           title: "EventFinder",
           description:
-            "Applicazione Next.js per scoprire eventi reali da Wikidata e provider esterni come Ticketmaster, Eventbrite, Meetup e PredictHQ.",
+            "Applicazione Next.js live su Azure per scoprire eventi reali da Wikidata, fonti civiche e provider come Ticketmaster.",
           impact:
-            "Impatto: esperienza responsive con ricerca, filtri, deduplicazione cross-source, integrazioni API e pipeline CI/CD.",
+            "Impatto: ricerca responsive con filtri per città valida e data, deduplicazione cross-source, API route e pipeline CI/CD.",
         },
         artistRoom: {
           title: "The Artist Room",
@@ -282,9 +282,9 @@ export const translations = {
         eventfinder: {
           title: "EventFinder",
           description:
-            "Next.js application for discovering real events from Wikidata and external providers such as Ticketmaster, Eventbrite, Meetup, and PredictHQ.",
+            "Live Next.js application on Azure for discovering real events from Wikidata, civic sources, and providers such as Ticketmaster.",
           impact:
-            "Impact: responsive search experience with filters, cross-source deduplication, API integrations, and CI/CD pipeline.",
+            "Impact: responsive search with valid-city and date filters, cross-source deduplication, API routes, and CI/CD pipeline.",
         },
         artistRoom: {
           title: "The Artist Room",

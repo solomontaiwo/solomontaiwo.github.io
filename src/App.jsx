@@ -31,10 +31,10 @@ const projectCatalog = [
     id: "eventfinder",
     sortDate: "2026-06-21",
     image: "/images/projects/eventfinder/eventfinder.png",
-    link: "https://github.com/solomontaiwo/event-planner",
+    link: "https://event-planner-cuhua6hpb8bwc7ft.italynorth-01.azurewebsites.net/",
     tech: ["Next.js", "TypeScript", "API", "CI/CD"],
     category: "webApp",
-    status: "completed",
+    status: "live",
   },
   {
     id: "isHormuzOpen",
@@ -297,7 +297,7 @@ function App() {
                         <FaGithub />
                       </a>
                       <a
-                        href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/"
+                        href="https://www.linkedin.com/in/solomon-taiwo"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="social-link"
@@ -475,7 +475,7 @@ function App() {
 
               <div className="col-md-6 col-lg-4">
                 <a
-                  href="https://www.linkedin.com/in/solomon-taiwo-7a151b1a3/"
+                  href="https://www.linkedin.com/in/solomon-taiwo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="surface-card contact-card reveal delay-1"
