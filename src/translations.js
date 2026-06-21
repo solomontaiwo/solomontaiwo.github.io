@@ -118,6 +118,13 @@ export const translations = {
             "Web app minimale che indica se lo Stretto di Hormuz risulta aperto, citando una fonte verificabile.",
           impact: "Impatto: rilascio end-to-end con Cloudflare Workers, dominio custom, CI/CD e UI essenziale.",
         },
+        eventfinder: {
+          title: "EventFinder",
+          description:
+            "Applicazione Next.js per scoprire eventi reali da Wikidata e provider esterni come Ticketmaster, Eventbrite, Meetup e PredictHQ.",
+          impact:
+            "Impatto: esperienza responsive con ricerca, filtri, deduplicazione cross-source, integrazioni API e pipeline CI/CD.",
+        },
         artistRoom: {
           title: "The Artist Room",
           description:
@@ -271,6 +278,13 @@ export const translations = {
           description:
             "Minimal web app reporting whether the Strait of Hormuz appears open, with a verifiable source.",
           impact: "Impact: end-to-end release with Cloudflare Workers, custom domain, CI/CD, and a minimal UI.",
+        },
+        eventfinder: {
+          title: "EventFinder",
+          description:
+            "Next.js application for discovering real events from Wikidata and external providers such as Ticketmaster, Eventbrite, Meetup, and PredictHQ.",
+          impact:
+            "Impact: responsive search experience with filters, cross-source deduplication, API integrations, and CI/CD pipeline.",
         },
         artistRoom: {
           title: "The Artist Room",

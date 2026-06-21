@@ -28,15 +28,17 @@ import "./App.css";
 
 const projectCatalog = [
   {
-    id: "exobabel",
-    image: "/images/projects/exobabel/exobabel.png",
-    link: "https://exobabel.wiki/",
-    tech: ["React", "Python", "JavaScript", "ML"],
-    category: "hackathon",
-    status: "live",
+    id: "eventfinder",
+    sortDate: "2026-06-21",
+    image: "/images/projects/eventfinder/eventfinder.png",
+    link: "https://github.com/solomontaiwo/event-planner",
+    tech: ["Next.js", "TypeScript", "API", "CI/CD"],
+    category: "webApp",
+    status: "completed",
   },
   {
     id: "isHormuzOpen",
+    sortDate: "2026-06-21",
     image: "/images/projects/is-hormuz-open/is-hormuz-open.png",
     link: "https://is-hormuz-open.com/",
     tech: ["TypeScript", "Cloudflare", "Hono", "CI/CD"],
@@ -44,7 +46,17 @@ const projectCatalog = [
     status: "live",
   },
   {
+    id: "exobabel",
+    sortDate: "2025-10-05",
+    image: "/images/projects/exobabel/exobabel.png",
+    link: "https://exobabel.wiki/",
+    tech: ["React", "Python", "JavaScript", "ML"],
+    category: "hackathon",
+    status: "live",
+  },
+  {
     id: "soldisotto",
+    sortDate: "2024-11-12",
     image: "/images/projects/soldisotto/soldi-sotto.png",
     link: "https://solomontaiwo.github.io/soldi-sotto/",
     tech: ["React", "JavaScript", "CSS"],
@@ -53,6 +65,7 @@ const projectCatalog = [
   },
   {
     id: "artistRoom",
+    sortDate: "2023-06-30",
     image: "/images/projects/the-artist-room/the-artist-room.png",
     link: "https://github.com/solomontaiwo/the-artist-room/",
     tech: ["React", "VueJS", "PHP", "MySQL"],
@@ -61,13 +74,14 @@ const projectCatalog = [
   },
   {
     id: "bibliotecaUnife",
+    sortDate: "2022-06-30",
     image: "/images/projects/bibliotecaUNIFE/BibliotecaUNIFE.png",
     link: "https://github.com/solomontaiwo/BibliotecaUNIFE",
     tech: ["Java", "Spring", "HTML", "SQL"],
     category: "repository",
     status: "completed",
   },
-];
+].sort((a, b) => b.sortDate.localeCompare(a.sortDate));
 
 const getTechIcon = (tech) => {
   const icons = {
@@ -87,6 +101,7 @@ const getTechIcon = (tech) => {
     ML: <FaLayerGroup />,
     VueJS: <FaCode />,
     TypeScript: <FaCode />,
+    "Next.js": <FaReact />,
     Cloudflare: <FaCloud />,
     Hono: <FaCode />,
     "CI/CD": <FaLayerGroup />,
