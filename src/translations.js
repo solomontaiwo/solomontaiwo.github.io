@@ -112,6 +112,12 @@ export const translations = {
             "Web app per gestione finanze personali con UX chiara e flusso orientato alla praticità.",
           impact: "Impatto: prodotto end-to-end con focus su usabilità, affidabilità e miglioramento progressivo.",
         },
+        isHormuzOpen: {
+          title: "Is Hormuz Open",
+          description:
+            "Web app minimale che indica se lo Stretto di Hormuz risulta aperto, citando una fonte verificabile.",
+          impact: "Impatto: rilascio end-to-end con Cloudflare Workers, dominio custom, CI/CD e UI essenziale.",
+        },
         artistRoom: {
           title: "The Artist Room",
           description:
@@ -259,6 +265,12 @@ export const translations = {
           description:
             "Personal finance web app with clear UX and a practical user-oriented flow.",
           impact: "Impact: end-to-end product focused on usability, reliability, and iterative improvement.",
+        },
+        isHormuzOpen: {
+          title: "Is Hormuz Open",
+          description:
+            "Minimal web app reporting whether the Strait of Hormuz appears open, with a verifiable source.",
+          impact: "Impact: end-to-end release with Cloudflare Workers, custom domain, CI/CD, and a minimal UI.",
         },
         artistRoom: {
           title: "The Artist Room",

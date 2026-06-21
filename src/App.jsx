@@ -3,6 +3,7 @@ import {
   FaArrowRight,
   FaArrowUp,
   FaBriefcase,
+  FaCloud,
   FaCode,
   FaDatabase,
   FaEnvelope,
@@ -32,6 +33,14 @@ const projectCatalog = [
     link: "https://exobabel.wiki/",
     tech: ["React", "Python", "JavaScript", "ML"],
     category: "hackathon",
+    status: "live",
+  },
+  {
+    id: "isHormuzOpen",
+    image: "/images/projects/is-hormuz-open/is-hormuz-open.png",
+    link: "https://is-hormuz-open.com/",
+    tech: ["TypeScript", "Cloudflare", "Hono", "CI/CD"],
+    category: "webApp",
     status: "live",
   },
   {
@@ -77,6 +86,10 @@ const getTechIcon = (tech) => {
     SQL: <FaDatabase />,
     ML: <FaLayerGroup />,
     VueJS: <FaCode />,
+    TypeScript: <FaCode />,
+    Cloudflare: <FaCloud />,
+    Hono: <FaCode />,
+    "CI/CD": <FaLayerGroup />,
   };
 
   return icons[tech] || <FaCode />;
