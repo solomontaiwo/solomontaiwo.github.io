@@ -37,6 +37,15 @@ const projectCatalog = [
     status: "live",
   },
   {
+    id: "ruggine",
+    sortDate: "2026-03-09",
+    image: "/images/projects/ruggine/ruggine.svg",
+    link: "https://github.com/solomontaiwo/rust-project",
+    tech: ["Rust", "React", "WebSocket", "SQLite"],
+    category: "university",
+    status: "completed",
+  },
+  {
     id: "isHormuzOpen",
     sortDate: "2026-06-21",
     image: "/images/projects/is-hormuz-open/is-hormuz-open.png",
@@ -81,7 +90,7 @@ const projectCatalog = [
     category: "repository",
     status: "completed",
   },
-].sort((a, b) => b.sortDate.localeCompare(a.sortDate));
+];
 
 const getTechIcon = (tech) => {
   const icons = {
@@ -105,6 +114,9 @@ const getTechIcon = (tech) => {
     Cloudflare: <FaCloud />,
     Hono: <FaCode />,
     "CI/CD": <FaLayerGroup />,
+    Rust: <FaCode />,
+    WebSocket: <FaLayerGroup />,
+    SQLite: <FaDatabase />,
   };
 
   return icons[tech] || <FaCode />;

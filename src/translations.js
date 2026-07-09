@@ -118,6 +118,13 @@ export const translations = {
             "Web app minimale che indica se lo Stretto di Hormuz risulta aperto, citando una fonte verificabile.",
           impact: "Impatto: rilascio end-to-end con Cloudflare Workers, dominio custom, CI/CD e UI essenziale.",
         },
+        ruggine: {
+          title: "Ruggine",
+          description:
+            "Progetto universitario di messaggistica real-time con backend Rust, frontend React, autenticazione JWT e persistenza SQLite.",
+          impact:
+            "Impatto: applicazione full-stack completa con chat 1-1, gruppi, inviti e comunicazione WebSocket.",
+        },
         eventfinder: {
           title: "EventFinder",
           description:
@@ -278,6 +285,13 @@ export const translations = {
           description:
             "Minimal web app reporting whether the Strait of Hormuz appears open, with a verifiable source.",
           impact: "Impact: end-to-end release with Cloudflare Workers, custom domain, CI/CD, and a minimal UI.",
+        },
+        ruggine: {
+          title: "Ruggine",
+          description:
+            "University real-time messaging project with a Rust backend, React frontend, JWT authentication, and SQLite persistence.",
+          impact:
+            "Impact: complete full-stack application with one-to-one chats, groups, invite codes, and WebSocket communication.",
         },
         eventfinder: {
           title: "EventFinder",
