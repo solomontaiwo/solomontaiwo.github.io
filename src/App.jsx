@@ -37,15 +37,6 @@ const projectCatalog = [
     status: "live",
   },
   {
-    id: "ruggine",
-    sortDate: "2026-03-09",
-    image: "/images/projects/ruggine/ruggine.svg",
-    link: "https://github.com/solomontaiwo/rust-project",
-    tech: ["Rust", "React", "WebSocket", "SQLite"],
-    category: "university",
-    status: "completed",
-  },
-  {
     id: "isHormuzOpen",
     sortDate: "2026-06-21",
     image: "/images/projects/is-hormuz-open/is-hormuz-open.png",
@@ -53,6 +44,15 @@ const projectCatalog = [
     tech: ["TypeScript", "Cloudflare", "Hono", "CI/CD"],
     category: "webApp",
     status: "live",
+  },
+  {
+    id: "ruggine",
+    sortDate: "2026-03-09",
+    image: "/images/projects/ruggine/ruggine.svg",
+    link: "https://github.com/solomontaiwo/rust-project",
+    tech: ["Rust", "React", "WebSocket", "SQLite"],
+    category: "university",
+    status: "completed",
   },
   {
     id: "exobabel",
