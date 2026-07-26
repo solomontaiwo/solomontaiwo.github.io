@@ -100,6 +100,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        seenary: {
+          title: "Seenary",
+          description:
+            "Tracker responsive per film, serie TV e anime, con progressi, valutazioni, recensioni e interfaccia multilingua.",
+          impact:
+            "Impatto: applicazione full-stack pronta per la produzione con Next.js, Java/Spring Boot e servizi serverless AWS, completa di CI/CD.",
+        },
         exobabel: {
           title: "Exobabel",
           description:
@@ -268,6 +275,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        seenary: {
+          title: "Seenary",
+          description:
+            "Responsive tracker for films, TV series and anime, with progress tracking, ratings, reviews, and a multilingual UX.",
+          impact:
+            "Impact: production-ready full-stack application built with Next.js, Java/Spring Boot, and AWS serverless services, with CI/CD included.",
+        },
         exobabel: {
           title: "Exobabel",
           description:

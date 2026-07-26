@@ -28,6 +28,15 @@ import "./App.css";
 
 const projectCatalog = [
   {
+    id: "seenary",
+    sortDate: "2026-07-26",
+    image: "/images/projects/seenary/seenary.png",
+    link: "https://main.d10eewmnsih3qy.amplifyapp.com/",
+    tech: ["Next.js", "Java", "Spring", "AWS", "CI/CD"],
+    category: "webApp",
+    status: "live",
+  },
+  {
     id: "eventfinder",
     sortDate: "2026-06-21",
     image: "/images/projects/eventfinder/eventfinder.png",
@@ -112,6 +121,7 @@ const getTechIcon = (tech) => {
     TypeScript: <FaCode />,
     "Next.js": <FaReact />,
     Cloudflare: <FaCloud />,
+    AWS: <FaCloud />,
     Hono: <FaCode />,
     "CI/CD": <FaLayerGroup />,
     Rust: <FaCode />,
