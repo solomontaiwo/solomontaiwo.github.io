@@ -67,7 +67,7 @@ const projectCatalog = [
     id: "exobabel",
     sortDate: "2025-10-05",
     image: "/images/projects/exobabel/exobabel.png",
-    link: "https://exobabel.wiki/",
+    link: "https://witty-field-0719a7f03.2.azurestaticapps.net/",
     tech: ["React", "Python", "JavaScript", "ML"],
     category: "hackathon",
     status: "live",
