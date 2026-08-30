@@ -100,6 +100,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        securityQuiz: {
+          title: "Quiz Sicurezza dei sistemi informativi",
+          description:
+            "Simulazione PWA per preparare l'esame di sicurezza dei sistemi informativi con domande a risposta multipla tratte dalle prove passate.",
+          impact:
+            "Impatto: esperienza di studio offline-first con 73 affermazioni, cinque lingue, spiegazioni degli errori e deploy automatico su Cloudflare Pages.",
+        },
         seenary: {
           title: "Seenary",
           description:
@@ -139,18 +146,19 @@ export const translations = {
           impact:
             "Impatto: ricerca responsive con filtri per città valida e data, deduplicazione cross-source, API route e pipeline CI/CD.",
         },
-        artistRoom: {
-          title: "The Artist Room",
-          description:
-            "Piattaforma per artisti e gallerie realizzata con stack eterogeneo e gestione dati strutturata.",
-          impact: "Impatto: coordinamento efficace di tecnologie diverse in un unico prodotto coerente.",
-        },
-        bibliotecaUnife: {
-          title: "Biblioteca UNIFE",
-          description:
-            "Repository tecnico orientato a Java e pattern software in contesto didattico.",
-          impact: "Impatto: consolidamento di basi ingegneristiche e disciplina progettuale del codice.",
-        },
+        // Progetti archiviati e non più presenti nel catalogo visualizzato.
+        // artistRoom: {
+        //   title: "The Artist Room",
+        //   description:
+        //     "Piattaforma per artisti e gallerie realizzata con stack eterogeneo e gestione dati strutturata.",
+        //   impact: "Impatto: coordinamento efficace di tecnologie diverse in un unico prodotto coerente.",
+        // },
+        // bibliotecaUnife: {
+        //   title: "Biblioteca UNIFE",
+        //   description:
+        //     "Repository tecnico orientato a Java e pattern software in contesto didattico.",
+        //   impact: "Impatto: consolidamento di basi ingegneristiche e disciplina progettuale del codice.",
+        // },
       },
     },
     contact: {
@@ -275,6 +283,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        securityQuiz: {
+          title: "Information Systems Security Quiz",
+          description:
+            "PWA study simulator for the Information Systems Security exam, with multiple-choice questions derived from past papers.",
+          impact:
+            "Impact: offline-first study experience with 73 statements, five languages, mistake explanations, and automatic deployment on Cloudflare Pages.",
+        },
         seenary: {
           title: "Seenary",
           description:
@@ -314,18 +329,19 @@ export const translations = {
           impact:
             "Impact: responsive search with valid-city and date filters, cross-source deduplication, API routes, and CI/CD pipeline.",
         },
-        artistRoom: {
-          title: "The Artist Room",
-          description:
-            "Platform for artists and galleries built with a heterogeneous stack and structured data handling.",
-          impact: "Impact: effective orchestration of different technologies into one coherent product.",
-        },
-        bibliotecaUnife: {
-          title: "Biblioteca UNIFE",
-          description:
-            "Technical repository focused on Java and software patterns in an educational context.",
-          impact: "Impact: stronger engineering fundamentals and cleaner code design discipline.",
-        },
+        // Archived projects kept as commented references and excluded from the catalog.
+        // artistRoom: {
+        //   title: "The Artist Room",
+        //   description:
+        //     "Platform for artists and galleries built with a heterogeneous stack and structured data handling.",
+        //   impact: "Impact: effective orchestration of different technologies into one coherent product.",
+        // },
+        // bibliotecaUnife: {
+        //   title: "Biblioteca UNIFE",
+        //   description:
+        //     "Technical repository focused on Java and software patterns in an educational context.",
+        //   impact: "Impact: stronger engineering fundamentals and cleaner code design discipline.",
+        // },
       },
     },
     contact: {

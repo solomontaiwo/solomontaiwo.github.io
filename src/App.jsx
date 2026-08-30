@@ -28,6 +28,15 @@ import "./App.css";
 
 const projectCatalog = [
   {
+    id: "securityQuiz",
+    sortDate: "2026-08-30",
+    image: "/images/projects/security-quiz/security-quiz.svg",
+    link: "https://sicurezza-sistemi-informativi-quiz.pages.dev/",
+    tech: ["HTML", "CSS", "JavaScript", "PWA", "Cloudflare", "CI/CD"],
+    category: "webApp",
+    status: "live",
+  },
+  {
     id: "seenary",
     sortDate: "2026-07-26",
     image: "/images/projects/seenary/seenary.png",
@@ -81,24 +90,25 @@ const projectCatalog = [
     category: "webApp",
     status: "live",
   },
-  {
-    id: "artistRoom",
-    sortDate: "2023-06-30",
-    image: "/images/projects/the-artist-room/the-artist-room.png",
-    link: "https://github.com/solomontaiwo/the-artist-room/",
-    tech: ["React", "VueJS", "PHP", "MySQL"],
-    category: "university",
-    status: "completed",
-  },
-  {
-    id: "bibliotecaUnife",
-    sortDate: "2022-06-30",
-    image: "/images/projects/bibliotecaUNIFE/BibliotecaUNIFE.png",
-    link: "https://github.com/solomontaiwo/BibliotecaUNIFE",
-    tech: ["Java", "Spring", "HTML", "SQL"],
-    category: "repository",
-    status: "completed",
-  },
+  // Progetti archiviati: mantenuti come riferimento, ma non mostrati nel portfolio.
+  // {
+  //   id: "artistRoom",
+  //   sortDate: "2023-06-30",
+  //   image: "/images/projects/the-artist-room/the-artist-room.png",
+  //   link: "https://github.com/solomontaiwo/the-artist-room/",
+  //   tech: ["React", "VueJS", "PHP", "MySQL"],
+  //   category: "university",
+  //   status: "completed",
+  // },
+  // {
+  //   id: "bibliotecaUnife",
+  //   sortDate: "2022-06-30",
+  //   image: "/images/projects/bibliotecaUNIFE/BibliotecaUNIFE.png",
+  //   link: "https://github.com/solomontaiwo/BibliotecaUNIFE",
+  //   tech: ["Java", "Spring", "HTML", "SQL"],
+  //   category: "repository",
+  //   status: "completed",
+  // },
 ];
 
 const getTechIcon = (tech) => {

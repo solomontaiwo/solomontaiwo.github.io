@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Information Systems Security Quiz</title>
+  <desc id="desc">Abstract preview of a multilingual security exam quiz.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b2f2a"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c7f36b"/>
+      <stop offset="1" stop-color="#73e0bb"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#background)"/>
+  <circle cx="1370" cy="110" r="260" fill="#73e0bb" opacity=".12"/>
+  <circle cx="160" cy="830" r="320" fill="#c7f36b" opacity=".08"/>
+  <rect x="165" y="145" width="1270" height="610" rx="34" fill="#f8faf7" opacity=".97"/>
+  <rect x="165" y="145" width="1270" height="92" rx="34" fill="#123c35"/>
+  <rect x="165" y="203" width="1270" height="34" fill="#123c35"/>
+  <circle cx="220" cy="190" r="12" fill="#c7f36b"/>
+  <circle cx="262" cy="190" r="12" fill="#73e0bb"/>
+  <circle cx="304" cy="190" r="12" fill="#f8faf7" opacity=".55"/>
+  <rect x="405" y="178" width="330" height="24" rx="12" fill="#f8faf7" opacity=".15"/>
+  <text x="235" y="325" fill="#123c35" font-family="Arial, sans-serif" font-size="50" font-weight="700">Information Systems</text>
+  <text x="235" y="385" fill="#123c35" font-family="Arial, sans-serif" font-size="50" font-weight="700">Security Quiz</text>
+  <rect x="235" y="430" width="520" height="15" rx="7" fill="#d9e5df"/>
+  <rect x="235" y="465" width="405" height="15" rx="7" fill="#d9e5df"/>
+  <rect x="235" y="550" width="500" height="112" rx="20" fill="#ecf8cf"/>
+  <circle cx="285" cy="606" r="24" fill="#123c35"/>
+  <path d="m273 606 9 9 18-21" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="335" y="598" fill="#123c35" font-family="Arial, sans-serif" font-size="26" font-weight="700">Select all correct</text>
+  <text x="335" y="630" fill="#557069" font-family="Arial, sans-serif" font-size="22">Past exam questions · 5 languages</text>
+  <rect x="900" y="330" width="365" height="70" rx="18" fill="url(#accent)"/>
+  <text x="1002" y="375" fill="#123c35" font-family="Arial, sans-serif" font-size="26" font-weight="700">5 questions</text>
+  <rect x="900" y="430" width="365" height="70" rx="18" fill="#e7efea"/>
+  <text x="1014" y="475" fill="#123c35" font-family="Arial, sans-serif" font-size="26" font-weight="700">30 statements</text>
+  <rect x="900" y="530" width="365" height="70" rx="18" fill="#123c35"/>
+  <text x="1012" y="575" fill="#fff" font-family="Arial, sans-serif" font-size="26" font-weight="700">Start practice</text>
+</svg>
