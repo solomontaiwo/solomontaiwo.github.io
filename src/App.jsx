@@ -1,27 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaArrowRight,
-  FaArrowUp,
-  FaBriefcase,
-  FaCloud,
-  FaCode,
-  FaDatabase,
-  FaEnvelope,
-  FaExternalLinkAlt,
-  FaGithub,
-  FaGraduationCap,
-  FaHtml5,
-  FaInstagram,
-  FaJava,
-  FaJsSquare,
-  FaLayerGroup,
-  FaLinkedin,
-  FaMoon,
-  FaNodeJs,
-  FaPhp,
-  FaReact,
-  FaSun,
-} from "react-icons/fa";
+import { FaArrowRight, FaArrowUp, FaExternalLinkAlt, FaMoon, FaSun, FaBars, FaTimes } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -111,461 +89,83 @@ const projectCatalog = [
   // },
 ];
 
-const getTechIcon = (tech) => {
-  const icons = {
-    React: <FaReact />,
-    JavaScript: <FaJsSquare />,
-    CSS: <FaCode />,
-    "Node.js": <FaNodeJs />,
-    MongoDB: <FaDatabase />,
-    MySQL: <FaDatabase />,
-    Java: <FaJava />,
-    Spring: <FaCode />,
-    HTML: <FaHtml5 />,
-    PHP: <FaPhp />,
-    API: <FaCode />,
-    Python: <FaCode />,
-    SQL: <FaDatabase />,
-    ML: <FaLayerGroup />,
-    VueJS: <FaCode />,
-    TypeScript: <FaCode />,
-    "Next.js": <FaReact />,
-    Cloudflare: <FaCloud />,
-    AWS: <FaCloud />,
-    Hono: <FaCode />,
-    "CI/CD": <FaLayerGroup />,
-    Rust: <FaCode />,
-    WebSocket: <FaLayerGroup />,
-    SQLite: <FaDatabase />,
-  };
+const selectedIds = ["seenary", "securityQuiz", "isHormuzOpen"];
+const selectedProjects = selectedIds.map(id => projectCatalog.find(project => project.id === id));
+const otherProjects = projectCatalog.filter(project => !selectedIds.includes(project.id));
 
-  return icons[tech] || <FaCode />;
-};
-
-const sectionIcon = {
-  experience: <FaBriefcase />,
-  education: <FaGraduationCap />,
-  focus: <FaCode />,
-  engineering: <FaCode />,
-  data: <FaDatabase />,
-  delivery: <FaLayerGroup />,
-};
+function ProjectCard({ project, t, featured = false }) {
+  const content = t.projects.items[project.id];
+  return (
+    <article className={`project-card${featured ? " project-featured" : ""}`}>
+      <a className="project-media" href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`${t.projects.viewProject}: ${content.title}`}>
+        <img src={project.image} alt={content.title} loading="lazy" />
+      </a>
+      <div className="project-copy">
+        <p className="eyebrow">{featured ? t.projects.featured : t.projects.categories[project.category]} <span className="project-status">{t.projects.status[project.status]}</span></p>
+        <h3>{content.title}</h3>
+        <p>{content.description}</p>
+        <p className="project-impact">{content.impact}</p>
+        <ul className="tech-list" aria-label={t.skills.title}>{project.tech.map(tech => <li key={tech}>{tech}</li>)}</ul>
+        <a className="text-link" href={project.link} target="_blank" rel="noopener noreferrer">{t.projects.viewProject}<FaExternalLinkAlt aria-hidden="true" /></a>
+      </div>
+    </article>
+  );
+}
 
 function App() {
-  const [loadedImages, setLoadedImages] = useState(() => Array(projectCatalog.length).fill(false));
   const { language, setLanguage } = useLanguage();
   const t = translations[language] || translations.en;
-  const contactEmail = "taiwo.o.solomon@gmail.com";
-
-  const [theme, setTheme] = useState(() =>
-    typeof document !== "undefined" ? (document.documentElement.getAttribute("data-theme") || "light") : "light"
-  );
-  const [activeSection, setActiveSection] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-
+  const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    if (typeof window !== "undefined" && window.localStorage) {
-      try {
-        window.localStorage.setItem("theme", next);
-      } catch {
-        // Ignore storage errors; theme is still applied via data-theme attribute.
-      }
-    }
+    try { window.localStorage.setItem("theme", next); } catch { /* Theme still works when storage is unavailable. */ }
   };
-
-  const toggleLanguage = () => {
-    setLanguage(language === "en" ? "it" : "en");
-  };
-
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
-
-    const sectionIds = ["home", "about", "skills", "projects", "contact"];
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-      let current = "home";
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollPos) {
-          current = id;
-        }
-      }
-      setActiveSection(current);
-      setShowBackToTop(window.scrollY > 400);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setShowBackToTop(window.scrollY > 500);
+    const onKey = event => { if (event.key === "Escape" && document.getElementById("menu-toggle")?.getAttribute("aria-expanded") === "true") { setMenuOpen(false); document.getElementById("menu-toggle")?.focus(); } };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("keydown", onKey); };
   }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
-
-    const elements = document.querySelectorAll(".reveal");
-    if (!("IntersectionObserver" in window)) {
-      elements.forEach((element) => element.classList.add("is-visible"));
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, []);
-
-  const handleImageLoad = (index) => {
-    setLoadedImages((previous) => {
-      const updated = [...previous];
-      updated[index] = true;
-      return updated;
-    });
-  };
-
   return (
-    <div className="theme-container">
-      <div className="ambient-bg" aria-hidden="true" />
-
-      <nav className="navbar navbar-expand-lg fixed-top top-nav" aria-label="Main navigation">
-        <div className="container">
-          <a className="navbar-brand" href="#home">
-            Solomon Taiwo
-          </a>
-
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-
-          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul className="navbar-nav align-items-lg-center me-lg-2">
-              <li className="nav-item">
-                <a className={`nav-link${activeSection === "about" ? " active" : ""}`} href="#about">
-                  {t.nav.about}
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className={`nav-link${activeSection === "skills" ? " active" : ""}`} href="#skills">
-                  {t.nav.skills}
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className={`nav-link${activeSection === "projects" ? " active" : ""}`} href="#projects">
-                  {t.nav.projects}
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className={`nav-link${activeSection === "contact" ? " active" : ""}`} href="#contact">
-                  {t.nav.contact}
-                </a>
-              </li>
-            </ul>
-
-            <div className="nav-controls">
-              <button className="nav-icon-btn" onClick={toggleLanguage} aria-label="Switch language" title={t.nav.langSwitch}>
-                <span aria-hidden="true">{t.nav.langSwitch}</span>
-              </button>
-              <button className="nav-icon-btn" onClick={toggleTheme} aria-label={t.nav.themeToggle} title={t.nav.themeToggle}>
-                {theme === "dark" ? <FaSun /> : <FaMoon />}
-              </button>
-              <a className="nav-cta" href="#contact">
-                {t.nav.cta}
-              </a>
-            </div>
-          </div>
+    <div className="portfolio">
+      <a className="skip-link" href="#main">{t.nav.skip}</a>
+      <header className="site-header">
+        <div className="page-width header-inner">
+          <a className="brand" href="#home" onClick={() => setMenuOpen(false)}>Solomon Taiwo<span aria-hidden="true"> /</span></a>
+          <button id="menu-toggle" className="icon-button menu-toggle" type="button" aria-label={t.nav.menu} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <FaTimes /> : <FaBars />}</button>
+          <nav id="main-navigation" className={`main-navigation${menuOpen ? " is-open" : ""}`} aria-label={t.nav.navigation}>
+            <a href="#projects" onClick={() => setMenuOpen(false)}>{t.nav.projects}</a>
+            <a href="#about" onClick={() => setMenuOpen(false)}>{t.nav.about}</a>
+            <a href="#contact" onClick={() => setMenuOpen(false)}>{t.nav.contact}</a>
+            <div className="nav-controls"><button className="icon-button language-button" type="button" onClick={() => setLanguage(language === "it" ? "en" : "it")} aria-label={t.nav.languageLabel}>{t.nav.langSwitch}</button><button className="icon-button" type="button" onClick={toggleTheme} aria-label={t.nav.themeToggle}>{theme === "dark" ? <FaSun /> : <FaMoon />}</button></div>
+          </nav>
         </div>
-      </nav>
-
-      <main>
-        <section id="home" className="hero-section section-spacing">
-          <div className="container">
-            <div className="surface-card hero-shell reveal">
-              <div className="hero-layout">
-                <article className="hero-main">
-                  <h1 className="hero-title">
-                    {t.hero.greeting} <span>{t.hero.name}</span>
-                  </h1>
-                  <p className="hero-role">{t.hero.role}</p>
-                  <p className="hero-description">{t.hero.description}</p>
-
-                  <div className="action-row">
-                    <a href="#projects" className="action-btn action-btn-primary">
-                      {t.hero.primaryCta}
-                      <FaArrowRight />
-                    </a>
-
-                    <div className="social-row social-row-inline" aria-label={t.hero.socialLabel}>
-                      <a
-                        href="https://github.com/solomontaiwo"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="social-link"
-                        aria-label="GitHub"
-                      >
-                        <FaGithub />
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/in/solomon-taiwo"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="social-link"
-                        aria-label="LinkedIn"
-                      >
-                        <FaLinkedin />
-                      </a>
-                      <a
-                        href="https://www.instagram.com/solomon.taiwo/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="social-link"
-                        aria-label="Instagram"
-                      >
-                        <FaInstagram />
-                      </a>
-                    </div>
-                  </div>
-
-                  <ul className="quick-facts" aria-label={t.hero.factsLabel}>
-                    {t.hero.quickFacts.map((fact) => (
-                      <li key={fact}>{fact}</li>
-                    ))}
-                  </ul>
-                </article>
-
-                <aside className="hero-visual reveal delay-1">
-                  <div className="hero-visual-card">
-                    <img src="/images/solomon-profile-photo.jpg" alt={t.hero.imageAlt} className="hero-visual-image" loading="eager" />
-                  </div>
-                </aside>
-              </div>
-            </div>
-          </div>
+      </header>
+      <main id="main" className="page-width">
+        <section id="home" className="hero">
+          <div className="hero-copy"><p className="eyebrow">{t.hero.role}</p><h1>{t.hero.headline[0]}<br /><span>{t.hero.headline[1]}</span></h1><p className="hero-description">{t.hero.description}</p><div className="hero-actions"><a className="primary-button" href="#projects">{t.hero.primaryCta}<FaArrowRight aria-hidden="true" /></a><a className="text-link" href="#contact">{t.nav.cta}<FaArrowRight aria-hidden="true" /></a></div></div>
+          <figure className="portrait"><img src="/images/solomon-profile-photo.jpg" alt={t.hero.imageAlt} fetchPriority="high" /><figcaption>Solomon Taiwo <span>Software Engineer</span></figcaption></figure>
         </section>
-
-        <section id="about" className="section-spacing">
-          <div className="container">
-            <header className="section-heading text-center reveal">
-              <p className="section-kicker">{t.about.eyebrow}</p>
-              <h2 className="section-title">{t.about.title}</h2>
-            </header>
-
-            <div className="about-layout">
-              <article className="surface-card about-main reveal delay-1">
-                <p>{t.about.intro}</p>
-                <ul className="timeline-list">
-                  {t.about.timeline.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-
-              <div className="row g-3 about-cards">
-                {Object.entries(t.about.cards).map(([key, card], index) => (
-                  <div className="col-md-6 col-xl-4" key={key}>
-                    <article className="surface-card info-card h-100 reveal" style={{ "--delay": `${index * 80}ms` }}>
-                      <span className="icon-dot">{sectionIcon[key]}</span>
-                      <h3>{card.title}</h3>
-                      <p>{card.description}</p>
-                    </article>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        <section id="projects" className="page-section">
+          <div className="section-heading"><h2>{t.projects.title}</h2><p className="eyebrow">01 — {t.projects.eyebrow}</p></div>
+          <ProjectCard project={selectedProjects[0]} t={t} featured />
+          <div className="project-grid">{selectedProjects.slice(1).map(project => <ProjectCard key={project.id} project={project} t={t} />)}</div>
+          <div id="other-projects" className="project-grid additional-projects" hidden={!expanded}>{otherProjects.map(project => <ProjectCard key={project.id} project={project} t={t} />)}</div>
+          <button className="secondary-button more-projects" type="button" aria-expanded={expanded} aria-controls="other-projects" onClick={() => setExpanded(!expanded)}>{expanded ? t.projects.showLess : `${t.projects.showMore} (${otherProjects.length})`}<span aria-hidden="true">{expanded ? "−" : "+"}</span></button>
         </section>
-
-        <section id="skills" className="section-spacing section-alt">
-          <div className="container">
-            <header className="section-heading text-center reveal">
-              <p className="section-kicker">{t.skills.eyebrow}</p>
-              <h2 className="section-title">{t.skills.title}</h2>
-              <p className="section-subtitle">{t.skills.subtitle}</p>
-            </header>
-
-            <div className="row g-4">
-              {t.skills.groups.map((group, index) => (
-                <div className="col-lg-4" key={group.id}>
-                  <article className="surface-card skill-card h-100 reveal" style={{ "--delay": `${index * 80}ms` }}>
-                    <div className="skill-head">
-                      <span className="icon-dot">{sectionIcon[group.id]}</span>
-                      <h3>{group.title}</h3>
-                    </div>
-
-                    <div className="chip-list">
-                      {group.items.map((item) => (
-                        <span className="skill-chip" key={item}>
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </article>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="projects" className="section-spacing">
-          <div className="container">
-            <header className="section-heading text-center reveal">
-              <p className="section-kicker">{t.projects.eyebrow}</p>
-              <h2 className="section-title">{t.projects.title}</h2>
-              <p className="section-subtitle">{t.projects.subtitle}</p>
-            </header>
-
-            <div className="row g-4">
-              {projectCatalog.map((project, index) => {
-                const content = t.projects.items[project.id];
-                return (
-                  <div key={project.id} className="col-lg-6">
-                    <article className="surface-card project-card reveal" style={{ "--delay": `${index * 80}ms` }}>
-                      <a
-                        className="project-media"
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${t.projects.viewProject} ${content.title}`}
-                      >
-                        <span className={`status-badge status-${project.status}`}>{t.projects.status[project.status]}</span>
-                        <span className="category-badge">{t.projects.categories[project.category]}</span>
-                        {!loadedImages[index] && <span className="image-skeleton" aria-hidden="true" />}
-                        <img
-                          src={project.image}
-                          alt={content.title}
-                          loading="lazy"
-                          className={`project-image ${loadedImages[index] ? "is-ready" : ""}`}
-                          onLoad={() => handleImageLoad(index)}
-                        />
-                      </a>
-
-                      <div className="project-content">
-                        <h3>{content.title}</h3>
-                        <p className="project-description">{content.description}</p>
-                        <p className="project-impact">{content.impact}</p>
-
-                        <div className="chip-list">
-                          {project.tech.map((tech) => (
-                            <span className="skill-chip" key={`${project.id}-${tech}`}>
-                              {getTechIcon(tech)} {tech}
-                            </span>
-                          ))}
-                        </div>
-
-                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
-                          {t.projects.viewProject}
-                          <FaExternalLinkAlt />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" className="section-spacing section-alt">
-          <div className="container">
-            <header className="section-heading text-center reveal">
-              <p className="section-kicker">{t.contact.eyebrow}</p>
-              <h2 className="section-title">{t.contact.title}</h2>
-              <p className="section-subtitle">{t.contact.subtitle}</p>
-            </header>
-
-            <div className="row g-4 justify-content-center">
-              <div className="col-md-6 col-lg-4">
-                <a href="https://github.com/solomontaiwo" target="_blank" rel="noopener noreferrer" className="surface-card contact-card reveal">
-                  <FaGithub />
-                  <h3>{t.contact.actions.github}</h3>
-                  <p>@solomontaiwo</p>
-                </a>
-              </div>
-
-              <div className="col-md-6 col-lg-4">
-                <a
-                  href="https://www.linkedin.com/in/solomon-taiwo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="surface-card contact-card reveal delay-1"
-                >
-                  <FaLinkedin />
-                  <h3>{t.contact.actions.linkedin}</h3>
-                  <p>{t.contact.linkedinText}</p>
-                </a>
-              </div>
-
-              <div className="col-md-6 col-lg-4">
-                <a href={`mailto:${contactEmail}`} className="surface-card contact-card reveal delay-2">
-                  <FaEnvelope />
-                  <h3>{t.contact.actions.email}</h3>
-                  <p>{t.contact.emailText}</p>
-                </a>
-              </div>
-            </div>
-
-            <div className="contact-cta text-center reveal delay-2">
-              <a href={`mailto:${contactEmail}`} className="action-btn action-btn-primary">
-                {t.contact.primaryCta}
-                <FaArrowRight />
-              </a>
-            </div>
-          </div>
-        </section>
+        <section id="about" className="page-section profile-layout"><div><p className="eyebrow">02 — {t.about.eyebrow}</p><h2>{t.about.title}</h2><p className="profile-intro">{t.about.intro}</p></div><div className="education"><h3>{t.about.cards.education.title}</h3><ul>{t.about.timeline.map(item => <li key={item}>{item}</li>)}</ul></div></section>
+        <section id="skills" className="page-section"><p className="eyebrow">03 — {t.skills.eyebrow}</p><h2 className="visually-hidden">{t.skills.title}</h2><div className="skills-grid">{t.skills.groups.map(group => <article key={group.id}><h3>{group.title}</h3><ul className="skills-list">{group.items.map(item => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
+        <section id="contact" className="page-section contact-layout"><div><p className="eyebrow">04 — {t.contact.eyebrow}</p><h2>{t.contact.title}</h2><p>{t.contact.subtitle}</p></div><a className="primary-button" href={`mailto:${t.contact.emailValue}`}>{t.contact.primaryCta}<FaArrowRight aria-hidden="true" /></a></section>
       </main>
-
-      <footer className="footer">
-        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-          <p className="mb-0">&copy; {new Date().getFullYear()} Solomon Taiwo</p>
-          <p className="mb-0">{t.footer.madeWith}</p>
-        </div>
-      </footer>
-
-      {showBackToTop && (
-        <button
-          className="back-to-top"
-          onClick={() => {
-            const prefersReducedMotion =
-              typeof window !== "undefined" &&
-              typeof window.matchMedia === "function" &&
-              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            if (prefersReducedMotion) {
-              window.scrollTo({ top: 0 });
-            } else {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-          aria-label={t.backToTop}
-          title={t.backToTop}
-        >
-          <FaArrowUp />
-        </button>
-      )}
+      <footer className="page-width site-footer"><p>© {new Date().getFullYear()} Solomon Taiwo</p><div className="footer-links"><a href="https://github.com/solomontaiwo" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/solomon-taiwo" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://www.instagram.com/solomon.taiwo/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></footer>
+      {showBackToTop && <a href="#home" className="back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
     </div>
   );
 }
-
 export default App;

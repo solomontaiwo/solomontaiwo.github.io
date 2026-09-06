@@ -1,6 +1,10 @@
 export const translations = {
   it: {
     nav: {
+      skip: "Vai al contenuto",
+      menu: "Apri o chiudi menu",
+      navigation: "Navigazione principale",
+      languageLabel: "Switch to English",
       about: "Profilo",
       skills: "Competenze",
       projects: "Progetti",
@@ -10,11 +14,12 @@ export const translations = {
       themeToggle: "Cambia tema",
     },
     hero: {
+      headline: ["Idee complesse.", "Software chiaro."],
       greeting: "Ciao, sono",
       name: "Solomon Taiwo",
       role: "Software Engineer | AI & Data",
       description:
-        "Progetto e sviluppo applicazioni web affidabili, curate nel dettaglio e pensate per generare impatto reale.",
+        "Sono Solomon Taiwo. Progetto e sviluppo applicazioni web affidabili, dal frontend ai dati.",
       primaryCta: "Vedi i progetti",
       socialLabel: "Canali professionali",
       factsLabel: "Punti chiave",
@@ -27,7 +32,7 @@ export const translations = {
     },
     about: {
       eyebrow: "Profilo",
-      title: "Ingegneria software con approccio concreto",
+      title: "Dal problema al prodotto.",
       subtitle:
         "Unisco rigore tecnico e pragmatismo per trasformare idee in prodotti digitali chiari, solidi e utili.",
       intro:
@@ -84,6 +89,9 @@ export const translations = {
       ],
     },
     projects: {
+      featured: "In evidenza · Full stack",
+      showMore: "Altri progetti",
+      showLess: "Mostra meno",
       eyebrow: "Showcase",
       title: "Progetti selezionati",
       subtitle: "Una selezione di lavori che mostrano execution tecnica e impatto concreto.",
@@ -184,6 +192,10 @@ export const translations = {
 
   en: {
     nav: {
+      skip: "Skip to content",
+      menu: "Open or close menu",
+      navigation: "Main navigation",
+      languageLabel: "Passa a italiano",
       about: "Profile",
       skills: "Skills",
       projects: "Projects",
@@ -193,11 +205,12 @@ export const translations = {
       themeToggle: "Toggle theme",
     },
     hero: {
+      headline: ["Complex ideas.", "Clear software."],
       greeting: "Hi, I'm",
       name: "Solomon Taiwo",
       role: "Software Engineer | AI & Data",
       description:
-        "I design and build reliable web applications with clean execution, strong UX, and measurable real-world impact.",
+        "I'm Solomon Taiwo. I design and build reliable web applications, from frontend to data.",
       primaryCta: "View projects",
       socialLabel: "Professional channels",
       factsLabel: "Key points",
@@ -210,7 +223,7 @@ export const translations = {
     },
     about: {
       eyebrow: "Profile",
-      title: "Software engineering with practical execution",
+      title: "From problem to product.",
       subtitle:
         "I combine technical rigor and pragmatism to turn ideas into clear, reliable, and useful digital products.",
       intro:
@@ -267,6 +280,9 @@ export const translations = {
       ],
     },
     projects: {
+      featured: "Featured · Full stack",
+      showMore: "More projects",
+      showLess: "Show less",
       eyebrow: "Showcase",
       title: "Selected projects",
       subtitle: "A curated set of work showing technical execution and concrete impact.",
