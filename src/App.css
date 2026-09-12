@@ -11,14 +11,14 @@
   --on-button: #ffffff;
 }
 [data-theme="dark"] {
-  --page: #151b18;
-  --surface: #202a24;
-  --text: #edf1e9;
-  --muted: #b0bdb4;
-  --line: #36473c;
-  --accent: #a4c6ae;
-  --button: #d1e5d4;
-  --on-button: #17281d;
+  --page: #111315;
+  --surface: #1b1e22;
+  --text: #f0f1f3;
+  --muted: #a9adb3;
+  --line: #35393f;
+  --accent: #c2c6cc;
+  --button: #e4e6e9;
+  --on-button: #111315;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 110px; }
@@ -54,7 +54,7 @@ h1 span { color: var(--accent); }
 .primary-button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; gap: 24px; padding: 15px 22px; min-height: 50px; font-size: 14px; font-weight: 600; border-radius: 4px; border: 1px solid transparent; }
 .primary-button { background: var(--button); color: var(--on-button); }
 .primary-button:hover { background: var(--accent); color: var(--on-button); }
-[data-theme="dark"] .primary-button:hover { color: #17281d; }
+[data-theme="dark"] .primary-button:hover { color: #111315; }
 .secondary-button { background: transparent; border-color: var(--line); color: var(--text); }
 .secondary-button:hover { background: var(--surface); }
 .text-link { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 14px; font-weight: 600; }
