@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaArrowRight, FaArrowUp, FaChevronDown, FaCode, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
+import { FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaCode, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -90,12 +90,13 @@ const projectCatalog = [
 ];
 
 // Add a project: append an entry to projectCatalog (above) and its texts to translations.js.
-// The grid below adapts to any number of projects; only the first INITIAL_OTHERS are shown until "See more".
+// The grid below adapts to any number of projects; only the first few are shown until "See more" (3 projects on mobile, 6 on desktop).
 const featuredId = "seenary";
-const INITIAL_OTHERS = 5;
+const INITIAL_OTHERS = 5; // desktop
+const INITIAL_OTHERS_MOBILE = 2; // mobile: featured + 2 = three visible
 const featuredProject = projectCatalog.find(project => project.id === featuredId);
 const otherProjects = projectCatalog.filter(project => project.id !== featuredId);
-const categories = [...new Set(projectCatalog.map(project => project.category))];
+const allProjects = [featuredProject, ...otherProjects];
 const sectionIds = ["home", "projects", "about", "skills", "contact"];
 const rowIds = ["about", "skills", "contact"];
 const socialLinks = [
@@ -136,22 +137,110 @@ const scrollToTop = event => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-function ProjectCard({ project, t, variant, span, filtered }) {
+// Featured card (desktop hero) links straight to the project; every other card opens the details dialog.
+function ProjectCard({ project, t, variant, span, onOpen }) {
   const content = t.projects.items[project.id];
-  const meta = variant === "featured" ? t.projects.featured : t.projects.categories[project.category];
+  const featured = variant === "featured";
+  const meta = featured ? t.projects.featured : t.projects.categories[project.category];
   return (
-    <article className={`glass project project-${variant}${span ? ` span-${span}` : ""}`} data-filtered={filtered ? "true" : undefined}>
-      <div className="project-media"><img src={project.image} alt="" loading={variant === "featured" ? "eager" : "lazy"} decoding="async" /></div>
+    <article className={`glass project project-${variant}${span ? ` span-${span}` : ""}`}>
+      <div className="project-media"><img src={project.image} alt="" loading={featured ? "eager" : "lazy"} decoding="async" /></div>
       <div className="project-copy">
         <p className="project-meta"><span>{meta}</span><span className="project-status">{t.projects.status[project.status]}</span></p>
-        <h3><a href={project.link} target="_blank" rel="noopener noreferrer">{content.title}<span className="visually-hidden"> — {t.projects.viewProject}</span></a></h3>
-        <p className="project-desc">{content.description}</p>
-        {variant === "featured" && <p className="project-impact">{content.impact}</p>}
-        <ul className="tech-list" aria-label={t.skills.title}>{project.tech.map(tech => <li key={tech}>{tech}</li>)}</ul>
-        {variant === "featured" && <span className="project-cta" aria-hidden="true">{t.projects.viewProject}<FaExternalLinkAlt /></span>}
+        {featured ? (
+          <h3><a href={project.link} target="_blank" rel="noopener noreferrer">{content.title}<span className="visually-hidden"> — {t.projects.viewProject}</span></a></h3>
+        ) : (
+          <h3><button type="button" className="project-open" data-project={project.id} aria-haspopup="dialog" onClick={event => onOpen(project, event.currentTarget)}>{content.title}</button></h3>
+        )}
+        {featured && <p className="project-desc">{content.description}</p>}
+        {featured && <p className="project-impact">{content.impact}</p>}
+        {variant !== "row" && <ul className="tech-list" aria-label={t.skills.title}>{project.tech.map(tech => <li key={tech}>{tech}</li>)}</ul>}
+        {featured && <span className="project-cta" aria-hidden="true">{t.projects.viewProject}<FaExternalLinkAlt /></span>}
       </div>
-      <FaExternalLinkAlt className="row-arrow" aria-hidden="true" />
+      {variant === "row" && <FaChevronRight className="row-arrow" aria-hidden="true" />}
     </article>
+  );
+}
+
+// Details: a bottom sheet on mobile, a centred dialog on desktop (layout is CSS only).
+function ProjectDialog({ projectId, projects, t, closing, onSelect, onClose, onExited }) {
+  const panelRef = useRef(null);
+  const closeRef = useRef(null);
+  const drag = useRef(null);
+  const index = Math.max(0, projects.findIndex(item => item.id === projectId));
+  const project = projects[index];
+  const content = t.projects.items[project.id];
+  const step = delta => onSelect(projects[(index + delta + projects.length) % projects.length].id);
+  const latest = useRef({});
+  latest.current = { onClose, step };
+
+  useEffect(() => {
+    closeRef.current?.focus({ preventScroll: true });
+    const onKey = event => {
+      if (event.key === "Escape") latest.current.onClose();
+      else if (event.key === "ArrowRight") latest.current.step(1);
+      else if (event.key === "ArrowLeft") latest.current.step(-1);
+      else if (event.key === "Tab" && panelRef.current) {
+        const items = [...panelRef.current.querySelectorAll("a[href], button:not([disabled])")].filter(item => item.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        else if (!panelRef.current.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+      }
+    };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = previous; };
+  }, []);
+
+  useEffect(() => {
+    if (!closing) return undefined;
+    const timer = window.setTimeout(onExited, 220);
+    return () => window.clearTimeout(timer);
+  }, [closing]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Swipe down on the handle closes the sheet (mobile).
+  const onDragStart = event => { drag.current = { y: event.clientY, dy: 0 }; event.currentTarget.setPointerCapture(event.pointerId); };
+  const onDragMove = event => {
+    if (!drag.current) return;
+    drag.current.dy = Math.max(0, event.clientY - drag.current.y);
+    panelRef.current.style.transition = "none";
+    panelRef.current.style.transform = `translateY(${drag.current.dy}px)`;
+  };
+  const onDragEnd = () => {
+    if (!drag.current) return;
+    const { dy } = drag.current;
+    drag.current = null;
+    panelRef.current.style.transition = "";
+    if (dy > 90) onClose();
+    else panelRef.current.style.transform = "";
+  };
+
+  return (
+    <div className={`dialog-overlay${closing ? " is-closing" : ""}`}>
+      <div className="dialog-backdrop" onClick={onClose} />
+      <section ref={panelRef} className="glass dialog-panel" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <div className="sheet-handle" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd} aria-hidden="true"><span /></div>
+        <button ref={closeRef} type="button" className="icon-button dialog-close" aria-label={t.projects.close} onClick={onClose}><FaTimes aria-hidden="true" /></button>
+        <div className="project-media dialog-media"><img src={project.image} alt="" decoding="async" /></div>
+        <div className="dialog-body">
+          <p className="project-meta"><span>{project.id === featuredId ? t.projects.featured : t.projects.categories[project.category]}</span><span className="project-status">{t.projects.status[project.status]}</span></p>
+          <h2 id="dialog-title">{content.title}</h2>
+          <p className="dialog-desc">{content.description}</p>
+          {content.impact && <p className="project-impact">{content.impact}</p>}
+          <ul className="tech-list" aria-label={t.skills.title}>{project.tech.map(tech => <li key={tech}>{tech}</li>)}</ul>
+          <a className="primary-button dialog-cta" href={project.link} target="_blank" rel="noopener noreferrer">{t.projects.viewProject}<FaExternalLinkAlt aria-hidden="true" /></a>
+        </div>
+        <div className="dialog-nav">
+          <button type="button" className="icon-button" aria-label={t.projects.previous} onClick={() => step(-1)}><FaChevronLeft aria-hidden="true" /></button>
+          <button type="button" className="icon-button" aria-label={t.projects.next} onClick={() => step(1)}><FaChevronRight aria-hidden="true" /></button>
+          <span className="dialog-count" aria-hidden="true">{index + 1} / {projects.length}</span>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -221,14 +310,23 @@ function App() {
   const t = translations[language] || translations.en;
   const isDesktop = useMediaQuery("(min-width: 720px)");
   const glass = on => (on ? " glass" : "");
-  const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
   const [openGroup, setOpenGroup] = useState(null);
   const [active, setActive] = useState("home");
   const [headerHidden, setHeaderHidden] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [photoState, setPhotoState] = useState("closed");
+  const [dialog, setDialog] = useState(null);
+  const opener = useRef(null);
   const avatarRef = useRef(null);
+  const openProject = (project, element) => { opener.current = element; setDialog({ id: project.id, closing: false }); };
+  const closeDialog = () => setDialog(current => (current && !current.closing ? { ...current, closing: true } : current));
+  const dialogExited = () => {
+    const id = dialog && dialog.id;
+    setDialog(null);
+    const target = document.querySelector(`.project-open[data-project="${id}"]`) || opener.current;
+    if (target && target.focus) target.focus({ preventScroll: true });
+  };
   const closePhoto = () => setPhotoState(state => (state === "open" ? "closing" : state));
   const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
   const toggleTheme = () => {
@@ -281,9 +379,9 @@ function App() {
   ];
   const mailto = `mailto:${t.contact.emailValue}`;
   const primaryContact = <a className="primary-button" href={mailto}>{t.contact.primaryCta}<FaArrowRight aria-hidden="true" /></a>;
-  const visibleOthers = showAll ? otherProjects : otherProjects.slice(0, INITIAL_OTHERS);
-  const hiddenCount = otherProjects.length - INITIAL_OTHERS;
-  const isFiltered = project => filter !== "all" && project.category !== filter;
+  const initialOthers = isDesktop ? INITIAL_OTHERS : INITIAL_OTHERS_MOBILE;
+  const visibleOthers = showAll ? otherProjects : otherProjects.slice(0, initialOthers);
+  const hiddenCount = otherProjects.length - initialOthers;
   const contactIntro = (
     <div className="contact-main">
       <p className="eyebrow">{t.contact.eyebrow}</p>
@@ -327,18 +425,11 @@ function App() {
 
         <section id="projects" className="section">
           <div className="section-head"><p className="eyebrow">{t.projects.eyebrow}</p><h2>{isDesktop ? t.projects.othersTitle : t.projects.title}</h2></div>
-          <div className="filters" role="group" aria-label={t.projects.filterLabel}>
-            {["all", ...categories].map(category => (
-              <button key={category} type="button" aria-pressed={filter === category} onClick={() => setFilter(category)}>
-                {category === "all" ? t.projects.filterAll : t.projects.categories[category]}
-              </button>
-            ))}
-          </div>
           <div id="project-grid" className="project-grid">
-            {!isDesktop && <ProjectCard project={featuredProject} t={t} variant="featured" filtered={isFiltered(featuredProject)} />}
-            {layoutOthers(visibleOthers).map(({ project, variant, span }) => (
-              <ProjectCard key={project.id} project={project} t={t} variant={variant} span={span} filtered={isFiltered(project)} />
-            ))}
+            {!isDesktop && <ProjectCard project={featuredProject} t={t} variant="row" onOpen={openProject} />}
+            {isDesktop
+              ? layoutOthers(visibleOthers).map(({ project, variant, span }) => <ProjectCard key={project.id} project={project} t={t} variant={variant} span={span} onOpen={openProject} />)
+              : visibleOthers.map(project => <ProjectCard key={project.id} project={project} t={t} variant="row" onOpen={openProject} />)}
           </div>
           {hiddenCount > 0 && (
             <button type="button" className="more-projects" aria-expanded={showAll} aria-controls="project-grid" onClick={() => setShowAll(!showAll)}>
@@ -403,6 +494,7 @@ function App() {
           <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /><span>{label}</span></a>
         ))}
       </nav>
+      {dialog && <ProjectDialog projectId={dialog.id} projects={allProjects} t={t} closing={dialog.closing} onSelect={id => setDialog({ id, closing: false })} onClose={closeDialog} onExited={dialogExited} />}
       <PhotoViewer open={photoState === "open"} visible={photoState !== "closed"} originRef={avatarRef} alt={t.hero.imageAlt} closeLabel={t.hero.closePhoto} onClose={closePhoto} onExited={() => setPhotoState("closed")} />
       {showBackToTop && <a href="#home" onClick={scrollToTop} className="glass back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
     </div>

@@ -100,8 +100,9 @@ export const translations = {
       title: "Progetti selezionati",
       subtitle: "Una selezione di lavori che mostrano execution tecnica e impatto concreto.",
       viewProject: "Apri progetto",
-      filterAll: "Tutti",
-      filterLabel: "Filtra i progetti",
+      close: "Chiudi",
+      previous: "Progetto precedente",
+      next: "Progetto successivo",
       seeMore: "Vedi altro",
       othersTitle: "Altri progetti",
       status: {
@@ -299,8 +300,9 @@ export const translations = {
       title: "Selected projects",
       subtitle: "A curated set of work showing technical execution and concrete impact.",
       viewProject: "Open project",
-      filterAll: "All",
-      filterLabel: "Filter projects",
+      close: "Close",
+      previous: "Previous project",
+      next: "Next project",
       seeMore: "See more",
       othersTitle: "More projects",
       status: {

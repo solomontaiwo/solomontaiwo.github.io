@@ -20,15 +20,16 @@ const fs = require('node:fs');
       await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('html').getAttribute('lang'), 'it');
-      assert.equal(await page.locator('.project').count(), 6);
-      assert.equal(await page.locator('.project-featured h3').textContent(), 'Seenary — Apri progetto');
+      assert.equal(await page.locator('.project').count(), mobile ? 3 : 6);
+      if (!mobile) assert.equal(await page.locator('.project-featured h3').textContent(), 'Seenary — Apri progetto');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}`);
       assert.equal(await page.locator('a[href$=".pdf"]').count(), 0, 'No CV download');
 
       assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 0 : 1, 'Hero has no redundant buttons (desktop: only the featured project link)');
       assert.equal(await page.locator('.header-cta').count(), mobile ? 0 : 1);
       assert.equal(await page.locator('.tab-bar a').count(), 4, 'Tab bar has no Home');
-      assert.equal(await page.locator('.more-projects').count(), 0, 'No See more with 5 other projects');
+      assert.equal(await page.locator('.more-projects').count(), mobile ? 1 : 0, 'See more only on mobile (3 visible of 6)');
+      assert.equal(await page.locator('.filters').count(), 0, 'No filters');
       assert.equal(await page.locator('.availability, .facts').count(), 0);
 
       // Portrait in the header expands to the full photo and closes again.
@@ -49,10 +50,11 @@ const fs = require('node:fs');
       if (mobile) {
         await page.locator('.tab-bar a[href="#projects"]').click();
         await page.waitForFunction(() => document.querySelector('.tab-bar a[href="#projects"]').hasAttribute('aria-current'));
-        await page.getByRole('button', { name: 'Hackathon' }).click();
-        assert.equal(await page.locator('.project:visible').count(), 1);
-        await page.getByRole('button', { name: 'Tutti' }).click();
+        assert.equal(await page.locator('.project:visible').count(), 3, 'Three projects visible on mobile');
+        await page.getByRole('button', { name: 'Vedi altro (3)' }).click();
         assert.equal(await page.locator('.project:visible').count(), 6);
+        await page.getByRole('button', { name: 'Mostra meno' }).click();
+        assert.equal(await page.locator('.project:visible').count(), 3);
         const toggle = page.getByRole('button', { name: 'Data & AI' });
         await toggle.click();
         assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
@@ -66,6 +68,40 @@ const fs = require('node:fs');
         await page.locator('.header-cta').click();
         await page.waitForTimeout(900);
         assert.equal(await page.locator('#contact').evaluate(el => el.getBoundingClientRect().top < innerHeight), true, 'CTA scrolls to contact');
+      }
+
+      // Details open in a sheet (mobile) / dialog (desktop); the site link lives inside it.
+      const opener = page.locator('.project-open').first();
+      await opener.scrollIntoViewIfNeeded();
+      await opener.click();
+      const dialog = page.getByRole('dialog');
+      await dialog.waitFor();
+      await page.waitForTimeout(500);
+      const firstTitle = await dialog.locator('h2').textContent();
+      assert.equal(await dialog.locator('a.dialog-cta').getAttribute('href') !== null, true);
+      assert.equal(await dialog.locator('a.dialog-cta').getAttribute('target'), '_blank');
+      assert.equal(await dialog.locator('.dialog-nav').isVisible(), !mobile);
+      assert.equal(await dialog.locator('.dialog-desc').isVisible(), true);
+      if (!mobile) {
+        await dialog.getByRole('button', { name: 'Progetto successivo' }).click();
+        assert.notEqual(await dialog.locator('h2').textContent(), firstTitle);
+      }
+      const box = await dialog.boundingBox();
+      assert.equal(box.x >= 0 && box.x + box.width <= width + 1, true, 'Dialog fits the viewport');
+      if (output && (width === 1440 || width === 390)) await page.screenshot({ path: path.join(output, width === 1440 ? 'desktop-dialog.png' : 'mobile-sheet.png') });
+      await page.keyboard.press('Escape');
+      await dialog.waitFor({ state: 'detached' });
+      assert.equal(await page.evaluate(() => document.activeElement && document.activeElement.classList.contains('project-open')), true, 'Focus returns to the card');
+      if (mobile) {
+        await opener.click();
+        await dialog.waitFor();
+        await page.waitForTimeout(500);
+        const handle = await dialog.locator('.sheet-handle').boundingBox();
+        await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(handle.x + handle.width / 2, handle.y + 200, { steps: 6 });
+        await page.mouse.up();
+        await dialog.waitFor({ state: 'detached' });
       }
 
       await page.getByRole('button', { name: 'Switch to English' }).click();
