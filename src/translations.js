@@ -47,9 +47,9 @@ export const translations = {
       intro:
         "Lavoro con un processo semplice e disciplinato: analisi del problema, design tecnico, sviluppo incrementale e verifica continua della qualità.",
       timeline: [
-        "Laurea in Informatica - Università degli Studi di Ferrara.",
-        "Magistrale in Computer Engineering (AI e Data Analysis) - Politecnico di Torino.",
         "Esperienza su web app, progetti data-driven e implementazioni orientate a utenti reali.",
+        "Magistrale in Computer Engineering (AI e Data Analysis) - Politecnico di Torino.",
+        "Laurea in Informatica - Università degli Studi di Ferrara.",
       ],
       cards: {
         experience: {
@@ -252,9 +252,9 @@ export const translations = {
       intro:
         "My process is simple and disciplined: problem analysis, technical design, incremental implementation, and continuous quality validation.",
       timeline: [
-        "Bachelor's degree in Computer Science - University of Ferrara.",
-        "Master's in Computer Engineering (AI and Data Analysis) - Polytechnic University of Turin.",
         "Hands-on experience in web apps, data-driven projects, and real-user focused implementations.",
+        "Master's in Computer Engineering (AI and Data Analysis) - Polytechnic University of Turin.",
+        "Bachelor's degree in Computer Science - University of Ferrara.",
       ],
       cards: {
         experience: {

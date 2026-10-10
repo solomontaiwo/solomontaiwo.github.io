@@ -26,7 +26,7 @@ const fs = require('node:fs');
       assert.equal(await page.locator('a[href$=".pdf"]').count(), 0, 'No CV download');
 
       assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 1 : 2, 'Hero: the portrait button (+ the featured project link on desktop)');
-      assert.equal(await page.locator('.header-cta').count(), mobile ? 0 : 1);
+      assert.equal(await page.locator('.desktop-nav a[href="#contact"]').count(), mobile ? 0 : 1);
       assert.equal(await page.locator('.dock a').count(), mobile ? 3 : 0, 'Dock: Projects, Profile, Contact (+ More button)');
       assert.equal(await page.locator('.site-header').count(), mobile ? 0 : 1, 'Mobile has a single bar: no top header');
       assert.equal(await page.locator('.avatar-button').count(), 1, 'One portrait only (in the hero)');
@@ -81,11 +81,11 @@ const fs = require('node:fs');
       } else {
         assert.equal(await page.locator('.project:visible').count(), 6);
         assert.equal(await page.locator('.skill-group h3:visible').count(), 3);
-        assert.equal(await page.locator('.desktop-nav a').count(), 2, 'Desktop nav: Projects + Profile only');
+        assert.equal(await page.locator('.desktop-nav a').count(), 3, 'Desktop nav: Projects, Profile, Contact (same style)');
         await page.locator('.desktop-nav a[href="#about"]').click();
         await page.waitForFunction(() => document.querySelector('.desktop-nav a[href="#about"]').hasAttribute('aria-current'));
         assert.equal(await page.locator('.desktop-nav a[aria-current]').count(), 1);
-        await page.locator('.header-cta').click();
+        await page.locator('.desktop-nav a[href="#contact"]').click();
         await page.waitForTimeout(900);
         assert.equal(await page.locator('#contact').evaluate(el => el.getBoundingClientRect().top < innerHeight), true, 'CTA scrolls to contact');
       }

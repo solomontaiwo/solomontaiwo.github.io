@@ -455,8 +455,8 @@ function App() {
                 {links.filter(link => ["projects", "about"].includes(link.id)).map(link => (
                   <a key={link.id} href={`#${link.id}`} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
                 ))}
+                <a href="#contact">{t.contact.primaryCta}</a>
               </nav>
-              <a className="header-cta" href="#contact">{t.contact.primaryCta}</a>
               <div className="more-wrap">
                 <button ref={moreButtonRef} type="button" className="icon-button header-more" aria-haspopup="true" aria-expanded={moreOpen} aria-label={t.nav.more} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /></button>
                 {moreOpen && settingsMenu}

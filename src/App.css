@@ -19,6 +19,7 @@
   --sheet-bg: linear-gradient(180deg, rgba(250, 252, 251, .94), rgba(238, 245, 241, .97));
   --tab-active: rgba(255, 255, 255, .95);
   --contact-bg: linear-gradient(135deg, rgba(110, 205, 168, .46), rgba(140, 150, 250, .26));
+  --hero-bg: linear-gradient(135deg, rgba(110, 205, 168, .26), rgba(140, 150, 250, .14));
   --blob-1: rgba(94, 190, 150, .55);
   --blob-2: rgba(110, 125, 245, .36);
   --blob-3: rgba(240, 178, 122, .42);
@@ -46,6 +47,7 @@
   --sheet-bg: linear-gradient(180deg, rgba(40, 56, 50, .94), rgba(18, 28, 24, .97));
   --tab-active: rgba(255, 255, 255, .2);
   --contact-bg: linear-gradient(135deg, rgba(127, 214, 176, .22), rgba(91, 108, 240, .16));
+  --hero-bg: var(--glass-bg);
   --blob-1: rgba(127, 214, 176, .5);
   --blob-2: rgba(91, 108, 240, .45);
   --blob-3: rgba(240, 178, 122, .28);
@@ -122,8 +124,6 @@ ul, ol { padding: 0; list-style: none; }
 .desktop-nav a[aria-current] { color: var(--text); background: var(--chip); box-shadow: var(--glass-hi); }
 .more-wrap { position: relative; }
 .more-wrap .dock-menu { position: absolute; right: 0; bottom: auto; top: calc(100% + 16px); animation: fade-in .18s ease backwards; }
-.header-cta { display: inline-flex; align-items: center; height: 44px; margin-left: 4px; padding: 0 22px; border-radius: 22px; background: var(--btn-bg); color: var(--btn-text); font-size: 14px; font-weight: 700; transition: filter .2s ease, transform .2s ease; }
-.header-cta:hover { filter: brightness(1.12); transform: translateY(-1px); }
 
 /* ---------- Tab bar (mobile) ---------- */
 .dock { position: fixed; z-index: 30; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); width: min(calc(100% - 32px), 460px); height: 68px; padding: 6px; display: flex; gap: 2px; border-radius: 34px; transform: translateX(-50%); -webkit-backdrop-filter: blur(26px) saturate(180%); backdrop-filter: blur(26px) saturate(180%); box-shadow: var(--glass-hi), 0 14px 34px rgba(0, 0, 0, .22); transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .25s ease, visibility 0s; }
@@ -250,7 +250,7 @@ h1 span { color: var(--accent); }
 .dialog-desc { margin-top: 8px; font-size: 14px; color: var(--muted); }
 .dialog-body .project-impact { font-size: 14px; }
 .dialog-body .tech-list { margin-top: 14px; }
-.dialog-cta { align-self: stretch; height: 48px; margin-top: 16px; font-size: 14px; }
+.dialog-cta { align-self: stretch; height: 48px; margin-top: 28px; font-size: 14px; }
 .dialog-nav { display: none; }
 @keyframes sheet-in { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes sheet-out { from { transform: translateY(var(--drag, 0px)); } to { transform: translateY(100%); } }
@@ -272,7 +272,7 @@ h1 span { color: var(--accent); }
   .dialog-body h2 { margin-top: 12px; font-size: clamp(28px, 2.6vw, 34px); line-height: 1.1; letter-spacing: -1.2px; }
   .dialog-desc { margin-top: 16px; font-size: 16px; }
   .dialog-body .project-impact { margin-top: 12px; font-size: 15px; }
-  .dialog-body .tech-list { margin-top: 18px; }
+  .dialog-body .tech-list { margin-top: 18px; margin-bottom: 28px; }
   .dialog-cta { align-self: flex-start; height: 54px; margin-top: auto; padding: 0 28px; font-size: 15px; }
   .dialog-nav { grid-area: nav; display: flex; align-items: center; gap: 10px; margin-top: 16px; }
   .dialog-count { margin-left: 6px; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
@@ -280,6 +280,9 @@ h1 span { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .dialog-panel, .dialog-backdrop { animation-duration: .01ms !important; } }
 
 /* ---------- Tablet + desktop ---------- */
+@media (min-width: 720px) and (prefers-reduced-transparency: no-preference) {
+  .hero-main.glass { background: var(--hero-bg); }
+}
 @media (min-width: 720px) {
   .desktop-nav { display: flex; }
   .dock { display: none; }
