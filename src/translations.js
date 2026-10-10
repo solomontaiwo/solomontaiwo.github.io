@@ -12,6 +12,8 @@ export const translations = {
       cta: "Parliamone",
       langSwitch: "EN",
       themeToggle: "Cambia tema",
+      home: "Home",
+      quickNav: "Navigazione rapida",
     },
     hero: {
       headline: ["Idee complesse.", "Software chiaro."],
@@ -29,6 +31,8 @@ export const translations = {
       spotlightText:
         "Dal requisito al rilascio, con attenzione a qualità del codice, esperienza utente e mantenibilità nel tempo.",
       quickFacts: ["Full Stack Engineering", "AI e Data Analysis", "Delivery orientata ai risultati"],
+      openPhoto: "Apri la foto",
+      closePhoto: "Chiudi la foto",
     },
     about: {
       eyebrow: "Profilo",
@@ -96,6 +100,10 @@ export const translations = {
       title: "Progetti selezionati",
       subtitle: "Una selezione di lavori che mostrano execution tecnica e impatto concreto.",
       viewProject: "Apri progetto",
+      filterAll: "Tutti",
+      filterLabel: "Filtra i progetti",
+      seeMore: "Vedi altro",
+      othersTitle: "Altri progetti",
       status: {
         live: "Live",
         completed: "Completato",
@@ -203,6 +211,8 @@ export const translations = {
       cta: "Let's talk",
       langSwitch: "IT",
       themeToggle: "Toggle theme",
+      home: "Home",
+      quickNav: "Quick navigation",
     },
     hero: {
       headline: ["Complex ideas.", "Clear software."],
@@ -220,6 +230,8 @@ export const translations = {
       spotlightText:
         "From requirement to release, with strong attention to code quality, user experience, and long-term maintainability.",
       quickFacts: ["Full Stack Engineering", "AI and Data Analysis", "Result-oriented delivery"],
+      openPhoto: "Open photo",
+      closePhoto: "Close photo",
     },
     about: {
       eyebrow: "Profile",
@@ -287,6 +299,10 @@ export const translations = {
       title: "Selected projects",
       subtitle: "A curated set of work showing technical execution and concrete impact.",
       viewProject: "Open project",
+      filterAll: "All",
+      filterLabel: "Filter projects",
+      seeMore: "See more",
+      othersTitle: "More projects",
       status: {
         live: "Live",
         completed: "Completed",

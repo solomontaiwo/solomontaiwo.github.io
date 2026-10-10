@@ -1,6 +1,7 @@
 {
   "name": "solomontaiwo.github.io",
   "version": "3.0.0",
+  "type": "module",
   "homepage": "https://solomontaiwo.github.io/",
   "private": true,
   "dependencies": {
