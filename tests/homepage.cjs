@@ -27,13 +27,14 @@ const fs = require('node:fs');
 
       assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 0 : 1, 'Hero has no redundant buttons (desktop: only the featured project link)');
       assert.equal(await page.locator('.header-cta').count(), mobile ? 0 : 1);
-      assert.equal(await page.locator('.tab-bar a').count(), 4, 'Tab bar has no Home');
+      assert.equal(await page.locator('.dock-full a').count(), mobile ? 3 : 0, 'Dock: Projects, Profile, Contact (+ More button)');
+      assert.equal(await page.locator('.site-header').count(), mobile ? 0 : 1, 'Mobile has a single bar: no top header');
       assert.equal(await page.locator('.more-projects').count(), mobile ? 1 : 0, 'See more only on mobile (3 visible of 6)');
       assert.equal(await page.locator('.filters').count(), 0, 'No filters');
       assert.equal(await page.locator('.availability, .facts').count(), 0);
 
       // Portrait in the header expands to the full photo and closes again.
-      await page.locator('.avatar-button').click();
+      await page.locator('.avatar-button:visible').click();
       await page.locator('.photo-large').waitFor();
       await page.waitForTimeout(800);
       assert.equal((await page.locator('.photo-large').boundingBox()).width > 250, true);
@@ -41,15 +42,37 @@ const fs = require('node:fs');
       if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-photo.png') });
       await page.keyboard.press('Escape');
       await page.locator('.photo-overlay').waitFor({ state: 'detached' });
-      assert.equal(await page.locator('.avatar-button img').isVisible(), true);
+      assert.equal(await page.locator('.avatar-button:visible img').isVisible(), true);
 
-      // Navigation: tab bar on mobile, header links from 720px.
-      assert.equal(await page.locator('.tab-bar').isVisible(), mobile);
+      // The header hides while scrolling down and returns when scrolling up (every width).
+      await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
+      const barHidden = hidden => page.waitForFunction(([isMobile, want]) => (isMobile ? document.querySelector('.dock').classList.contains('is-compact') : document.querySelector('.site-header').classList.contains('is-hidden')) === want, [mobile, hidden]);
+      await page.mouse.wheel(0, 700);
+      await barHidden(true);
+      if (mobile) {
+        await page.waitForTimeout(500);
+        assert.equal(await page.locator('.dock-compact').isVisible(), true, 'Compact pill shows the current section');
+        assert.equal(await page.locator('.dock-full a:visible').count(), 0);
+        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-dock-compact.png') });
+        await page.locator('.dock-compact').click();
+        await barHidden(false);
+        await page.waitForTimeout(500);
+        assert.equal(await page.locator('.dock-full a:visible').count(), 3, 'Tap on the pill expands the dock');
+        await page.mouse.wheel(0, 500);
+        await barHidden(true);
+      }
+      await page.mouse.wheel(0, -200);
+      await barHidden(false);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForFunction(() => window.scrollY === 0);
+
+      // Navigation: dock on mobile, header links from 720px.
+      assert.equal(await page.locator('.dock').count(), mobile ? 1 : 0);
       assert.equal(await page.locator('.desktop-nav').isVisible(), !mobile);
 
       if (mobile) {
-        await page.locator('.tab-bar a[href="#projects"]').click();
-        await page.waitForFunction(() => document.querySelector('.tab-bar a[href="#projects"]').hasAttribute('aria-current'));
+        await page.locator('.dock-full a[href="#projects"]').click();
+        await page.waitForFunction(() => document.querySelector('.dock-full a[href="#projects"]').hasAttribute('aria-current'));
         assert.equal(await page.locator('.project:visible').count(), 3, 'Three projects visible on mobile');
         await page.getByRole('button', { name: 'Vedi altro (3)' }).click();
         assert.equal(await page.locator('.project:visible').count(), 6);
@@ -97,23 +120,57 @@ const fs = require('node:fs');
         await dialog.waitFor();
         await page.waitForTimeout(500);
         const handle = await dialog.locator('.sheet-handle').boundingBox();
-        await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+        const cx = handle.x + handle.width / 2;
+        const cy = handle.y + handle.height / 2;
+        const top = (await dialog.boundingBox()).y;
+        // A short drag follows the finger, then springs back.
+        await page.mouse.move(cx, cy);
         await page.mouse.down();
-        await page.mouse.move(handle.x + handle.width / 2, handle.y + 200, { steps: 6 });
+        for (let i = 1; i <= 6; i += 1) { await page.mouse.move(cx, cy + 15 * i); await page.waitForTimeout(50); }
+        const dragged = (await dialog.boundingBox()).y - top;
+        assert.equal(dragged > 80 && dragged < 100, true, `Sheet follows the finger (moved ${dragged}px)`);
+        await page.mouse.up();
+        await page.waitForTimeout(500);
+        assert.equal(Math.abs((await dialog.boundingBox()).y - top) < 2, true, 'Sheet springs back');
+        // A long drag dismisses it.
+        await page.mouse.move(cx, cy);
+        await page.mouse.down();
+        await page.mouse.move(cx, cy + 320, { steps: 8 });
         await page.mouse.up();
         await dialog.waitFor({ state: 'detached' });
       }
 
-      await page.getByRole('button', { name: 'Switch to English' }).click();
-      await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
-      await page.getByRole('button', { name: 'Toggle theme' }).click();
+      const settings = async () => { if (mobile) { await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-compact')); await page.locator('.dock-more').click(); } };
+      await settings();
+      if (mobile) {
+        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-dock-menu.png') });
+        await page.keyboard.press('Escape');
+        await page.locator('.dock-menu').waitFor({ state: 'detached' });
+        assert.equal(await page.evaluate(() => document.activeElement.classList.contains('dock-more')), true, 'Esc returns focus to More');
+        await page.locator('.dock-more').click();
+        await page.getByRole('button', { name: 'English' }).click();
+        await page.getByRole('button', { name: 'Dark' }).or(page.getByRole('button', { name: 'Scuro' })).click();
+        await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+        await page.mouse.click(20, 120);
+        await page.locator('.dock-menu').waitFor({ state: 'detached' });
+      } else {
+        await page.getByRole('button', { name: 'Switch to English' }).click();
+        await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+        await page.getByRole('button', { name: 'Toggle theme' }).click();
+      }
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       await page.reload({ waitUntil: 'networkidle' });
       assert.equal(await page.locator('html').getAttribute('lang'), 'en');
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-      await page.getByRole('button', { name: 'Passa a italiano' }).click();
-      await page.getByRole('button', { name: 'Cambia tema' }).click();
+      if (mobile) {
+        await settings();
+        await page.getByRole('button', { name: 'Italiano' }).click();
+        await page.getByRole('button', { name: 'Chiaro' }).click();
+      } else {
+        await page.getByRole('button', { name: 'Passa a italiano' }).click();
+        await page.getByRole('button', { name: 'Cambia tema' }).click();
+      }
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
 
       await page.locator('.project img').first().scrollIntoViewIfNeeded();

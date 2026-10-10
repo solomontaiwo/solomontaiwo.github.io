@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaCode, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
+import { FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaCode, FaChevronUp, FaEllipsisH, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -167,6 +167,7 @@ function ProjectDialog({ projectId, projects, t, closing, onSelect, onClose, onE
   const panelRef = useRef(null);
   const closeRef = useRef(null);
   const drag = useRef(null);
+  const backdropRef = useRef(null);
   const index = Math.max(0, projects.findIndex(item => item.id === projectId));
   const project = projects[index];
   const content = t.projects.items[project.id];
@@ -202,26 +203,46 @@ function ProjectDialog({ projectId, projects, t, closing, onSelect, onClose, onE
     return () => window.clearTimeout(timer);
   }, [closing]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Swipe down on the handle closes the sheet (mobile).
-  const onDragStart = event => { drag.current = { y: event.clientY, dy: 0 }; event.currentTarget.setPointerCapture(event.pointerId); };
-  const onDragMove = event => {
-    if (!drag.current) return;
-    drag.current.dy = Math.max(0, event.clientY - drag.current.y);
+  // Drag the handle: the sheet follows the finger, then either dismisses (far or fast enough) or springs back.
+  const onDragStart = event => {
+    drag.current = { id: event.pointerId, startY: event.clientY, dy: 0, lastY: event.clientY, lastTime: event.timeStamp, velocity: 0 };
+    event.currentTarget.setPointerCapture(event.pointerId);
     panelRef.current.style.transition = "none";
-    panelRef.current.style.transform = `translateY(${drag.current.dy}px)`;
   };
-  const onDragEnd = () => {
-    if (!drag.current) return;
-    const { dy } = drag.current;
+  const onDragMove = event => {
+    const state = drag.current;
+    if (!state || state.id !== event.pointerId) return;
+    const dt = event.timeStamp - state.lastTime;
+    if (dt > 0) state.velocity = (event.clientY - state.lastY) / dt;
+    state.lastY = event.clientY;
+    state.lastTime = event.timeStamp;
+    state.dy = Math.max(0, event.clientY - state.startY);
+    panelRef.current.style.transform = `translateY(${state.dy}px)`;
+    backdropRef.current.style.opacity = String(Math.max(0.2, 1 - state.dy / panelRef.current.offsetHeight));
+  };
+  const onDragEnd = event => {
+    const state = drag.current;
+    if (!state || state.id !== event.pointerId) return;
     drag.current = null;
-    panelRef.current.style.transition = "";
-    if (dy > 90) onClose();
-    else panelRef.current.style.transform = "";
+    const panel = panelRef.current;
+    const backdrop = backdropRef.current;
+    const dismiss = event.type !== "pointercancel" && state.dy > 8 && (state.dy > panel.offsetHeight * 0.25 || state.velocity > 0.6);
+    if (dismiss) {
+      // The closing animation starts from where the finger left the sheet.
+      panel.style.setProperty("--drag", `${state.dy}px`);
+      backdrop.style.setProperty("--fade", backdrop.style.opacity || "1");
+      onClose();
+    } else {
+      panel.style.transition = "transform .32s cubic-bezier(.22, 1, .36, 1)";
+      panel.style.transform = "";
+      backdrop.style.transition = "opacity .32s ease";
+      backdrop.style.opacity = "";
+    }
   };
 
   return (
     <div className={`dialog-overlay${closing ? " is-closing" : ""}`}>
-      <div className="dialog-backdrop" onClick={onClose} />
+      <div ref={backdropRef} className="dialog-backdrop" onClick={onClose} />
       <section ref={panelRef} className="glass dialog-panel" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
         <div className="sheet-handle" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd} aria-hidden="true"><span /></div>
         <button ref={closeRef} type="button" className="icon-button dialog-close" aria-label={t.projects.close} onClick={onClose}><FaTimes aria-hidden="true" /></button>
@@ -319,6 +340,9 @@ function App() {
   const [dialog, setDialog] = useState(null);
   const opener = useRef(null);
   const avatarRef = useRef(null);
+  const dockAvatarRef = useRef(null);
+  const moreButtonRef = useRef(null);
+  const [moreOpen, setMoreOpen] = useState(false);
   const openProject = (project, element) => { opener.current = element; setDialog({ id: project.id, closing: false }); };
   const closeDialog = () => setDialog(current => (current && !current.closing ? { ...current, closing: true } : current));
   const dialogExited = () => {
@@ -329,12 +353,20 @@ function App() {
   };
   const closePhoto = () => setPhotoState(state => (state === "open" ? "closing" : state));
   const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
+  const applyTheme = next => {
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
     try { window.localStorage.setItem("theme", next); } catch { /* Theme still works when storage is unavailable. */ }
   };
+  const toggleTheme = () => applyTheme(theme === "dark" ? "light" : "dark");
+  const closeMore = () => { setMoreOpen(false); if (moreButtonRef.current) moreButtonRef.current.focus({ preventScroll: true }); };
+  useEffect(() => {
+    if (!moreOpen) return undefined;
+    const onKey = event => { if (event.key === "Escape") { setMoreOpen(false); if (moreButtonRef.current) moreButtonRef.current.focus({ preventScroll: true }); } };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [moreOpen]);
+  useEffect(() => { if (isDesktop) setMoreOpen(false); }, [isDesktop]);
   useEffect(() => {
     let last = window.scrollY;
     let frame = 0;
@@ -357,6 +389,7 @@ function App() {
         // The row sits at the very end of the page, so it may never reach the reading line: the bottom counts as "about" too.
         if (rowIds.includes(current) || window.innerHeight + y >= document.documentElement.scrollHeight - 4) current = "about";
       } else if (window.innerHeight + y >= document.documentElement.scrollHeight - 4) current = "contact";
+      else if (current === "skills") current = "about"; // On mobile the "Profilo" entry covers profile and skills.
       setActive(current);
     };
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update); };
@@ -377,6 +410,8 @@ function App() {
     { id: "skills", label: t.nav.skills, Icon: FaCode },
     { id: "contact", label: t.nav.contact, Icon: FaEnvelope },
   ];
+  const compact = headerHidden && !moreOpen && !isDesktop;
+  const sectionLabel = ({ home: t.nav.home, projects: t.nav.projects, about: t.nav.about, skills: t.nav.about, contact: t.nav.contact })[active] || t.nav.home;
   const mailto = `mailto:${t.contact.emailValue}`;
   const primaryContact = <a className="primary-button" href={mailto}>{t.contact.primaryCta}<FaArrowRight aria-hidden="true" /></a>;
   const initialOthers = isDesktop ? INITIAL_OTHERS : INITIAL_OTHERS_MOBILE;
@@ -394,7 +429,7 @@ function App() {
     <div className="portfolio">
       <div className="ambient" aria-hidden="true" />
       <a className="skip-link" href="#main">{t.nav.skip}</a>
-      <header className={`site-header${headerHidden ? " is-hidden" : ""}`} onFocus={() => setHeaderHidden(false)}>
+      {isDesktop && <header className={`site-header${headerHidden ? " is-hidden" : ""}`} onFocus={() => setHeaderHidden(false)}>
         <div className="glass header-pill">
           <div className="header-id">
             <button ref={avatarRef} type="button" className="avatar-button" data-hidden={photoState !== "closed"} aria-haspopup="dialog" aria-label={t.hero.openPhoto} onClick={() => setPhotoState("open")}><img src={PHOTO.thumb} alt="" width="44" height="44" /></button>
@@ -411,7 +446,7 @@ function App() {
             <button className="icon-button" type="button" onClick={toggleTheme} aria-label={t.nav.themeToggle}>{theme === "dark" ? <FaSun /> : <FaMoon />}</button>
           </div>
         </div>
-      </header>
+      </header>}
 
       <main id="main" className="page-width">
         <section id="home" className="hero">
@@ -489,13 +524,44 @@ function App() {
 
       <footer className="page-width site-footer"><p>© {new Date().getFullYear()} Solomon Taiwo</p></footer>
 
-      <nav className="glass tab-bar" aria-label={t.nav.quickNav}>
-        {links.map(({ id, label, Icon }) => (
-          <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /><span>{label}</span></a>
-        ))}
-      </nav>
+      {!isDesktop && (
+        <>
+          {moreOpen && <div className="dock-menu-backdrop" onClick={closeMore} aria-hidden="true" />}
+          {moreOpen && (
+            <div className="dock-menu" role="group" aria-label={t.nav.more}>
+              <div className="dock-menu-row">
+                <span className="dock-menu-label">{t.nav.language}</span>
+                <div className="seg">
+                  <button type="button" aria-pressed={language === "it"} aria-label="Italiano" onClick={() => setLanguage("it")}>IT</button>
+                  <button type="button" aria-pressed={language === "en"} aria-label="English" onClick={() => setLanguage("en")}>EN</button>
+                </div>
+              </div>
+              <div className="dock-menu-row">
+                <span className="dock-menu-label">{t.nav.theme}</span>
+                <div className="seg">
+                  <button type="button" aria-pressed={theme === "light"} onClick={() => applyTheme("light")}><FaSun aria-hidden="true" />{t.nav.themeLight}</button>
+                  <button type="button" aria-pressed={theme === "dark"} onClick={() => applyTheme("dark")}><FaMoon aria-hidden="true" />{t.nav.themeDark}</button>
+                </div>
+              </div>
+            </div>
+          )}
+          <nav className={`glass dock${compact ? " is-compact" : ""}`} aria-label={t.nav.quickNav} onFocus={() => setHeaderHidden(false)}>
+            <button ref={dockAvatarRef} type="button" className="avatar-button dock-avatar" data-hidden={photoState !== "closed"} aria-haspopup="dialog" aria-label={t.hero.openPhoto} onClick={() => setPhotoState("open")}><img src={PHOTO.thumb} alt="" width="44" height="44" /></button>
+            <div className="dock-full">
+              {links.filter(link => link.id !== "skills").map(({ id, label, Icon }) => (
+                <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /><span>{label}</span></a>
+              ))}
+              <button ref={moreButtonRef} type="button" className="dock-more" aria-haspopup="true" aria-expanded={moreOpen} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /><span>{t.nav.more}</span></button>
+            </div>
+            <button type="button" className="dock-compact" aria-label={t.nav.expandMenu} onClick={() => setHeaderHidden(false)}>
+              <span className="dock-here"><small>{t.nav.currentSection}</small><strong>{sectionLabel}</strong></span>
+              <FaChevronUp aria-hidden="true" />
+            </button>
+          </nav>
+        </>
+      )}
       {dialog && <ProjectDialog projectId={dialog.id} projects={allProjects} t={t} closing={dialog.closing} onSelect={id => setDialog({ id, closing: false })} onClose={closeDialog} onExited={dialogExited} />}
-      <PhotoViewer open={photoState === "open"} visible={photoState !== "closed"} originRef={avatarRef} alt={t.hero.imageAlt} closeLabel={t.hero.closePhoto} onClose={closePhoto} onExited={() => setPhotoState("closed")} />
+      <PhotoViewer open={photoState === "open"} visible={photoState !== "closed"} originRef={isDesktop ? avatarRef : dockAvatarRef} alt={t.hero.imageAlt} closeLabel={t.hero.closePhoto} onClose={closePhoto} onExited={() => setPhotoState("closed")} />
       {showBackToTop && <a href="#home" onClick={scrollToTop} className="glass back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
     </div>
   );
