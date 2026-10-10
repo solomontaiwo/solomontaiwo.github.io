@@ -25,10 +25,13 @@ const fs = require('node:fs');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}`);
       assert.equal(await page.locator('a[href$=".pdf"]').count(), 0, 'No CV download');
 
-      assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 0 : 1, 'Hero has no redundant buttons (desktop: only the featured project link)');
+      assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 1 : 2, 'Hero: the portrait button (+ the featured project link on desktop)');
       assert.equal(await page.locator('.header-cta').count(), mobile ? 0 : 1);
-      assert.equal(await page.locator('.dock-full a').count(), mobile ? 3 : 0, 'Dock: Projects, Profile, Contact (+ More button)');
+      assert.equal(await page.locator('.dock a').count(), mobile ? 3 : 0, 'Dock: Projects, Profile, Contact (+ More button)');
       assert.equal(await page.locator('.site-header').count(), mobile ? 0 : 1, 'Mobile has a single bar: no top header');
+      assert.equal(await page.locator('.avatar-button').count(), 1, 'One portrait only (in the hero)');
+      assert.equal(await page.locator('.hero-name').textContent(), 'Solomon Taiwo');
+      assert.equal(await page.locator('.brand, .header-id').count(), 0, 'No name or portrait in the bar');
       assert.equal(await page.locator('.more-projects').count(), mobile ? 1 : 0, 'See more only on mobile (3 visible of 6)');
       assert.equal(await page.locator('.filters').count(), 0, 'No filters');
       assert.equal(await page.locator('.availability, .facts').count(), 0);
@@ -46,33 +49,27 @@ const fs = require('node:fs');
 
       // The header hides while scrolling down and returns when scrolling up (every width).
       await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
-      const barHidden = hidden => page.waitForFunction(([isMobile, want]) => (isMobile ? document.querySelector('.dock').classList.contains('is-compact') : document.querySelector('.site-header').classList.contains('is-hidden')) === want, [mobile, hidden]);
+      const barHidden = hidden => page.waitForFunction(([isMobile, want]) => (isMobile ? document.querySelector('.dock').classList.contains('is-hidden') : document.querySelector('.site-header').classList.contains('is-hidden')) === want, [mobile, hidden]);
       await page.mouse.wheel(0, 700);
       await barHidden(true);
       if (mobile) {
         await page.waitForTimeout(500);
-        assert.equal(await page.locator('.dock-compact').isVisible(), true, 'Compact pill shows the current section');
-        assert.equal(await page.locator('.dock-full a:visible').count(), 0);
-        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-dock-compact.png') });
-        await page.locator('.dock-compact').click();
-        await barHidden(false);
-        await page.waitForTimeout(500);
-        assert.equal(await page.locator('.dock-full a:visible').count(), 3, 'Tap on the pill expands the dock');
-        await page.mouse.wheel(0, 500);
-        await barHidden(true);
+        assert.equal(await page.locator('.dock').isVisible(), false, 'Dock slides away while scrolling down');
+        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-dock-hidden.png') });
       }
       await page.mouse.wheel(0, -200);
       await barHidden(false);
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForFunction(() => window.scrollY === 0);
+      await barHidden(false);
 
       // Navigation: dock on mobile, header links from 720px.
       assert.equal(await page.locator('.dock').count(), mobile ? 1 : 0);
       assert.equal(await page.locator('.desktop-nav').isVisible(), !mobile);
 
       if (mobile) {
-        await page.locator('.dock-full a[href="#projects"]').click();
-        await page.waitForFunction(() => document.querySelector('.dock-full a[href="#projects"]').hasAttribute('aria-current'));
+        await page.locator('.dock a[href="#projects"]').click();
+        await page.waitForFunction(() => document.querySelector('.dock a[href="#projects"]').hasAttribute('aria-current'));
         assert.equal(await page.locator('.project:visible').count(), 3, 'Three projects visible on mobile');
         await page.getByRole('button', { name: 'Vedi altro (3)' }).click();
         assert.equal(await page.locator('.project:visible').count(), 6);
@@ -140,37 +137,32 @@ const fs = require('node:fs');
         await dialog.waitFor({ state: 'detached' });
       }
 
-      const settings = async () => { if (mobile) { await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-compact')); await page.locator('.dock-more').click(); } };
+      const moreSel = mobile ? '.dock-more' : '.header-more';
+      const settings = async () => {
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForFunction(() => { const bar = document.querySelector('.dock') || document.querySelector('.site-header'); return !bar.classList.contains('is-hidden'); });
+        await page.locator(moreSel).click();
+        await page.locator('.dock-menu').waitFor();
+      };
       await settings();
-      if (mobile) {
-        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-dock-menu.png') });
-        await page.keyboard.press('Escape');
-        await page.locator('.dock-menu').waitFor({ state: 'detached' });
-        assert.equal(await page.evaluate(() => document.activeElement.classList.contains('dock-more')), true, 'Esc returns focus to More');
-        await page.locator('.dock-more').click();
-        await page.getByRole('button', { name: 'English' }).click();
-        await page.getByRole('button', { name: 'Dark' }).or(page.getByRole('button', { name: 'Scuro' })).click();
-        await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
-        await page.mouse.click(20, 120);
-        await page.locator('.dock-menu').waitFor({ state: 'detached' });
-      } else {
-        await page.getByRole('button', { name: 'Switch to English' }).click();
-        await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
-        await page.getByRole('button', { name: 'Toggle theme' }).click();
-      }
+      if (output && (width === 390 || width === 1440)) await page.screenshot({ path: path.join(output, width === 390 ? 'mobile-menu.png' : 'desktop-menu.png') });
+      await page.keyboard.press('Escape');
+      await page.locator('.dock-menu').waitFor({ state: 'detached' });
+      assert.equal(await page.evaluate(sel => document.activeElement.matches(sel), moreSel), true, 'Esc returns focus to More');
+      await page.locator(moreSel).click();
+      await page.getByRole('button', { name: 'English' }).click();
+      await page.getByRole('button', { name: 'Dark' }).click();
+      await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+      await page.mouse.click(20, 120);
+      await page.locator('.dock-menu').waitFor({ state: 'detached' });
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       await page.reload({ waitUntil: 'networkidle' });
       assert.equal(await page.locator('html').getAttribute('lang'), 'en');
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-      if (mobile) {
-        await settings();
-        await page.getByRole('button', { name: 'Italiano' }).click();
-        await page.getByRole('button', { name: 'Chiaro' }).click();
-      } else {
-        await page.getByRole('button', { name: 'Passa a italiano' }).click();
-        await page.getByRole('button', { name: 'Cambia tema' }).click();
-      }
+      await settings();
+      await page.getByRole('button', { name: 'Italiano' }).click();
+      await page.getByRole('button', { name: 'Chiaro' }).click();
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
 
       await page.locator('.project img').first().scrollIntoViewIfNeeded();
