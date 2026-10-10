@@ -17,7 +17,7 @@ const projectCatalog = [
   {
     id: "seenary",
     sortDate: "2026-07-26",
-    image: "/images/projects/seenary/seenary.png",
+    image: "/images/projects/seenary/seenary.webp",
     link: "https://main.d10eewmnsih3qy.amplifyapp.com/",
     tech: ["Next.js", "Java", "Spring", "AWS", "CI/CD"],
     category: "webApp",
@@ -26,7 +26,7 @@ const projectCatalog = [
   {
     id: "eventfinder",
     sortDate: "2026-06-21",
-    image: "/images/projects/eventfinder/eventfinder.png",
+    image: "/images/projects/eventfinder/eventfinder.webp",
     link: "https://event-planner-cuhua6hpb8bwc7ft.italynorth-01.azurewebsites.net/",
     tech: ["Next.js", "TypeScript", "API", "CI/CD"],
     category: "webApp",
@@ -35,7 +35,7 @@ const projectCatalog = [
   {
     id: "isHormuzOpen",
     sortDate: "2026-06-21",
-    image: "/images/projects/is-hormuz-open/is-hormuz-open.png",
+    image: "/images/projects/is-hormuz-open/is-hormuz-open.webp",
     link: "https://is-hormuz-open.com/",
     tech: ["TypeScript", "Cloudflare", "Hono", "CI/CD"],
     category: "webApp",
@@ -53,7 +53,7 @@ const projectCatalog = [
   {
     id: "exobabel",
     sortDate: "2025-10-05",
-    image: "/images/projects/exobabel/exobabel.png",
+    image: "/images/projects/exobabel/exobabel.webp",
     link: "https://witty-field-0719a7f03.2.azurestaticapps.net/",
     tech: ["React", "Python", "JavaScript", "ML"],
     category: "hackathon",
@@ -62,7 +62,7 @@ const projectCatalog = [
   {
     id: "soldisotto",
     sortDate: "2024-11-12",
-    image: "/images/projects/soldisotto/soldi-sotto.png",
+    image: "/images/projects/soldisotto/soldi-sotto.webp",
     link: "https://solomontaiwo.github.io/soldi-sotto/",
     tech: ["React", "JavaScript", "CSS"],
     category: "webApp",
@@ -229,7 +229,6 @@ function App() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [photoState, setPhotoState] = useState("closed");
   const avatarRef = useRef(null);
-  const pinned = useRef(null);
   const closePhoto = () => setPhotoState(state => (state === "open" ? "closing" : state));
   const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
   const toggleTheme = () => {
@@ -256,9 +255,9 @@ function App() {
         if (element && element.getBoundingClientRect().top <= line) current = id;
       });
       if (desktop) {
-        // Profile, skills and contact share one row: keep the link the visitor picked, otherwise highlight the profile.
-        if (rowIds.includes(current)) current = rowIds.includes(pinned.current) ? pinned.current : "about";
-        else pinned.current = null;
+        // Profile, skills and contact share one row, so on desktop they are a single "about" entry.
+        // The row sits at the very end of the page, so it may never reach the reading line: the bottom counts as "about" too.
+        if (rowIds.includes(current) || window.innerHeight + y >= document.documentElement.scrollHeight - 4) current = "about";
       } else if (window.innerHeight + y >= document.documentElement.scrollHeight - 4) current = "contact";
       setActive(current);
     };
@@ -304,12 +303,12 @@ function App() {
             <a className="brand" href="#home" onClick={scrollToTop}>Solomon Taiwo<span aria-hidden="true"> /</span></a>
           </div>
           <nav className="desktop-nav" aria-label={t.nav.navigation}>
-            {links.map(link => (
-              <a key={link.id} href={`#${link.id}`} onClick={() => { pinned.current = link.id; setActive(link.id); }} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
+            {links.filter(link => ["projects", "about"].includes(link.id)).map(link => (
+              <a key={link.id} href={`#${link.id}`} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
             ))}
           </nav>
           <div className="nav-controls">
-            {isDesktop && <a className="header-cta" href="#contact" onClick={() => { pinned.current = "contact"; setActive("contact"); }}>{t.contact.primaryCta}</a>}
+            {isDesktop && <a className="header-cta" href="#contact">{t.contact.primaryCta}</a>}
             <button className="icon-button language-button" type="button" onClick={() => setLanguage(language === "it" ? "en" : "it")} aria-label={t.nav.languageLabel}>{t.nav.langSwitch}</button>
             <button className="icon-button" type="button" onClick={toggleTheme} aria-label={t.nav.themeToggle}>{theme === "dark" ? <FaSun /> : <FaMoon />}</button>
           </div>

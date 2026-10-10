@@ -59,6 +59,13 @@ const fs = require('node:fs');
       } else {
         assert.equal(await page.locator('.project:visible').count(), 6);
         assert.equal(await page.locator('.skill-group h3:visible').count(), 3);
+        assert.equal(await page.locator('.desktop-nav a').count(), 2, 'Desktop nav: Projects + Profile only');
+        await page.locator('.desktop-nav a[href="#about"]').click();
+        await page.waitForFunction(() => document.querySelector('.desktop-nav a[href="#about"]').hasAttribute('aria-current'));
+        assert.equal(await page.locator('.desktop-nav a[aria-current]').count(), 1);
+        await page.locator('.header-cta').click();
+        await page.waitForTimeout(900);
+        assert.equal(await page.locator('#contact').evaluate(el => el.getBoundingClientRect().top < innerHeight), true, 'CTA scrolls to contact');
       }
 
       await page.getByRole('button', { name: 'Switch to English' }).click();
