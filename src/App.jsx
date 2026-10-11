@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaCode, FaEllipsisH, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
+import { FaArrowDown, FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaEllipsisH, FaExternalLinkAlt, FaMoon, FaSun, FaTimes } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -134,7 +134,7 @@ const parseTimeline = item => {
 
 const scrollToTop = event => {
   event.preventDefault();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 };
 
 // Featured card (desktop hero) links straight to the project; every other card opens the details dialog.
@@ -405,10 +405,8 @@ function App() {
 
   const activeGroup = openGroup ?? t.skills.groups[0].id;
   const links = [
-    { id: "projects", label: t.nav.projects, Icon: FaThLarge },
-    { id: "about", label: t.nav.about, Icon: FaUser },
-    { id: "skills", label: t.nav.skills, Icon: FaCode },
-    { id: "contact", label: t.nav.contact, Icon: FaEnvelope },
+    { id: "projects", label: t.nav.projects },
+    { id: "about", label: t.nav.about },
   ];
   const barHidden = headerHidden && !moreOpen;
   const settingsMenu = (
@@ -427,6 +425,12 @@ function App() {
           <button type="button" aria-pressed={theme === "dark"} onClick={() => applyTheme("dark")}><FaMoon aria-hidden="true" />{t.nav.themeDark}</button>
         </div>
       </div>
+    </div>
+  );
+  const mobilePreferences = (
+    <div className="mobile-preferences" role="group" aria-label={`${t.nav.language}, ${t.nav.theme}`}>
+      <button type="button" className="icon-button language-button" aria-label={t.nav.languageLabel} onClick={() => setLanguage(language === "it" ? "en" : "it")}>{language.toUpperCase()}</button>
+      <button type="button" className="icon-button theme-button" aria-label={t.nav.themeToggle} aria-pressed={theme === "dark"} onClick={toggleTheme}>{theme === "dark" ? <FaMoon aria-hidden="true" /> : <FaSun aria-hidden="true" />}</button>
     </div>
   );
   const mailto = `mailto:${t.contact.emailValue}`;
@@ -452,7 +456,7 @@ function App() {
           <header className={`site-header${barHidden ? " is-hidden" : ""}`} onFocus={() => setHeaderHidden(false)}>
             <div className="glass header-pill">
               <nav className="desktop-nav" aria-label={t.nav.navigation}>
-                {links.filter(link => ["projects", "about"].includes(link.id)).map(link => (
+                {links.map(link => (
                   <a key={link.id} href={`#${link.id}`} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
                 ))}
                 <a href="#contact">{t.contact.primaryCta}</a>
@@ -467,6 +471,7 @@ function App() {
       )}
 
       <main id="main" className="page-width">
+        {!isDesktop && <div className="mobile-tools">{mobilePreferences}</div>}
         <section id="home" className="hero">
           <div className={`hero-main${glass(isDesktop)}`}>
             <div className="hero-id">
@@ -478,6 +483,12 @@ function App() {
             </div>
             <h1>{t.hero.headline[0]}<br /><span>{t.hero.headline[1]}</span></h1>
             <p className="hero-description">{t.hero.description}</p>
+            {!isDesktop && (
+              <nav className="hero-actions" aria-label={t.nav.quickNav}>
+                <a className="primary-button" href="#projects">{t.nav.projects}<FaArrowDown aria-hidden="true" /></a>
+                <a className="secondary-button" href="#contact">{t.nav.contact}<FaArrowDown aria-hidden="true" /></a>
+              </nav>
+            )}
           </div>
           {isDesktop && <ProjectCard project={featuredProject} t={t} variant="featured" />}
         </section>
@@ -494,6 +505,12 @@ function App() {
             <button type="button" className="more-projects" aria-expanded={showAll} aria-controls="project-grid" onClick={() => setShowAll(!showAll)}>
               {showAll ? t.projects.showLess : `${t.projects.seeMore} (${hiddenCount})`}
             </button>
+          )}
+          {!isDesktop && (
+            <nav className="content-links" aria-label={t.nav.navigation}>
+              <a href="#about">{t.nav.profileAndSkills}<FaArrowDown aria-hidden="true" /></a>
+              <a href="#contact">{t.nav.contact}</a>
+            </nav>
           )}
         </section>
 
@@ -546,23 +563,18 @@ function App() {
         </div>
       </main>
 
-      <footer className="page-width site-footer"><p>© {new Date().getFullYear()} Solomon Taiwo</p></footer>
-
-      {!isDesktop && (
-        <>
-          {moreOpen && <div className="dock-menu-backdrop" onClick={closeMore} aria-hidden="true" />}
-          {moreOpen && settingsMenu}
-          <nav className={`glass dock${barHidden ? " is-hidden" : ""}`} aria-label={t.nav.quickNav} onFocus={() => setHeaderHidden(false)}>
-            {links.filter(link => link.id !== "skills").map(({ id, label, Icon }) => (
-              <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /><span>{label}</span></a>
-            ))}
-            <button ref={moreButtonRef} type="button" className="dock-more" aria-haspopup="true" aria-expanded={moreOpen} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /><span>{t.nav.more}</span></button>
-          </nav>
-        </>
-      )}
+      <footer className="page-width site-footer">
+        {!isDesktop && (
+          <div className="footer-controls">
+            {mobilePreferences}
+            <a className="footer-back-to-top" href="#home" onClick={scrollToTop}>{t.backToTop}<FaArrowUp aria-hidden="true" /></a>
+          </div>
+        )}
+        <p>© {new Date().getFullYear()} Solomon Taiwo</p>
+      </footer>
       {dialog && <ProjectDialog projectId={dialog.id} projects={allProjects} t={t} closing={dialog.closing} onSelect={id => setDialog({ id, closing: false })} onClose={closeDialog} onExited={dialogExited} />}
       <PhotoViewer open={photoState === "open"} visible={photoState !== "closed"} originRef={avatarRef} alt={t.hero.imageAlt} closeLabel={t.hero.closePhoto} onClose={closePhoto} onExited={() => setPhotoState("closed")} />
-      {showBackToTop && <a href="#home" onClick={scrollToTop} className="glass back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
+      {isDesktop && showBackToTop && <a href="#home" onClick={scrollToTop} className="glass back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
     </div>
   );
 }

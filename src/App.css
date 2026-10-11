@@ -125,12 +125,7 @@ ul, ol { padding: 0; list-style: none; }
 .more-wrap { position: relative; }
 .more-wrap .dock-menu { position: absolute; right: 0; bottom: auto; top: calc(100% + 16px); animation: fade-in .18s ease backwards; }
 
-/* ---------- Tab bar (mobile) ---------- */
-.dock { position: fixed; z-index: 30; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); width: min(calc(100% - 32px), 460px); height: 68px; padding: 6px; display: flex; gap: 2px; border-radius: 34px; transform: translateX(-50%); -webkit-backdrop-filter: blur(26px) saturate(180%); backdrop-filter: blur(26px) saturate(180%); box-shadow: var(--glass-hi), 0 14px 34px rgba(0, 0, 0, .22); transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .25s ease, visibility 0s; }
-.dock.is-hidden { transform: translate(-50%, calc(100% + 32px + env(safe-area-inset-bottom))); opacity: 0; visibility: hidden; pointer-events: none; transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .25s ease, visibility 0s .35s; }
-.dock a, .dock-more { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 28px; background: none; font: inherit; font-size: 11px; font-weight: 600; color: var(--muted); transition: background .25s ease, color .25s ease; }
-.dock svg { width: 20px; height: 20px; }
-.dock a[aria-current], .dock-more[aria-expanded="true"] { background: var(--tab-active); color: var(--text); font-weight: 700; box-shadow: var(--glass-hi); }
+/* ---------- Desktop settings ---------- */
 .dock-menu-backdrop { position: fixed; inset: 0; z-index: 31; }
 .dock-menu-backdrop.is-desktop { z-index: 29; }
 .dock-menu { position: fixed; z-index: 32; right: max(16px, calc(50% - 230px)); bottom: calc(16px + 68px + 10px + env(safe-area-inset-bottom)); width: 248px; display: grid; gap: 12px; padding: 14px; border-radius: 26px; background: var(--sheet-bg); border: 1px solid var(--glass-border); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%); box-shadow: var(--glass-hi), 0 18px 40px rgba(0, 0, 0, .28); animation: fade-in .18s ease backwards; }
@@ -285,7 +280,6 @@ h1 span { color: var(--accent); }
 }
 @media (min-width: 720px) {
   .desktop-nav { display: flex; }
-  .dock { display: none; }
   .hero h1 { font-size: clamp(40px, 4.6vw, 72px); }
   .hero-description { font-size: 20px; }
 }
@@ -315,7 +309,19 @@ h1 span { color: var(--accent); }
   .section-head { flex-direction: column-reverse; align-items: flex-start; gap: 8px; margin-bottom: 14px; padding-inline: 0; }
   h2 { font-size: 30px; letter-spacing: -1.1px; }
   main { padding-top: calc(12px + env(safe-area-inset-top)); padding-bottom: 8px; }
-  .site-footer { padding-bottom: 120px; }
+  .mobile-tools { display: flex; justify-content: flex-end; }
+  .mobile-preferences { display: flex; align-items: center; gap: 8px; }
+  .mobile-preferences .icon-button { padding: 0; }
+  .mobile-preferences svg { width: 18px; height: 18px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .hero-actions a { height: 48px; padding-inline: 20px; gap: 10px; }
+  .hero-actions svg, .content-links svg, .footer-back-to-top svg { width: 14px; height: 14px; }
+  .content-links { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; font-size: 14px; }
+  .content-links a, .footer-back-to-top { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+  .site-footer { flex-direction: column; gap: 20px; padding: 28px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .footer-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .footer-back-to-top { font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; }
+  .site-footer > p { text-align: center; }
 
   .hero { display: block; margin-top: 28px; }
   .hero-main { display: block; padding: 0; }
