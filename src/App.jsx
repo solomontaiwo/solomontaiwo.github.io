@@ -508,7 +508,6 @@ function App() {
           )}
           {!isDesktop && (
             <nav className="content-links" aria-label={t.nav.navigation}>
-              <a href="#about">{t.nav.profileAndSkills}<FaArrowDown aria-hidden="true" /></a>
               <a href="#contact">{t.nav.contact}</a>
             </nav>
           )}
