@@ -78,6 +78,7 @@ const fs = require('node:fs');
         await page.getByRole('button', { name: 'Mostra meno' }).click();
         assert.equal(await page.locator('.project:visible').count(), 3);
         assert.equal(await page.locator('.content-links a').count(), 1, 'Only the contact shortcut remains after projects');
+        assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Vai ai contatti');
         assert.equal(await page.locator('a[href="#about"]').count(), 0, 'No redundant mobile profile shortcut');
         await page.locator('.content-links a[href="#contact"]').click();
         await page.waitForFunction(() => document.getElementById('contact').getBoundingClientRect().top >= 0 && document.getElementById('contact').getBoundingClientRect().top < innerHeight);
@@ -158,7 +159,7 @@ const fs = require('node:fs');
       if (mobile) {
         await page.locator('.mobile-tools .language-button').click();
         await page.locator('.mobile-tools .theme-button').click();
-        assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Contact');
+        assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Go to contact');
         assert.equal(await page.locator('.site-footer .language-button').textContent(), 'EN');
         assert.equal(await page.locator('.site-footer .theme-button').getAttribute('aria-pressed'), 'true');
       } else {

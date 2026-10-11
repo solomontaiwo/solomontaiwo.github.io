@@ -508,7 +508,7 @@ function App() {
           )}
           {!isDesktop && (
             <nav className="content-links" aria-label={t.nav.navigation}>
-              <a href="#contact">{t.nav.contact}</a>
+              <a href="#contact">{t.nav.goToContact}<FaArrowDown aria-hidden="true" /></a>
             </nav>
           )}
         </section>
