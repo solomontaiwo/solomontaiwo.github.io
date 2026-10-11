@@ -565,7 +565,6 @@ function App() {
       <footer className="page-width site-footer">
         {!isDesktop && (
           <div className="footer-controls">
-            {mobilePreferences}
             <a className="footer-back-to-top" href="#home" onClick={scrollToTop}>{t.backToTop}<FaArrowUp aria-hidden="true" /></a>
           </div>
         )}

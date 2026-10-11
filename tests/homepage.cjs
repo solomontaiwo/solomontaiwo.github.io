@@ -29,7 +29,8 @@ const fs = require('node:fs');
       assert.equal(await page.locator('.desktop-nav a[href="#contact"]').count(), mobile ? 0 : 1);
       assert.equal(await page.locator('.dock').count(), 0, 'No mobile dock');
       assert.equal(await page.locator('.site-header').count(), mobile ? 0 : 1, 'No mobile top header');
-      assert.equal(await page.locator('.mobile-preferences').count(), mobile ? 2 : 0, 'Mobile preferences at the top and in the footer');
+      assert.equal(await page.locator('.mobile-preferences').count(), mobile ? 1 : 0, 'One pair of mobile preferences at the top');
+      assert.equal(await page.locator('.site-footer .mobile-preferences').count(), 0, 'No duplicate preferences in the footer');
       assert.equal(await page.locator('.hero-actions, .content-links, .footer-controls').count(), mobile ? 3 : 0);
       assert.equal(await page.locator('.avatar-button').count(), 1, 'One portrait only (in the hero)');
       assert.equal(await page.locator('.hero-name').textContent(), 'Solomon Taiwo');
@@ -160,8 +161,8 @@ const fs = require('node:fs');
         await page.locator('.mobile-tools .language-button').click();
         await page.locator('.mobile-tools .theme-button').click();
         assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Go to contact');
-        assert.equal(await page.locator('.site-footer .language-button').textContent(), 'EN');
-        assert.equal(await page.locator('.site-footer .theme-button').getAttribute('aria-pressed'), 'true');
+        assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
+        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'true');
       } else {
         await settings();
         if (output && width === 1440) await page.screenshot({ path: path.join(output, 'desktop-menu.png') });
@@ -183,11 +184,16 @@ const fs = require('node:fs');
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       if (mobile) {
-        await page.locator('.site-footer .language-button').click();
-        await page.locator('.site-footer .theme-button').click();
+        assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
+        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'true');
+        await page.locator('.mobile-tools .language-button').click();
+        await page.locator('.mobile-tools .theme-button').click();
         assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'IT');
         assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'false');
-        if (output && width === 390) await page.screenshot({ path: path.join(output, 'mobile-footer.png') });
+        if (output && width === 390) {
+          await page.locator('.footer-back-to-top').scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(output, 'mobile-footer.png') });
+        }
         await page.locator('.footer-back-to-top').click();
         await page.waitForFunction(() => window.scrollY === 0);
       } else {

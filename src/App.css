@@ -319,7 +319,7 @@ h1 span { color: var(--accent); }
   .content-links { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; font-size: 14px; }
   .content-links a, .footer-back-to-top { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
   .site-footer { flex-direction: column; gap: 20px; padding: 28px 0 calc(28px + env(safe-area-inset-bottom)); }
-  .footer-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .footer-controls { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
   .footer-back-to-top { font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; }
   .site-footer > p { text-align: center; }
 
