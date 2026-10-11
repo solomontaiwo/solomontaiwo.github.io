@@ -160,9 +160,10 @@ const fs = require('node:fs');
       if (mobile) {
         await page.locator('.mobile-tools .language-button').click();
         await page.locator('.mobile-tools .theme-button').click();
+        await page.locator('.mobile-tools .theme-button').click();
         assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Go to contact');
         assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'true');
+        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'dark');
       } else {
         await settings();
         if (output && width === 1440) await page.screenshot({ path: path.join(output, 'desktop-menu.png') });
@@ -185,11 +186,11 @@ const fs = require('node:fs');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       if (mobile) {
         assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'true');
+        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'dark');
         await page.locator('.mobile-tools .language-button').click();
         await page.locator('.mobile-tools .theme-button').click();
         assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'IT');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('aria-pressed'), 'false');
+        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'system');
         if (output && width === 390) {
           await page.locator('.footer-back-to-top').scrollIntoViewIfNeeded();
           await page.screenshot({ path: path.join(output, 'mobile-footer.png') });
@@ -233,5 +234,38 @@ const fs = require('node:fs');
     assert.equal(await page.locator('.mobile-preferences, .hero-actions, .content-links, .footer-controls, .dock-menu').count(), 0, 'Resizing back restores desktop without mobile controls or stale settings');
     console.log('PASS resizing and reduced-motion navigation');
     await page.close();
+
+    // Theme: follows the device until a manual choice is made; "Auto" goes back to following it.
+    for (const width of [1440, 390]) {
+      const context = await browser.newContext({ viewport: { width, height: 900 }, locale: 'it-IT', colorScheme: 'dark' });
+      const page = await context.newPage();
+      const theme = () => page.locator('html').getAttribute('data-theme');
+      const mobile = width < 720;
+      const choose = async name => {
+        if (mobile) { const button = page.locator('.mobile-tools .theme-button'); for (let i = 0; i < 3 && (await button.getAttribute('data-theme-pref')) !== name; i += 1) await button.click(); return; }
+        if (!(await page.locator('.dock-menu').count())) await page.locator('.header-more').click();
+        await page.getByRole('button', { name: { system: 'Auto', light: 'Chiaro', dark: 'Scuro' }[name] }).click();
+      };
+      await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
+      assert.equal(await theme(), 'dark', 'Starts with the device theme');
+      if (mobile) assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'system');
+      else { await page.locator('.header-more').click(); assert.equal(await page.getByRole('button', { name: 'Auto' }).getAttribute('aria-pressed'), 'true'); }
+      await page.emulateMedia({ colorScheme: 'light' });
+      await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');
+      await choose('dark');
+      assert.equal(await page.evaluate(() => localStorage.getItem('theme')), 'dark');
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.emulateMedia({ colorScheme: 'light' });
+      await page.waitForTimeout(200);
+      assert.equal(await theme(), 'dark', 'A manual choice ignores the device');
+      await choose('system');
+      assert.equal(await page.evaluate(() => localStorage.getItem('theme')), null);
+      assert.equal(await theme(), 'light', 'Auto follows the device again');
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'dark');
+      if (output && (width === 390 || width === 1440)) await page.screenshot({ path: path.join(output, width === 390 ? 'mobile-theme-menu.png' : 'desktop-theme-menu.png') });
+      console.log(`PASS ${width}px: theme follows the device, manual override, Auto`);
+      await context.close();
+    }
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

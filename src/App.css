@@ -131,6 +131,9 @@ ul, ol { padding: 0; list-style: none; }
 .dock-menu { position: fixed; z-index: 32; right: max(16px, calc(50% - 230px)); bottom: calc(16px + 68px + 10px + env(safe-area-inset-bottom)); width: 248px; display: grid; gap: 12px; padding: 14px; border-radius: 26px; background: var(--sheet-bg); border: 1px solid var(--glass-border); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%); box-shadow: var(--glass-hi), 0 18px 40px rgba(0, 0, 0, .28); animation: fade-in .18s ease backwards; }
 .dock-menu-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .dock-menu-label { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
+.dock-menu-row.is-stack { flex-direction: column; align-items: stretch; gap: 8px; }
+.seg.is-wide { display: flex; }
+.seg.is-wide button { flex: 1; justify-content: center; padding: 0 6px; }
 .seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--chip); }
 .seg button { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 12px; font-weight: 600; color: var(--muted); transition: background .2s ease, color .2s ease; }
 .seg button svg { width: 12px; height: 12px; }

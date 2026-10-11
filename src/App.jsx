@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaArrowDown, FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaEllipsisH, FaExternalLinkAlt, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import { FaArrowDown, FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaDesktop, FaEllipsisH, FaExternalLinkAlt, FaMoon, FaSun, FaTimes } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -351,13 +351,20 @@ function App() {
     if (target && target.focus) target.focus({ preventScroll: true });
   };
   const closePhoto = () => setPhotoState(state => (state === "open" ? "closing" : state));
-  const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
-  const applyTheme = next => {
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    try { window.localStorage.setItem("theme", next); } catch { /* Theme still works when storage is unavailable. */ }
+  const readThemePref = () => { try { const saved = window.localStorage.getItem("theme"); return saved === "light" || saved === "dark" ? saved : "system"; } catch { return "system"; } };
+  const [themePref, setThemePref] = useState(readThemePref);
+  const applyTheme = pref => {
+    setThemePref(pref);
+    try { if (pref === "system") window.localStorage.removeItem("theme"); else window.localStorage.setItem("theme", pref); } catch { /* Theme still works when storage is unavailable. */ }
   };
-  const toggleTheme = () => applyTheme(theme === "dark" ? "light" : "dark");
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => document.documentElement.setAttribute("data-theme", themePref === "system" ? (media.matches ? "dark" : "light") : themePref);
+    apply();
+    if (themePref !== "system") return undefined;
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, [themePref]);
   const closeMore = () => { setMoreOpen(false); if (moreButtonRef.current) moreButtonRef.current.focus({ preventScroll: true }); };
   useEffect(() => {
     if (!moreOpen) return undefined;
@@ -418,19 +425,22 @@ function App() {
           <button type="button" aria-pressed={language === "en"} aria-label="English" onClick={() => setLanguage("en")}>EN</button>
         </div>
       </div>
-      <div className="dock-menu-row">
+      <div className="dock-menu-row is-stack">
         <span className="dock-menu-label">{t.nav.theme}</span>
-        <div className="seg">
-          <button type="button" aria-pressed={theme === "light"} onClick={() => applyTheme("light")}><FaSun aria-hidden="true" />{t.nav.themeLight}</button>
-          <button type="button" aria-pressed={theme === "dark"} onClick={() => applyTheme("dark")}><FaMoon aria-hidden="true" />{t.nav.themeDark}</button>
+        <div className="seg is-wide">
+          <button type="button" aria-pressed={themePref === "system"} onClick={() => applyTheme("system")}><FaDesktop aria-hidden="true" />{t.nav.themeSystem}</button>
+          <button type="button" aria-pressed={themePref === "light"} onClick={() => applyTheme("light")}><FaSun aria-hidden="true" />{t.nav.themeLight}</button>
+          <button type="button" aria-pressed={themePref === "dark"} onClick={() => applyTheme("dark")}><FaMoon aria-hidden="true" />{t.nav.themeDark}</button>
         </div>
       </div>
     </div>
   );
+  const themeOrder = ["system", "light", "dark"];
+  const themeLabels = { system: t.nav.themeSystem, light: t.nav.themeLight, dark: t.nav.themeDark };
   const mobilePreferences = (
     <div className="mobile-preferences" role="group" aria-label={`${t.nav.language}, ${t.nav.theme}`}>
       <button type="button" className="icon-button language-button" aria-label={t.nav.languageLabel} onClick={() => setLanguage(language === "it" ? "en" : "it")}>{language.toUpperCase()}</button>
-      <button type="button" className="icon-button theme-button" aria-label={t.nav.themeToggle} aria-pressed={theme === "dark"} onClick={toggleTheme}>{theme === "dark" ? <FaMoon aria-hidden="true" /> : <FaSun aria-hidden="true" />}</button>
+      <button type="button" className="icon-button theme-button" aria-label={`${t.nav.theme}: ${themeLabels[themePref]}`} data-theme-pref={themePref} onClick={() => applyTheme(themeOrder[(themeOrder.indexOf(themePref) + 1) % themeOrder.length])}>{themePref === "system" ? <FaDesktop aria-hidden="true" /> : themePref === "light" ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}</button>
     </div>
   );
   const mailto = `mailto:${t.contact.emailValue}`;
