@@ -12,8 +12,8 @@ const fs = require('node:fs');
   const output = process.env.SCREENSHOT_DIR;
   if (output) fs.mkdirSync(output, { recursive: true });
   try {
-    for (const width of [1440, 768, 720, 719, 390, 320]) {
-      const mobile = width < 720;
+    for (const width of [1440, 768, 669, 600, 599, 390, 320]) {
+      const mobile = width < 600;
       const page = await browser.newPage({ viewport: { width, height: 1000 }, locale: 'it-IT', colorScheme: 'light' });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
@@ -66,7 +66,7 @@ const fs = require('node:fs');
       await page.waitForFunction(() => window.scrollY === 0);
       await barHidden(false);
 
-      // Navigation: pill on mobile, unchanged header links from 720px.
+      // Navigation: pill on mobile, unchanged header links from 600px.
       assert.equal(await page.locator('.desktop-nav').isVisible(), !mobile);
 
       if (mobile) {
@@ -203,7 +203,7 @@ const fs = require('node:fs');
       console.log(`PASS ${width}px: layout, navigation, projects, skills, language/theme persistence, contact, no CV link, runtime`);
       await page.close();
     }
-    const page = await browser.newPage({ viewport: { width: 720, height: 900 }, locale: 'it-IT', reducedMotion: 'reduce' });
+    const page = await browser.newPage({ viewport: { width: 600, height: 900 }, locale: 'it-IT', reducedMotion: 'reduce' });
     await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
     await page.locator('.header-more').click();
     await page.locator('.dock-menu').waitFor();
@@ -218,12 +218,59 @@ const fs = require('node:fs');
     console.log('PASS resizing and reduced-motion navigation');
     await page.close();
 
+    // Rail layout: short, wide touch screens (iPhone Duo open sideways 951×543, phones in landscape 852×393).
+    for (const [width, height] of [[951, 543], [852, 393]]) {
+      const context = await browser.newContext({ viewport: { width, height }, locale: 'it-IT', hasTouch: true, isMobile: true, colorScheme: 'dark' });
+      const page = await context.newPage();
+      const errors = [];
+      page.on('pageerror', error => errors.push(error.message));
+      await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready);
+      assert.equal(await page.locator('.side-rail').isVisible(), true, 'Side rail on short touch screens');
+      assert.equal(await page.locator('.site-header, .dock').count(), 0, 'No other navigation bar');
+      assert.equal(await page.locator('.side-rail a, .side-rail button').count(), 4, 'Rail: Progetti, Profilo, Scrivimi, Altro');
+      assert.equal(await page.locator('.side-rail').boundingBox().then(box => box.width), 64, 'Rail is 64px wide');
+      assert.equal(await page.locator('.hero.is-rail > *').count(), 3, 'Three columns');
+      assert.equal(await page.locator('.hero #contact, .hero #projects').count(), 2, 'Contact and projects in the first screen');
+      assert.equal(await page.locator('#contact').count(), 1);
+      assert.equal(await page.locator('.rail-projects .project-row').count(), 5, 'All other projects listed');
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}×${height}`);
+      const tops = await page.locator('.hero.is-rail > *').evaluateAll(cols => cols.map(col => Math.round(col.getBoundingClientRect().top)));
+      assert.equal(new Set(tops).size, 1, 'Columns side by side');
+      await page.locator('.rail-projects .project-open').first().click();
+      await page.getByRole('dialog').waitFor();
+      await page.keyboard.press('Escape');
+      await page.getByRole('dialog').waitFor({ state: 'detached' });
+      await page.locator('.side-rail a[href="#about"]').click();
+      await page.waitForFunction(() => document.querySelector('.side-rail a[href="#about"]').hasAttribute('aria-current'));
+      await page.locator('.side-rail-more').click();
+      await page.locator('.dock-menu').waitFor();
+      const menu = await page.locator('.dock-menu').boundingBox();
+      assert.equal(menu.x > 74 && menu.y >= 0 && menu.y + menu.height <= height, true, 'Settings open beside the rail, inside the screen');
+      await page.getByRole('button', { name: 'English' }).click();
+      await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+      await page.getByRole('button', { name: 'Italiano' }).click();
+      await page.keyboard.press('Escape');
+      if (output) await page.evaluate(() => window.scrollTo(0, 0)), await page.waitForTimeout(300), await page.screenshot({ path: path.join(output, `rail-${width}x${height}.png`) });
+      assert.deepEqual(errors, []);
+      console.log(`PASS rail ${width}×${height}: side rail, three columns, dialog, settings`);
+      await context.close();
+    }
+    {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 540 }, locale: 'it-IT' });
+      await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
+      assert.equal(await page.locator('.side-rail').count(), 0, 'Short desktop window with a mouse keeps the centered bar');
+      assert.equal(await page.locator('.site-header').count(), 1);
+      await page.close();
+      console.log('PASS short desktop window without rail');
+    }
+
     // Theme: follows the device until a manual choice is made; "Auto" goes back to following it.
     for (const width of [1440, 390]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, locale: 'it-IT', colorScheme: 'dark' });
       const page = await context.newPage();
       const theme = () => page.locator('html').getAttribute('data-theme');
-      const mobile = width < 720;
+      const mobile = width < 600;
       const choose = async name => {
         if (!(await page.locator('.dock-menu').count())) await page.locator(mobile ? '.dock-more' : '.header-more').click();
         await page.getByRole('button', { name: { system: 'Auto', light: 'Chiaro', dark: 'Scuro' }[name] }).click();

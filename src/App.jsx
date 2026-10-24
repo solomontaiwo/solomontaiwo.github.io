@@ -114,6 +114,9 @@ const layoutOthers = list => {
     : { project, variant: "wide", span: remainder === 2 ? 3 : 6 }));
 };
 
+// Short, wide touch screens (iPhone Duo open sideways, phones in landscape): side rail + three columns.
+const RAIL_QUERY = "(min-width: 600px) and (max-height: 600px) and (pointer: coarse)";
+
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
   useEffect(() => {
@@ -329,7 +332,8 @@ function PhotoViewer({ open, visible, originRef, alt, closeLabel, onClose, onExi
 function App() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language] || translations.en;
-  const isDesktop = useMediaQuery("(min-width: 720px)");
+  const isDesktop = useMediaQuery("(min-width: 600px)");
+  const isRail = useMediaQuery(RAIL_QUERY) && isDesktop;
   const glass = on => (on ? " glass" : "");
   const [showAll, setShowAll] = useState(false);
   const [openGroup, setOpenGroup] = useState(null);
@@ -382,7 +386,8 @@ function App() {
     const update = () => {
       frame = 0;
       const y = window.scrollY;
-      const desktop = window.innerWidth >= 720;
+      const desktop = window.innerWidth >= 600;
+      const rail = desktop && window.matchMedia(RAIL_QUERY).matches;
       setShowBackToTop(y > 500);
       if (y < 80 || y < last - 4) setHeaderHidden(false);
       else if (y > last + 4 && y > 160 && Date.now() > navLock.current) setHeaderHidden(true);
@@ -394,7 +399,12 @@ function App() {
         const element = document.getElementById(id);
         if (element && element.getBoundingClientRect().top <= line) current = id;
       });
-      if (desktop) {
+      const atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 4;
+      if (rail) {
+        // Rail layout: contact and projects sit in the first screen, profile and skills below it.
+        const about = document.getElementById("about");
+        current = (about && about.getBoundingClientRect().top <= line) || (atBottom && y > 0) ? "about" : "projects";
+      } else if (desktop) {
         // Profile, skills and contact share one row, so on desktop they are a single "about" entry.
         // The row sits at the very end of the page, so it may never reach the reading line: the bottom counts as "about" too.
         if (rowIds.includes(current) || window.innerHeight + y >= document.documentElement.scrollHeight - 4) current = "about";
@@ -456,11 +466,41 @@ function App() {
     </div>
   );
 
+  const heroMain = (
+    <div className={`hero-main${glass(isDesktop)}`}>
+      <div className="hero-id">
+        <button ref={avatarRef} type="button" className="avatar-button hero-avatar" data-hidden={photoState !== "closed"} aria-haspopup="dialog" aria-label={t.hero.openPhoto} onClick={() => setPhotoState("open")}><img src={PHOTO.thumb} alt="" width="72" height="72" /></button>
+        <div>
+          <p className="hero-name">{t.hero.name}</p>
+          <p className="eyebrow">{t.hero.role}</p>
+        </div>
+      </div>
+      <h1>{t.hero.headline[0]}<br /><span>{t.hero.headline[1]}</span></h1>
+      <p className="hero-description">{t.hero.description}</p>
+    </div>
+  );
+
   return (
-    <div className="portfolio">
+    <div className={`portfolio${isRail ? " has-rail" : ""}`}>
       <div className="ambient" aria-hidden="true" />
       <a className="skip-link" href="#main">{t.nav.skip}</a>
-      {isDesktop && (
+      {isRail && (
+        <>
+          {moreOpen && <div className="dock-menu-backdrop is-desktop" onClick={closeMore} aria-hidden="true" />}
+          <nav className="glass side-rail" aria-label={t.nav.navigation}>
+            <div className="side-rail-links">
+              {dockLinks.map(({ id, label, Icon }) => (
+                <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /><span>{label}</span></a>
+              ))}
+            </div>
+            <div className="more-wrap">
+              <button ref={moreButtonRef} type="button" className="side-rail-more" aria-haspopup="true" aria-expanded={moreOpen} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /><span>{t.nav.more}</span></button>
+              {moreOpen && settingsMenu}
+            </div>
+          </nav>
+        </>
+      )}
+      {isDesktop && !isRail && (
         <>
           {moreOpen && <div className="dock-menu-backdrop is-desktop" onClick={closeMore} aria-hidden="true" />}
           <header className={`site-header${barHidden ? " is-hidden" : ""}`} onFocus={() => setHeaderHidden(false)}>
@@ -481,35 +521,48 @@ function App() {
       )}
 
       <main id="main" className="page-width">
-        <section id="home" className="hero">
-          <div className={`hero-main${glass(isDesktop)}`}>
-            <div className="hero-id">
-              <button ref={avatarRef} type="button" className="avatar-button hero-avatar" data-hidden={photoState !== "closed"} aria-haspopup="dialog" aria-label={t.hero.openPhoto} onClick={() => setPhotoState("open")}><img src={PHOTO.thumb} alt="" width="72" height="72" /></button>
-              <div>
-                <p className="hero-name">{t.hero.name}</p>
-                <p className="eyebrow">{t.hero.role}</p>
+        <section id="home" className={`hero${isRail ? " is-rail" : ""}`}>
+          {isRail ? (
+            <>
+              <div className="rail-stack">
+                {heroMain}
+                <section id="contact" className="glass contact-card rail-contact" aria-labelledby="rail-contact-title">
+                  <h2 id="rail-contact-title">{t.contact.title}</h2>
+                  {primaryContact}
+                  <ul className="social-links">{socialLinks.map(link => <li key={link.id}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>)}</ul>
+                </section>
               </div>
-            </div>
-            <h1>{t.hero.headline[0]}<br /><span>{t.hero.headline[1]}</span></h1>
-            <p className="hero-description">{t.hero.description}</p>
-          </div>
-          {isDesktop && <ProjectCard project={featuredProject} t={t} variant="featured" />}
-        </section>
-
-        <section id="projects" className="section">
-          <div className="section-head"><p className="eyebrow">{t.projects.eyebrow}</p><h2>{isDesktop ? t.projects.othersTitle : t.projects.title}</h2></div>
-          <div id="project-grid" className="project-grid">
-            {!isDesktop && <ProjectCard project={featuredProject} t={t} variant="row" onOpen={openProject} />}
-            {isDesktop
-              ? layoutOthers(visibleOthers).map(({ project, variant, span }) => <ProjectCard key={project.id} project={project} t={t} variant={variant} span={span} onOpen={openProject} />)
-              : visibleOthers.map(project => <ProjectCard key={project.id} project={project} t={t} variant="row" onOpen={openProject} />)}
-          </div>
-          {hiddenCount > 0 && (
-            <button type="button" className="more-projects" aria-expanded={showAll} aria-controls="project-grid" onClick={() => setShowAll(!showAll)}>
-              {showAll ? t.projects.showLess : `${t.projects.seeMore} (${hiddenCount})`}
-            </button>
+              <ProjectCard project={featuredProject} t={t} variant="featured" />
+              <section id="projects" className="glass rail-projects" aria-labelledby="rail-projects-title">
+                <h2 id="rail-projects-title">{t.projects.othersTitle}</h2>
+                <div className="rail-list">{otherProjects.map(project => <ProjectCard key={project.id} project={project} t={t} variant="row" onOpen={openProject} />)}</div>
+                <a className="secondary-button rail-more" href="#about">{t.nav.profileAndSkills}</a>
+              </section>
+            </>
+          ) : (
+            <>
+              {heroMain}
+              {isDesktop && <ProjectCard project={featuredProject} t={t} variant="featured" />}
+            </>
           )}
         </section>
+
+        {!isRail && (
+          <section id="projects" className="section">
+            <div className="section-head"><p className="eyebrow">{t.projects.eyebrow}</p><h2>{isDesktop ? t.projects.othersTitle : t.projects.title}</h2></div>
+            <div id="project-grid" className="project-grid">
+              {!isDesktop && <ProjectCard project={featuredProject} t={t} variant="row" onOpen={openProject} />}
+              {isDesktop
+                ? layoutOthers(visibleOthers).map(({ project, variant, span }) => <ProjectCard key={project.id} project={project} t={t} variant={variant} span={span} onOpen={openProject} />)
+                : visibleOthers.map(project => <ProjectCard key={project.id} project={project} t={t} variant="row" onOpen={openProject} />)}
+            </div>
+            {hiddenCount > 0 && (
+              <button type="button" className="more-projects" aria-expanded={showAll} aria-controls="project-grid" onClick={() => setShowAll(!showAll)}>
+                {showAll ? t.projects.showLess : `${t.projects.seeMore} (${hiddenCount})`}
+              </button>
+            )}
+          </section>
+        )}
 
         <div id="about" className="section bottom-row">
           <section className={`profile-card${glass(isDesktop)}`} aria-labelledby="about-title">
@@ -538,7 +591,7 @@ function App() {
               })}
             </div>
           </section>
-          {isDesktop ? (
+          {isRail ? null : isDesktop ? (
             <section id="contact" className="glass contact-card">
               {contactIntro}
               {primaryContact}

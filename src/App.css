@@ -146,7 +146,7 @@ ul, ol { padding: 0; list-style: none; }
 .dock svg { width: 19px; height: 19px; }
 .dock a[aria-current], .dock-more[aria-expanded="true"] { background: var(--tab-active); color: var(--text); box-shadow: var(--glass-hi); }
 .dock-sep { width: 1px; height: 24px; margin: 0 2px; background: var(--line); }
-@media (min-width: 720px) { .dock { display: none; } }
+@media (min-width: 600px) { .dock { display: none; } }
 
 /* ---------- Sections ---------- */
 .section { margin-top: 56px; }
@@ -204,6 +204,14 @@ h1 span { color: var(--accent); }
 .project-wide .project-media { flex: 0 0 44%; max-width: 460px; align-self: flex-start; }
 .project-wide .project-copy { padding: 4px 6px 4px 0; }
 .project-wide .tech-list, .project-tall .tech-list { margin-top: auto; padding-top: 12px; }
+/* Compact rows: mobile list and the rail layout's third column */
+.project-row { flex-direction: row; align-items: center; gap: 12px; min-height: 76px; padding: 8px 14px 8px 8px; border-radius: 24px; }
+.project-row .project-media { flex: 0 0 88px; width: 88px; height: 50px; aspect-ratio: auto; border-radius: 12px; }
+.project-row .project-copy { flex-direction: column-reverse; padding: 0; }
+.project-row h3 { margin: 0 0 3px; font-size: 15px; letter-spacing: -.3px; }
+.project-row .project-meta { justify-content: flex-start; gap: 6px; font-size: 11px; letter-spacing: 0; text-transform: none; }
+.project-row .project-status { height: auto; padding: 0; background: none; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400; color: var(--muted); }
+.project-row .project-status::before { content: "·"; width: auto; height: auto; margin-right: 6px; border-radius: 0; background: none; }
 .more-projects { display: flex; align-items: center; justify-content: center; height: 48px; margin: 24px auto 0; padding: 0 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--chip); font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s ease, transform .2s ease; }
 .more-projects:hover { background: var(--accent-soft); transform: translateY(-1px); }
 
@@ -267,7 +275,7 @@ h1 span { color: var(--accent); }
 @keyframes dialog-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(10px) scale(.98); } }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .dialog-panel { background: var(--glass-solid); } }
 @media (prefers-reduced-transparency: reduce) { .dialog-panel { background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none; } .dialog-backdrop { -webkit-backdrop-filter: none; backdrop-filter: none; } }
-@media (min-width: 720px) {
+@media (min-width: 600px) {
   .dialog-overlay { align-items: center; }
   .dialog-panel { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: auto 1fr; grid-template-areas: "media body" "nav body"; column-gap: 28px; width: min(1120px, calc(100% - 64px)); max-height: calc(100vh - 64px); padding: 16px; border-radius: 36px; animation: dialog-in .28s cubic-bezier(.22, 1, .36, 1) backwards; }
   .dialog-overlay.is-closing .dialog-panel { animation: dialog-out .22s ease-in both; }
@@ -287,18 +295,27 @@ h1 span { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .dialog-panel, .dialog-backdrop { animation-duration: .01ms !important; } }
 
 /* ---------- Tablet + desktop ---------- */
-@media (min-width: 720px) and (prefers-reduced-transparency: no-preference) {
+@media (min-width: 600px) and (prefers-reduced-transparency: no-preference) {
   .hero-main.glass { background: var(--hero-bg); }
 }
-@media (min-width: 720px) {
+@media (min-width: 600px) {
   .desktop-nav { display: flex; }
   .hero h1 { font-size: clamp(40px, 4.6vw, 72px); }
   .hero-description { font-size: 20px; }
 }
-@media (min-width: 720px) and (max-width: 1023px) {
-  .hero-main, .hero > .project-featured { grid-column: span 12; }
-  .hero-main { padding: 36px; }
-  .hero h1 { font-size: clamp(44px, 6vw, 60px); }
+@media (min-width: 600px) and (max-width: 1023px) {
+  .hero { gap: 16px; }
+  .hero-main, .hero > .project-featured { grid-column: span 6; }
+  .hero-main { padding: 26px; }
+  .hero-avatar { width: 56px; height: 56px; }
+  .hero-name { font-size: 20px; }
+  .hero-id + h1 { margin-top: 22px; }
+  .hero h1 { font-size: clamp(32px, 4.6vw, 44px); }
+  .hero-description { font-size: 16px; }
+  .hero > .project-featured { padding: 12px; }
+  .hero > .project-featured .project-copy { padding: 14px 6px 4px; }
+  .hero > .project-featured h3 { font-size: 22px; letter-spacing: -.6px; }
+  .hero > .project-featured .project-impact { display: none; }
   .span-2 { grid-column: span 3; }
   .project-wide.span-3 { flex-direction: column; }
   .project-wide.span-3 .project-media { flex: none; max-width: none; align-self: stretch; }
@@ -309,8 +326,47 @@ h1 span { color: var(--accent); }
   .social-links li { flex: 1; }
 }
 
+/* ---------- Rail layout: short, wide touch screens (iPhone Duo open sideways, phones in landscape) ---------- */
+.side-rail { position: fixed; z-index: 30; left: calc(10px + env(safe-area-inset-left)); top: 10px; bottom: 10px; width: 64px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; border-radius: 24px; }
+.side-rail-links { display: flex; flex-direction: column; gap: 6px; }
+.side-rail a, .side-rail-more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 16px; background: none; font: inherit; font-size: 10px; font-weight: 600; color: var(--muted); transition: background .2s ease, color .2s ease; }
+.side-rail svg { width: 19px; height: 19px; color: var(--accent); }
+.side-rail a[aria-current], .side-rail-more[aria-expanded="true"] { background: var(--tab-active); color: var(--text); box-shadow: var(--glass-hi); }
+.side-rail .more-wrap .dock-menu { top: auto; right: auto; left: calc(100% + 16px); bottom: 0; }
+.has-rail .page-width { width: auto; max-width: none; margin-left: calc(86px + env(safe-area-inset-left)); margin-right: calc(12px + env(safe-area-inset-right)); }
+.has-rail { --header-offset: 12px; }
+.hero.is-rail { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; min-height: calc(100vh - 20px); min-height: calc(100dvh - 20px); margin-top: 10px; }
+.hero.is-rail > * { grid-column: auto; min-width: 0; }
+.rail-stack { display: flex; flex-direction: column; gap: 12px; }
+.is-rail .hero-main { flex: 1; padding: 20px; border-radius: 26px; }
+.is-rail .hero-avatar { width: 48px; height: 48px; }
+.is-rail .hero-name { font-size: 18px; }
+.is-rail .hero-id + h1 { margin-top: 18px; }
+.is-rail h1 { font-size: 30px; letter-spacing: -1.4px; }
+.is-rail .hero-description { margin-top: 12px; font-size: 14px; }
+.rail-contact { gap: 12px; padding: 16px; border-radius: 26px; }
+.rail-contact h2 { font-size: 17px; line-height: 1.2; letter-spacing: -.3px; }
+.rail-contact .primary-button { height: 44px; }
+.rail-contact .social-links { flex-direction: row; gap: 6px; }
+.rail-contact .social-links li { flex: 1; min-width: 0; }
+.rail-contact .social-links a { justify-content: center; padding: 0 6px; font-size: 12px; }
+.is-rail .project-featured { padding: 12px; border-radius: 26px; }
+.is-rail .project-featured .project-copy { padding: 14px 6px 4px; }
+.is-rail .project-featured h3 { font-size: 21px; letter-spacing: -.5px; }
+.is-rail .project-featured .project-impact { display: none; }
+.rail-projects { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 26px; }
+.rail-projects h2 { margin: 4px 6px 4px; font-size: 18px; letter-spacing: -.4px; }
+.rail-list { display: flex; flex-direction: column; gap: 4px; }
+.rail-projects .project-row { min-height: 64px; padding: 6px 10px 6px 6px; border-radius: 18px; background: none; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.rail-projects .project-row .project-media { flex-basis: 72px; width: 72px; height: 48px; }
+.rail-projects .project-row:hover { background: var(--chip); }
+.rail-more { margin-top: auto; height: 44px; justify-content: center; }
+.has-rail .bottom-row .profile-card { grid-column: span 5; }
+.has-rail .bottom-row .skills-card { grid-column: span 7; }
+@media (max-height: 450px) { .is-rail h1 { font-size: 24px; letter-spacing: -1px; } .is-rail .hero-name { font-size: 16px; } .rail-projects .project-row h3 { font-size: 14px; } }
+
 /* ---------- Mobile (liquid glass) ---------- */
-@media (max-width: 719px) {
+@media (max-width: 599px) {
   :root { --header-offset: 24px; --radius-lg: 28px; }
   .page-width { width: calc(100% - 32px); }
   .back-to-top { display: none; }
@@ -343,13 +399,6 @@ h1 span { color: var(--accent); }
   .project-featured h3 { font-size: 22px; letter-spacing: -.6px; }
   .project-featured .project-desc { font-size: 14px; }
   .project-featured .project-impact { display: none; }
-  .project-row { flex-direction: row; align-items: center; gap: 12px; min-height: 76px; padding: 8px 14px 8px 8px; border-radius: 24px; }
-  .project-row .project-media { flex: 0 0 88px; width: 88px; height: 50px; aspect-ratio: auto; border-radius: 12px; }
-  .project-row .project-copy { flex-direction: column-reverse; padding: 0; }
-  .project-row h3 { margin: 0 0 3px; font-size: 15px; letter-spacing: -.3px; }
-  .project-row .project-meta { justify-content: flex-start; gap: 6px; font-size: 11px; letter-spacing: 0; text-transform: none; }
-  .project-row .project-status { height: auto; padding: 0; background: none; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400; color: var(--muted); }
-  .project-row .project-status::before { content: "·"; width: auto; height: auto; margin-right: 6px; border-radius: 0; background: none; }
 
   .profile-card, .skills-card { grid-column: auto; padding: 0; background: none; border: 0; box-shadow: none; }
   .profile-card h2 { margin-top: 8px; }
