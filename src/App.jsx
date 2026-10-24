@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaArrowDown, FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaDesktop, FaEllipsisH, FaExternalLinkAlt, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import { FaArrowRight, FaArrowUp, FaChevronDown, FaChevronLeft, FaChevronRight, FaDesktop, FaEllipsisH, FaEnvelope, FaExternalLinkAlt, FaMoon, FaSun, FaThLarge, FaTimes, FaUser } from "react-icons/fa";
 import { useLanguage } from "./LanguageContext";
 import { translations } from "./translations";
 import "./App.css";
@@ -341,6 +341,9 @@ function App() {
   const opener = useRef(null);
   const avatarRef = useRef(null);
   const moreButtonRef = useRef(null);
+  // Jumping to a section scrolls down: keep the bar visible for that scroll instead of hiding it.
+  const navLock = useRef(0);
+  const keepBar = () => { navLock.current = Date.now() + 1200; setHeaderHidden(false); };
   const [moreOpen, setMoreOpen] = useState(false);
   const openProject = (project, element) => { opener.current = element; setDialog({ id: project.id, closing: false }); };
   const closeDialog = () => setDialog(current => (current && !current.closing ? { ...current, closing: true } : current));
@@ -372,7 +375,7 @@ function App() {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [moreOpen]);
-  useEffect(() => { if (isDesktop) setMoreOpen(false); }, [isDesktop]);
+  useEffect(() => { setMoreOpen(false); }, [isDesktop]);
   useEffect(() => {
     let last = window.scrollY;
     let frame = 0;
@@ -382,7 +385,7 @@ function App() {
       const desktop = window.innerWidth >= 720;
       setShowBackToTop(y > 500);
       if (y < 80 || y < last - 4) setHeaderHidden(false);
-      else if (y > last + 4 && y > 160) setHeaderHidden(true);
+      else if (y > last + 4 && y > 160 && Date.now() > navLock.current) setHeaderHidden(true);
       if (!desktop && window.innerHeight + y >= document.documentElement.scrollHeight - 4) setHeaderHidden(false);
       if (Math.abs(y - last) > 4) last = y;
       const line = window.innerHeight * 0.4;
@@ -435,14 +438,11 @@ function App() {
       </div>
     </div>
   );
-  const themeOrder = ["system", "light", "dark"];
-  const themeLabels = { system: t.nav.themeSystem, light: t.nav.themeLight, dark: t.nav.themeDark };
-  const mobilePreferences = (
-    <div className="mobile-preferences" role="group" aria-label={`${t.nav.language}, ${t.nav.theme}`}>
-      <button type="button" className="icon-button language-button" aria-label={t.nav.languageLabel} onClick={() => setLanguage(language === "it" ? "en" : "it")}>{language.toUpperCase()}</button>
-      <button type="button" className="icon-button theme-button" aria-label={`${t.nav.theme}: ${themeLabels[themePref]}`} data-theme-pref={themePref} onClick={() => applyTheme(themeOrder[(themeOrder.indexOf(themePref) + 1) % themeOrder.length])}>{themePref === "system" ? <FaDesktop aria-hidden="true" /> : themePref === "light" ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}</button>
-    </div>
-  );
+  const dockLinks = [
+    { id: "projects", label: t.nav.projects, Icon: FaThLarge },
+    { id: "about", label: t.nav.about, Icon: FaUser },
+    { id: "contact", label: t.contact.primaryCta, Icon: FaEnvelope },
+  ];
   const mailto = `mailto:${t.contact.emailValue}`;
   const primaryContact = <a className="primary-button" href={mailto}>{t.contact.primaryCta}<FaArrowRight aria-hidden="true" /></a>;
   const initialOthers = isDesktop ? INITIAL_OTHERS : INITIAL_OTHERS_MOBILE;
@@ -467,9 +467,9 @@ function App() {
             <div className="glass header-pill">
               <nav className="desktop-nav" aria-label={t.nav.navigation}>
                 {links.map(link => (
-                  <a key={link.id} href={`#${link.id}`} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
+                  <a key={link.id} href={`#${link.id}`} onClick={keepBar} aria-current={active === link.id ? "location" : undefined}>{link.label}</a>
                 ))}
-                <a href="#contact">{t.contact.primaryCta}</a>
+                <a href="#contact" onClick={keepBar}>{t.contact.primaryCta}</a>
               </nav>
               <div className="more-wrap">
                 <button ref={moreButtonRef} type="button" className="icon-button header-more" aria-haspopup="true" aria-expanded={moreOpen} aria-label={t.nav.more} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /></button>
@@ -481,7 +481,6 @@ function App() {
       )}
 
       <main id="main" className="page-width">
-        {!isDesktop && <div className="mobile-tools">{mobilePreferences}</div>}
         <section id="home" className="hero">
           <div className={`hero-main${glass(isDesktop)}`}>
             <div className="hero-id">
@@ -493,12 +492,6 @@ function App() {
             </div>
             <h1>{t.hero.headline[0]}<br /><span>{t.hero.headline[1]}</span></h1>
             <p className="hero-description">{t.hero.description}</p>
-            {!isDesktop && (
-              <nav className="hero-actions" aria-label={t.nav.quickNav}>
-                <a className="primary-button" href="#projects">{t.nav.projects}<FaArrowDown aria-hidden="true" /></a>
-                <a className="secondary-button" href="#contact">{t.nav.contact}<FaArrowDown aria-hidden="true" /></a>
-              </nav>
-            )}
           </div>
           {isDesktop && <ProjectCard project={featuredProject} t={t} variant="featured" />}
         </section>
@@ -515,11 +508,6 @@ function App() {
             <button type="button" className="more-projects" aria-expanded={showAll} aria-controls="project-grid" onClick={() => setShowAll(!showAll)}>
               {showAll ? t.projects.showLess : `${t.projects.seeMore} (${hiddenCount})`}
             </button>
-          )}
-          {!isDesktop && (
-            <nav className="content-links" aria-label={t.nav.navigation}>
-              <a href="#contact">{t.nav.goToContact}<FaArrowDown aria-hidden="true" /></a>
-            </nav>
           )}
         </section>
 
@@ -582,6 +570,19 @@ function App() {
       </footer>
       {dialog && <ProjectDialog projectId={dialog.id} projects={allProjects} t={t} closing={dialog.closing} onSelect={id => setDialog({ id, closing: false })} onClose={closeDialog} onExited={dialogExited} />}
       <PhotoViewer open={photoState === "open"} visible={photoState !== "closed"} originRef={avatarRef} alt={t.hero.imageAlt} closeLabel={t.hero.closePhoto} onClose={closePhoto} onExited={() => setPhotoState("closed")} />
+      {!isDesktop && (
+        <>
+          {moreOpen && <div className="dock-menu-backdrop" onClick={closeMore} aria-hidden="true" />}
+          {moreOpen && settingsMenu}
+          <nav className={`glass dock${barHidden ? " is-hidden" : ""}`} aria-label={t.nav.navigation} onFocus={() => setHeaderHidden(false)}>
+            {dockLinks.map(({ id, label, Icon }) => (
+              <a key={id} href={`#${id}`} onClick={keepBar} aria-label={label} title={label} aria-current={active === id ? "location" : undefined}><Icon aria-hidden="true" /></a>
+            ))}
+            <span className="dock-sep" aria-hidden="true" />
+            <button ref={moreButtonRef} type="button" className="dock-more" aria-haspopup="true" aria-expanded={moreOpen} aria-label={t.nav.more} title={t.nav.more} onClick={() => setMoreOpen(open => !open)}><FaEllipsisH aria-hidden="true" /></button>
+          </nav>
+        </>
+      )}
       {isDesktop && showBackToTop && <a href="#home" onClick={scrollToTop} className="glass back-to-top icon-button" aria-label={t.backToTop}><FaArrowUp /></a>}
     </div>
   );

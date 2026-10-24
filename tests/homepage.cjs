@@ -25,13 +25,16 @@ const fs = require('node:fs');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}`);
       assert.equal(await page.locator('a[href$=".pdf"]').count(), 0, 'No CV download');
 
-      assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 3 : 2, 'Hero: portrait and mobile section links (featured project on desktop)');
+      assert.equal(await page.locator('.hero a, .hero button').count(), mobile ? 1 : 2, 'Hero: portrait (featured project on desktop), no redundant shortcuts');
       assert.equal(await page.locator('.desktop-nav a[href="#contact"]').count(), mobile ? 0 : 1);
-      assert.equal(await page.locator('.dock').count(), 0, 'No mobile dock');
+      assert.equal(await page.locator('.dock').count(), mobile ? 1 : 0, 'Compact pill on mobile only');
+      if (mobile) assert.equal(await page.locator('.dock a, .dock button').count(), 4, 'Pill: Progetti, Profilo, Scrivimi, More');
+      if (mobile) assert.equal((await page.locator('.dock').boundingBox()).height, 52, 'Pill is 52px tall');
       assert.equal(await page.locator('.site-header').count(), mobile ? 0 : 1, 'No mobile top header');
-      assert.equal(await page.locator('.mobile-preferences').count(), mobile ? 1 : 0, 'One pair of mobile preferences at the top');
+      assert.equal(await page.locator('.mobile-preferences, .mobile-tools').count(), 0, 'Language and theme live in the More menu');
       assert.equal(await page.locator('.site-footer .mobile-preferences').count(), 0, 'No duplicate preferences in the footer');
-      assert.equal(await page.locator('.hero-actions, .content-links, .footer-controls').count(), mobile ? 3 : 0);
+      assert.equal(await page.locator('.hero-actions, .content-links').count(), 0);
+      assert.equal(await page.locator('.footer-controls').count(), mobile ? 1 : 0);
       assert.equal(await page.locator('.avatar-button').count(), 1, 'One portrait only (in the hero)');
       assert.equal(await page.locator('.hero-name').textContent(), 'Solomon Taiwo');
       assert.equal(await page.locator('.brand, .header-id').count(), 0, 'No name or portrait in the bar');
@@ -50,45 +53,37 @@ const fs = require('node:fs');
       await page.locator('.photo-overlay').waitFor({ state: 'detached' });
       assert.equal(await page.locator('.avatar-button:visible img').isVisible(), true);
 
-      // Only desktop keeps an auto-hiding header; mobile controls stay in the page flow.
+      // The bar (desktop header, mobile pill) hides on scroll down and comes back on scroll up.
       await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
-      const barHidden = hidden => page.waitForFunction(want => document.querySelector('.site-header').classList.contains('is-hidden') === want, hidden);
+      const barSel = mobile ? '.dock' : '.site-header';
+      const barHidden = hidden => page.waitForFunction(([sel, want]) => document.querySelector(sel).classList.contains('is-hidden') === want, [barSel, hidden]);
       await page.mouse.wheel(0, 700);
-      if (mobile) {
-        await page.waitForFunction(() => window.scrollY > 500);
-        assert.equal(await page.locator('.mobile-tools').evaluate(el => el.getBoundingClientRect().bottom < 0), true, 'Mobile preferences scroll away with the content');
-        assert.equal(await page.locator('.back-to-top').count(), 0, 'No floating mobile controls');
-      } else {
-        await barHidden(true);
-        await page.mouse.wheel(0, -200);
-        await barHidden(false);
-      }
+      await barHidden(true);
+      await page.mouse.wheel(0, -200);
+      await barHidden(false);
+      if (mobile) assert.equal(await page.locator('.back-to-top').count(), 0, 'No floating back-to-top on mobile');
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForFunction(() => window.scrollY === 0);
-      if (!mobile) await barHidden(false);
+      await barHidden(false);
 
-      // Navigation: inline links on mobile, unchanged header links from 720px.
+      // Navigation: pill on mobile, unchanged header links from 720px.
       assert.equal(await page.locator('.desktop-nav').isVisible(), !mobile);
 
       if (mobile) {
-        await page.locator('.hero-actions a[href="#projects"]').click();
+        await page.locator('.dock a[href="#projects"]').click();
         await page.waitForFunction(() => Math.abs(document.getElementById('projects').getBoundingClientRect().top - 24) < 2);
         assert.equal(await page.locator('.project:visible').count(), 3, 'Three projects visible on mobile');
         await page.getByRole('button', { name: 'Vedi altro (3)' }).click();
         assert.equal(await page.locator('.project:visible').count(), 6);
         await page.getByRole('button', { name: 'Mostra meno' }).click();
         assert.equal(await page.locator('.project:visible').count(), 3);
-        assert.equal(await page.locator('.content-links a').count(), 1, 'Only the contact shortcut remains after projects');
-        assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Vai ai contatti');
-        assert.equal(await page.locator('a[href="#about"]').count(), 0, 'No redundant mobile profile shortcut');
-        await page.locator('.content-links a[href="#contact"]').click();
+        assert.equal(await page.locator('a[href="#about"]').count(), 1, 'Profile only in the pill');
+        assert.equal(await page.locator('.dock a[href="#contact"]').getAttribute('aria-label'), 'Scrivimi');
+        await page.locator('.dock a[href="#contact"]').click();
         await page.waitForFunction(() => document.getElementById('contact').getBoundingClientRect().top >= 0 && document.getElementById('contact').getBoundingClientRect().top < innerHeight);
         const toggle = page.getByRole('button', { name: 'Data & AI' });
         await toggle.click();
         assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.locator('.hero-actions a[href="#contact"]').click();
-        await page.waitForFunction(() => document.getElementById('contact').getBoundingClientRect().top >= 0 && document.getElementById('contact').getBoundingClientRect().top < innerHeight);
         await page.locator('.footer-back-to-top').click();
         await page.waitForFunction(() => window.scrollY === 0);
       } else {
@@ -150,23 +145,16 @@ const fs = require('node:fs');
         await dialog.waitFor({ state: 'detached' });
       }
 
-      const moreSel = '.header-more';
+      const moreSel = mobile ? '.dock-more' : '.header-more';
       const settings = async () => {
         await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForFunction(() => !document.querySelector('.site-header').classList.contains('is-hidden'));
+        await barHidden(false);
         await page.locator(moreSel).click();
         await page.locator('.dock-menu').waitFor();
       };
-      if (mobile) {
-        await page.locator('.mobile-tools .language-button').click();
-        await page.locator('.mobile-tools .theme-button').click();
-        await page.locator('.mobile-tools .theme-button').click();
-        assert.equal(await page.locator('.content-links a[href="#contact"]').textContent(), 'Go to contact');
-        assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'dark');
-      } else {
+      {
         await settings();
-        if (output && width === 1440) await page.screenshot({ path: path.join(output, 'desktop-menu.png') });
+        if (output && (width === 1440 || width === 390)) await page.screenshot({ path: path.join(output, mobile ? 'mobile-menu.png' : 'desktop-menu.png') });
         await page.keyboard.press('Escape');
         await page.locator('.dock-menu').waitFor({ state: 'detached' });
         assert.equal(await page.evaluate(sel => document.activeElement.matches(sel), moreSel), true, 'Esc returns focus to More');
@@ -175,32 +163,27 @@ const fs = require('node:fs');
         await page.getByRole('button', { name: 'Dark' }).click();
       }
       await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
-      if (!mobile) {
-        await page.mouse.click(20, 120);
-        await page.locator('.dock-menu').waitFor({ state: 'detached' });
-      }
+      await page.mouse.click(20, 120);
+      await page.locator('.dock-menu').waitFor({ state: 'detached' });
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       await page.reload({ waitUntil: 'networkidle' });
       assert.equal(await page.locator('html').getAttribute('lang'), 'en');
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      await settings();
+      assert.equal(await page.getByRole('button', { name: 'English' }).getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.getByRole('button', { name: 'Dark' }).getAttribute('aria-pressed'), 'true');
+      await page.getByRole('button', { name: 'Italiano' }).click();
+      await page.getByRole('button', { name: 'Chiaro' }).click();
+      await page.keyboard.press('Escape');
+      await page.locator('.dock-menu').waitFor({ state: 'detached' });
       if (mobile) {
-        assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'EN');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'dark');
-        await page.locator('.mobile-tools .language-button').click();
-        await page.locator('.mobile-tools .theme-button').click();
-        assert.equal(await page.locator('.mobile-tools .language-button').textContent(), 'IT');
-        assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'system');
         if (output && width === 390) {
           await page.locator('.footer-back-to-top').scrollIntoViewIfNeeded();
           await page.screenshot({ path: path.join(output, 'mobile-footer.png') });
         }
         await page.locator('.footer-back-to-top').click();
         await page.waitForFunction(() => window.scrollY === 0);
-      } else {
-        await settings();
-        await page.getByRole('button', { name: 'Italiano' }).click();
-        await page.getByRole('button', { name: 'Chiaro' }).click();
       }
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
 
@@ -225,13 +208,13 @@ const fs = require('node:fs');
     await page.locator('.header-more').click();
     await page.locator('.dock-menu').waitFor();
     await page.setViewportSize({ width: 390, height: 900 });
-    await page.locator('.mobile-tools').waitFor();
-    assert.equal(await page.locator('.dock-menu, .site-header, .dock').count(), 0, 'Resizing to mobile removes desktop navigation and its open settings');
+    await page.locator('.dock').waitFor();
+    assert.equal(await page.locator('.dock-menu, .site-header').count(), 0, 'Resizing to mobile removes desktop navigation and its open settings');
     await page.locator('.footer-back-to-top').click();
     assert.equal(await page.evaluate(() => window.scrollY), 0, 'Back to top respects reduced motion');
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.locator('.site-header').waitFor();
-    assert.equal(await page.locator('.mobile-preferences, .hero-actions, .content-links, .footer-controls, .dock-menu').count(), 0, 'Resizing back restores desktop without mobile controls or stale settings');
+    assert.equal(await page.locator('.dock, .footer-controls, .dock-menu').count(), 0, 'Resizing back restores desktop without mobile controls or stale settings');
     console.log('PASS resizing and reduced-motion navigation');
     await page.close();
 
@@ -242,14 +225,13 @@ const fs = require('node:fs');
       const theme = () => page.locator('html').getAttribute('data-theme');
       const mobile = width < 720;
       const choose = async name => {
-        if (mobile) { const button = page.locator('.mobile-tools .theme-button'); for (let i = 0; i < 3 && (await button.getAttribute('data-theme-pref')) !== name; i += 1) await button.click(); return; }
-        if (!(await page.locator('.dock-menu').count())) await page.locator('.header-more').click();
+        if (!(await page.locator('.dock-menu').count())) await page.locator(mobile ? '.dock-more' : '.header-more').click();
         await page.getByRole('button', { name: { system: 'Auto', light: 'Chiaro', dark: 'Scuro' }[name] }).click();
       };
       await page.goto(process.env.SITE_URL || 'http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
       assert.equal(await theme(), 'dark', 'Starts with the device theme');
-      if (mobile) assert.equal(await page.locator('.mobile-tools .theme-button').getAttribute('data-theme-pref'), 'system');
-      else { await page.locator('.header-more').click(); assert.equal(await page.getByRole('button', { name: 'Auto' }).getAttribute('aria-pressed'), 'true'); }
+      await page.locator(mobile ? '.dock-more' : '.header-more').click();
+      assert.equal(await page.getByRole('button', { name: 'Auto' }).getAttribute('aria-pressed'), 'true');
       await page.emulateMedia({ colorScheme: 'light' });
       await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');
       await choose('dark');
