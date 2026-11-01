@@ -145,11 +145,11 @@ export const translations = {
             "Progetto NASA Space Apps Challenge 2025 per analisi di esopianeti con approccio machine learning.",
           impact: "Impatto: integrazione tra UI moderna e logiche data-driven su un caso ad alta complessità.",
         },
-        soldisotto: {
-          title: "SoldiSotto",
+        ducat: {
+          title: "Ducat",
           description:
-            "Web app per gestione finanze personali con UX chiara e flusso orientato alla praticità.",
-          impact: "Impatto: prodotto end-to-end con focus su usabilità, affidabilità e miglioramento progressivo.",
+            "App di finanze personali per web, desktop e iPhone: movimenti in tre secondi, budget e statistiche chiare.",
+          impact: "Impatto: prodotto end-to-end con cache offline, sincronizzazione e app pronta per l’App Store.",
         },
         isHormuzOpen: {
           title: "Is Hormuz Open",
@@ -353,11 +353,11 @@ export const translations = {
             "NASA Space Apps Challenge 2025 project focused on exoplanet analysis with a machine learning approach.",
           impact: "Impact: integration of modern UI and data-driven logic on a high-complexity case.",
         },
-        soldisotto: {
-          title: "SoldiSotto",
+        ducat: {
+          title: "Ducat",
           description:
-            "Personal finance web app with clear UX and a practical user-oriented flow.",
-          impact: "Impact: end-to-end product focused on usability, reliability, and iterative improvement.",
+            "Personal finance app for web, desktop and iPhone: log an expense in three seconds, clear budgets and insights.",
+          impact: "Impact: end-to-end product with offline caching, sync and an App Store-ready build.",
         },
         isHormuzOpen: {
           title: "Is Hormuz Open",
