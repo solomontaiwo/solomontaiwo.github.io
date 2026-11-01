@@ -63,7 +63,7 @@ const projectCatalog = [
     id: "ducat",
     sortDate: "2026-11-01",
     image: "/images/projects/ducat/ducat.webp",
-    link: "https://solomontaiwo.github.io/ducat/",
+    link: "https://ducatapp.com/",
     tech: ["React", "Tauri", "Supabase", "iOS"],
     category: "webApp",
     status: "live",
