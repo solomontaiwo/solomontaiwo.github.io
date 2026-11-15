@@ -6,6 +6,15 @@ import "./App.css";
 
 const projectCatalog = [
   {
+    id: "goNoGo",
+    sortDate: "2026-11-15",
+    image: "/images/projects/go-no-go/go-no-go.webp",
+    link: "https://github.com/NASA-SPACEAPP-2026/Space-Mission-Design-Game",
+    tech: ["Three.js", "Node.js", "PostgreSQL", "NASA GMAT", "Azure", "CI/CD"],
+    category: "hackathon",
+    status: "completed",
+  },
+  {
     id: "securityQuiz",
     sortDate: "2026-08-30",
     image: "/images/projects/security-quiz/security-quiz.svg",
@@ -90,9 +99,9 @@ const projectCatalog = [
 ];
 
 // Add a project: append an entry to projectCatalog (above) and its texts to translations.js.
-// The grid below adapts to any number of projects; only the first few are shown until "See more" (3 projects on mobile, 6 on desktop).
+// The grid below adapts to any number of projects; only the first few are shown until "See more" (3 projects on mobile, 7 on desktop).
 const featuredId = "seenary";
-const INITIAL_OTHERS = 5; // desktop
+const INITIAL_OTHERS = 6; // desktop: two full rows of three
 const INITIAL_OTHERS_MOBILE = 2; // mobile: featured + 2 = three visible
 const featuredProject = projectCatalog.find(project => project.id === featuredId);
 const otherProjects = projectCatalog.filter(project => project.id !== featuredId);

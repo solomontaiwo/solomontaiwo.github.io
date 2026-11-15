@@ -125,6 +125,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        goNoGo: {
+          title: "Go-No-Go",
+          description:
+            "Gioco web educativo di progettazione di missioni spaziali: dalla scelta degli obiettivi al CubeSat, dall’orbita al lancio. Realizzato in team per la NASA Space Apps Challenge 2026 di Milano.",
+          impact:
+            "Impatto: campus 3D con Three.js, missioni cooperative fino a quattro persone, analisi orbitali con NASA GMAT e account su PostgreSQL con CI/CD su Azure.",
+        },
         securityQuiz: {
           title: "Quiz Sicurezza dei sistemi informativi",
           description:
@@ -333,6 +340,13 @@ export const translations = {
         repository: "Repository",
       },
       items: {
+        goNoGo: {
+          title: "Go-No-Go",
+          description:
+            "Educational web game about space mission design: from stakeholder goals to the CubeSat, from orbit to launch. Built as a team for the NASA Space Apps Challenge 2026 in Milan.",
+          impact:
+            "Impact: 3D campus built with Three.js, joint missions for up to four players, orbital analysis with NASA GMAT, and PostgreSQL accounts with CI/CD on Azure.",
+        },
         securityQuiz: {
           title: "Information Systems Security Quiz",
           description:
