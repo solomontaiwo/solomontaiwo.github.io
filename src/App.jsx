@@ -9,10 +9,10 @@ const projectCatalog = [
     id: "goNoGo",
     sortDate: "2026-11-15",
     image: "/images/projects/go-no-go/go-no-go.webp",
-    link: "https://github.com/NASA-SPACEAPP-2026/Space-Mission-Design-Game",
+    link: "https://gonogogame.space/en",
     tech: ["Three.js", "Node.js", "PostgreSQL", "NASA GMAT", "Azure", "CI/CD"],
     category: "hackathon",
-    status: "completed",
+    status: "live",
   },
   {
     id: "securityQuiz",
