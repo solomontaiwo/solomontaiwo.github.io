@@ -6,12 +6,12 @@ import "./App.css";
 
 const projectCatalog = [
   {
-    id: "goNoGo",
-    sortDate: "2026-11-15",
-    image: "/images/projects/go-no-go/go-no-go.webp",
-    link: "https://gonogogame.space/en",
-    tech: ["Three.js", "Node.js", "PostgreSQL", "NASA GMAT", "Azure", "CI/CD"],
-    category: "hackathon",
+    id: "seenary",
+    sortDate: "2026-07-26",
+    image: "/images/projects/seenary/seenary.webp",
+    link: "https://main.d10eewmnsih3qy.amplifyapp.com/",
+    tech: ["Next.js", "Java", "Spring", "AWS", "CI/CD"],
+    category: "webApp",
     status: "live",
   },
   {
@@ -24,12 +24,12 @@ const projectCatalog = [
     status: "live",
   },
   {
-    id: "seenary",
-    sortDate: "2026-07-26",
-    image: "/images/projects/seenary/seenary.webp",
-    link: "https://main.d10eewmnsih3qy.amplifyapp.com/",
-    tech: ["Next.js", "Java", "Spring", "AWS", "CI/CD"],
-    category: "webApp",
+    id: "goNoGo",
+    sortDate: "2026-11-15",
+    image: "/images/projects/go-no-go/go-no-go.webp",
+    link: "https://gonogogame.space/en",
+    tech: ["Three.js", "Node.js", "PostgreSQL", "NASA GMAT", "Azure", "CI/CD"],
+    category: "hackathon",
     status: "live",
   },
   {
@@ -100,7 +100,7 @@ const projectCatalog = [
 
 // Add a project: append an entry to projectCatalog (above) and its texts to translations.js.
 // The grid below adapts to any number of projects; only the first few are shown until "See more" (3 projects on mobile, 7 on desktop).
-const featuredId = "seenary";
+const featuredId = "goNoGo";
 const INITIAL_OTHERS = 6; // desktop: two full rows of three
 const INITIAL_OTHERS_MOBILE = 2; // mobile: featured + 2 = three visible
 const featuredProject = projectCatalog.find(project => project.id === featuredId);

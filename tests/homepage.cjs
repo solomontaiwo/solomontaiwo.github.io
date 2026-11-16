@@ -21,7 +21,7 @@ const fs = require('node:fs');
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('html').getAttribute('lang'), 'it');
       assert.equal(await page.locator('.project').count(), mobile ? 3 : 7);
-      if (!mobile) assert.equal(await page.locator('.project-featured h3').textContent(), 'Seenary — Apri progetto');
+      if (!mobile) assert.equal(await page.locator('.project-featured h3').textContent(), 'Go-No-Go — Apri progetto');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}`);
       assert.equal(await page.locator('a[href$=".pdf"]').count(), 0, 'No CV download');
 
