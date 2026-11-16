@@ -162,7 +162,7 @@ const fs = require('node:fs');
         await page.getByRole('button', { name: 'English' }).click();
         await page.getByRole('button', { name: 'Dark' }).click();
       }
-      await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+      await page.getByRole('heading', { name: 'Solid backends. Polished interfaces.' }).waitFor();
       await page.mouse.click(20, 120);
       await page.locator('.dock-menu').waitFor({ state: 'detached' });
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
@@ -248,7 +248,7 @@ const fs = require('node:fs');
       const menu = await page.locator('.dock-menu').boundingBox();
       assert.equal(menu.x > 74 && menu.y >= 0 && menu.y + menu.height <= height, true, 'Settings open beside the rail, inside the screen');
       await page.getByRole('button', { name: 'English' }).click();
-      await page.getByRole('heading', { name: 'Complex ideas. Clear software.' }).waitFor();
+      await page.getByRole('heading', { name: 'Solid backends. Polished interfaces.' }).waitFor();
       await page.getByRole('button', { name: 'Italiano' }).click();
       await page.keyboard.press('Escape');
       if (output) await page.evaluate(() => window.scrollTo(0, 0)), await page.waitForTimeout(300), await page.screenshot({ path: path.join(output, `rail-${width}x${height}.png`) });
