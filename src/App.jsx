@@ -18,7 +18,7 @@ const projectCatalog = [
     id: "securityQuiz",
     sortDate: "2026-08-30",
     image: "/images/projects/security-quiz/security-quiz.svg",
-    link: "https://sicurezza-sistemi-informativi-quiz.pages.dev/",
+    link: "https://information-security-quiz.pages.dev/",
     tech: ["HTML", "CSS", "JavaScript", "PWA", "Cloudflare", "CI/CD"],
     category: "webApp",
     status: "live",
