@@ -2,7 +2,7 @@
   "name": "solomontaiwo.github.io",
   "version": "3.0.0",
   "type": "module",
-  "homepage": "https://solomontaiwo.github.io/",
+  "homepage": "https://solomontaiwo.com/",
   "private": true,
   "dependencies": {
     "bootstrap": "^5.3.3",
